@@ -12,7 +12,7 @@ export function CaseStudies() {
       <Seo
         title="Case Studies"
         path="/case-studies"
-        description="Illustrative composite scenarios showing how QBPES™ applies in practice across client tiers -- not claims about specific clients."
+        description="Illustrative scenarios covering revenue leakage, customer churn, process optimization, system standardization, and AI automation -- not claims about specific clients."
       />
       <PageHero
         eyebrow={caseStudiesHero.eyebrow}

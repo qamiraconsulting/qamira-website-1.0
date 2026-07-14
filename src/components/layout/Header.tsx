@@ -38,7 +38,7 @@ export function Header() {
       )}
     >
       <div className="mx-auto flex max-w-content items-center justify-between px-5 sm:px-8 lg:px-12">
-        <Logo />
+        <Logo large />
         <div className="flex items-center gap-3 sm:gap-5">
           <Button to="/contact" variant="ghost" arrow={false} className="hidden sm:inline-flex">
             Start a conversation

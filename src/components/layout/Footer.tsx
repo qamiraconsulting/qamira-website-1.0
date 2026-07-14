@@ -15,7 +15,7 @@ export function Footer() {
           <div className="lg:col-span-1">
             <Logo />
             <p className="mt-4 max-w-[32ch] text-sm">
-              AI-native Business Performance Excellence. We redesign how organizations work, then calibrate AI to execute it.
+              Redesigning how businesses run, then using AI to make it stick.
             </p>
           </div>
           <FooterColumn title="Firm" items={footerNav.firm} />

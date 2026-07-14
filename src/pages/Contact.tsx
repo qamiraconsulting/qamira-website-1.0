@@ -72,7 +72,15 @@ export function Contact() {
                   <label className={labelClass} htmlFor="email">
                     Email
                   </label>
-                  <input id="email" name="email" type="email" required className={inputClass} />
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                    title="Enter a valid email address, e.g. name@company.com"
+                    className={inputClass}
+                  />
                 </div>
                 <div className="flex flex-col gap-2 sm:col-span-2">
                   <label className={labelClass} htmlFor="company">
