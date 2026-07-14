@@ -6,12 +6,6 @@ import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { site } from "@/data/site";
 
-// Static-site form backend. GitHub Pages can't process submissions
-// server-side, so this posts to Formspree. Replace FORMSPREE_ENDPOINT with
-// a real form ID from https://formspree.io before going live -- until
-// then, submissions will fail with the error state below.
-const FORMSPREE_ENDPOINT = "https://formspree.io/f/REPLACE_WITH_REAL_FORM_ID";
-
 type Status = "idle" | "submitting" | "success" | "error";
 
 const inputClass =
@@ -20,25 +14,31 @@ const labelClass = "font-mono text-xs uppercase tracking-[0.06em] text-charcoal-
 
 export function Contact() {
   const [status, setStatus] = useState<Status>("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
     setStatus("submitting");
+    setErrorMessage("");
 
     try {
-      const res = await fetch(FORMSPREE_ENDPOINT, {
+      const payload = Object.fromEntries(new FormData(form));
+      const res = await fetch("/api/contact", {
         method: "POST",
-        body: new FormData(form),
-        headers: { Accept: "application/json" },
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
       });
       if (res.ok) {
         setStatus("success");
         form.reset();
       } else {
+        const data = await res.json().catch(() => ({}));
+        setErrorMessage(data.error ?? "Something went wrong sending that.");
         setStatus("error");
       }
     } catch {
+      setErrorMessage("Something went wrong reaching the contact service.");
       setStatus("error");
     }
   }
@@ -111,7 +111,7 @@ export function Contact() {
                   )}
                   {status === "error" && (
                     <p className="mt-4 font-mono text-sm text-[#b5573e]" role="alert">
-                      Something went wrong sending that. Please email us directly at{" "}
+                      {errorMessage || "Something went wrong sending that."} Please email us directly at{" "}
                       <a href={`mailto:${site.email}`} className="underline">
                         {site.email}
                       </a>
