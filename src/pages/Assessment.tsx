@@ -9,21 +9,58 @@ import {
   PERFORMANCE_DOMAINS,
   PRIORITY_OUTCOMES,
   REVENUE_RANGES,
+  EMPLOYEE_BANDS,
+  YEARS_IN_OPERATION,
+  OWNERSHIP_STRUCTURES,
+  SYSTEM_COUNT_BANDS,
+  DUPLICATE_DATA_ENTRY_OPTIONS,
   type AssessmentRequest,
   type AssessmentReport,
 } from "@/lib/assessmentTypes";
 
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 5;
+
+// Mirrors the domain questions published on the Methodology page
+// (src/data/content/methodology.ts) -- duplicated here rather than
+// imported since this is a display-only lookup local to the form.
+const DOMAIN_QUESTIONS: Record<(typeof PERFORMANCE_DOMAINS)[number], string> = {
+  Strategy: "Are objectives and priorities clear and shared?",
+  "Financial Performance": "Is profitability and cost visible and explainable?",
+  Process: "Are workflows designed deliberately, or accumulated by accident?",
+  People: "Does the organization have the skills, culture, and capacity the strategy requires?",
+  Data: "Is information trustworthy, timely, and unified?",
+  Technology: "Do systems serve the business, or fragment it?",
+  Customer: "Is the client experience understood end-to-end?",
+  Governance: "Are decisions, metrics, and reviews owned and enforced?",
+};
+
+const MATURITY_LEVELS: { level: 1 | 2 | 3 | 4 | 5; title: string }[] = [
+  { level: 1, title: "Ad Hoc" },
+  { level: 2, title: "Emerging" },
+  { level: 3, title: "Defined" },
+  { level: 4, title: "Managed" },
+  { level: 5, title: "Optimized" },
+];
+
+const MATURITY_TITLES: Record<number, string> = { 1: "Ad Hoc", 2: "Emerging", 3: "Defined", 4: "Managed", 5: "Optimized" };
 
 const emptyForm: AssessmentRequest = {
   companyName: "",
   industry: "",
   revenueRange: "",
-  frictionDomains: [],
+  employeeCount: "",
+  yearsInOperation: "",
+  ownershipStructure: "",
+  website: "",
+  domainRatings: PERFORMANCE_DOMAINS.map((domain) => ({ domain, maturityLevel: 0 as const, note: "" })),
+  systemCount: "",
+  duplicateDataEntry: "",
   priorities: [],
   context: "",
   contactName: "",
   contactEmail: "",
+  contactRole: "",
+  contactPhone: "",
 };
 
 const inputClass =
@@ -43,11 +80,27 @@ export function Assessment() {
   const [errorMessage, setErrorMessage] = useState("");
   const [report, setReport] = useState<AssessmentReport | null>(null);
 
+  function setDomainRating(domain: (typeof PERFORMANCE_DOMAINS)[number], level: 1 | 2 | 3 | 4 | 5) {
+    setForm({
+      ...form,
+      domainRatings: form.domainRatings.map((d) => (d.domain === domain ? { ...d, maturityLevel: level } : d)),
+    });
+  }
+
+  function setDomainNote(domain: (typeof PERFORMANCE_DOMAINS)[number], note: string) {
+    setForm({
+      ...form,
+      domainRatings: form.domainRatings.map((d) => (d.domain === domain ? { ...d, note } : d)),
+    });
+  }
+
   const canProceed =
     (step === 0 && form.companyName.trim().length > 0) ||
-    (step === 1 && form.frictionDomains.length > 0) ||
-    (step === 2 && form.priorities.length > 0) ||
-    step === 3;
+    (step === 1 &&
+      form.domainRatings.every((d) => d.maturityLevel > 0 && (d.maturityLevel >= 3 || d.note.trim().length > 0))) ||
+    step === 2 ||
+    (step === 3 && form.priorities.length > 0) ||
+    step === 4;
 
   async function submit() {
     setStatus("submitting");
@@ -86,7 +139,7 @@ export function Assessment() {
       <PageHero
         eyebrow="Diagnose your performance"
         title="Get your AI Opportunity Report."
-        lede="Four short steps. We'll tell you plainly where the highest-leverage AI opportunity in your business likely sits -- a starting point for a real conversation, not a substitute for one."
+        lede="Five short steps. We'll tell you plainly where the highest-leverage AI opportunity in your business likely sits -- a starting point for a real conversation, not a substitute for one."
         breadcrumbLabel="AI Business Assessment"
       />
 
@@ -102,7 +155,7 @@ export function Assessment() {
             <Reveal key={step}>
               {step === 0 && (
                 <div className="flex flex-col gap-5">
-                  <p className={labelClass}>Step 1 of 4 — About your business</p>
+                  <p className={labelClass}>Step 1 of 5 — About your business</p>
                   <div className="flex flex-col gap-2">
                     <label className={labelClass} htmlFor="companyName">Company name</label>
                     <input
@@ -122,49 +175,170 @@ export function Assessment() {
                       placeholder="e.g. Manufacturing, Retail, Professional Services"
                     />
                   </div>
+                  <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                    <div className="flex flex-col gap-2">
+                      <label className={labelClass} htmlFor="revenueRange">Revenue range</label>
+                      <select
+                        id="revenueRange"
+                        className={inputClass}
+                        value={form.revenueRange}
+                        onChange={(e) => setForm({ ...form, revenueRange: e.target.value as AssessmentRequest["revenueRange"] })}
+                      >
+                        <option value="">Select a range</option>
+                        {REVENUE_RANGES.map((r) => (
+                          <option key={r} value={r}>{r}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label className={labelClass} htmlFor="employeeCount">Employee count</label>
+                      <select
+                        id="employeeCount"
+                        className={inputClass}
+                        value={form.employeeCount}
+                        onChange={(e) => setForm({ ...form, employeeCount: e.target.value as AssessmentRequest["employeeCount"] })}
+                      >
+                        <option value="">Select a range</option>
+                        {EMPLOYEE_BANDS.map((r) => (
+                          <option key={r} value={r}>{r}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label className={labelClass} htmlFor="yearsInOperation">Years in operation</label>
+                      <select
+                        id="yearsInOperation"
+                        className={inputClass}
+                        value={form.yearsInOperation}
+                        onChange={(e) => setForm({ ...form, yearsInOperation: e.target.value as AssessmentRequest["yearsInOperation"] })}
+                      >
+                        <option value="">Select a range</option>
+                        {YEARS_IN_OPERATION.map((r) => (
+                          <option key={r} value={r}>{r}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label className={labelClass} htmlFor="ownershipStructure">Ownership structure</label>
+                      <select
+                        id="ownershipStructure"
+                        className={inputClass}
+                        value={form.ownershipStructure}
+                        onChange={(e) => setForm({ ...form, ownershipStructure: e.target.value as AssessmentRequest["ownershipStructure"] })}
+                      >
+                        <option value="">Select one</option>
+                        {OWNERSHIP_STRUCTURES.map((r) => (
+                          <option key={r} value={r}>{r}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
                   <div className="flex flex-col gap-2">
-                    <label className={labelClass} htmlFor="revenueRange">Revenue range</label>
-                    <select
-                      id="revenueRange"
+                    <label className={labelClass} htmlFor="website">Company website (optional)</label>
+                    <input
+                      id="website"
                       className={inputClass}
-                      value={form.revenueRange}
-                      onChange={(e) => setForm({ ...form, revenueRange: e.target.value as AssessmentRequest["revenueRange"] })}
-                    >
-                      <option value="">Select a range</option>
-                      {REVENUE_RANGES.map((r) => (
-                        <option key={r} value={r}>{r}</option>
-                      ))}
-                    </select>
+                      value={form.website}
+                      onChange={(e) => setForm({ ...form, website: e.target.value })}
+                      placeholder="e.g. www.yourcompany.com"
+                    />
                   </div>
                 </div>
               )}
 
               {step === 1 && (
-                <div className="flex flex-col gap-5">
-                  <p className={labelClass}>Step 2 of 4 — Where's the friction?</p>
-                  <p className="text-sm text-charcoal-dim">Select every domain where performance feels off. No wrong answers.</p>
-                  <div className="grid grid-cols-2 gap-3">
-                    {PERFORMANCE_DOMAINS.map((domain) => (
-                      <button
-                        key={domain}
-                        type="button"
-                        onClick={() => setForm({ ...form, frictionDomains: toggle(form.frictionDomains, domain) })}
-                        className={`border px-4 py-3 text-left text-sm transition-colors ${
-                          form.frictionDomains.includes(domain)
-                            ? "border-brass bg-brass/10 text-charcoal"
-                            : "border-charcoal/20 text-charcoal-dim hover:border-charcoal/40"
-                        }`}
-                      >
-                        {domain}
-                      </button>
-                    ))}
+                <div className="flex flex-col gap-8">
+                  <div className="flex flex-col gap-2">
+                    <p className={labelClass}>Step 2 of 5 — Domain checkup</p>
+                    <p className="text-sm text-charcoal-dim">
+                      Rate where the business stands today across our eight performance domains -- the same
+                      framework behind our methodology. No wrong answers.
+                    </p>
+                  </div>
+                  <div className="flex flex-col gap-6">
+                    {PERFORMANCE_DOMAINS.map((domain) => {
+                      const rating = form.domainRatings.find((d) => d.domain === domain)!;
+                      const noteRequired = rating.maturityLevel > 0 && rating.maturityLevel <= 2;
+                      return (
+                        <div key={domain} className="border border-charcoal/10 p-5">
+                          <h4 className="text-charcoal">{domain}</h4>
+                          <p className="mt-1 text-sm text-charcoal-dim">{DOMAIN_QUESTIONS[domain]}</p>
+                          <div className="mt-4 flex flex-wrap gap-2">
+                            {MATURITY_LEVELS.map((level) => (
+                              <button
+                                key={level.level}
+                                type="button"
+                                title={level.title}
+                                onClick={() => setDomainRating(domain, level.level)}
+                                className={`border px-3 py-2 font-mono text-xs uppercase tracking-[0.04em] transition-colors ${
+                                  rating.maturityLevel === level.level
+                                    ? "border-brass bg-brass/10 text-charcoal"
+                                    : "border-charcoal/20 text-charcoal-dim hover:border-charcoal/40"
+                                }`}
+                              >
+                                {level.level}. {level.title}
+                              </button>
+                            ))}
+                          </div>
+                          <div className="mt-3 flex flex-col gap-1.5">
+                            <label className={labelClass} htmlFor={`note-${domain}`}>
+                              What's driving that? {noteRequired ? "(required)" : "(optional)"}
+                            </label>
+                            <input
+                              id={`note-${domain}`}
+                              className={inputClass}
+                              value={rating.note}
+                              onChange={(e) => setDomainNote(domain, e.target.value)}
+                            />
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}
 
               {step === 2 && (
                 <div className="flex flex-col gap-5">
-                  <p className={labelClass}>Step 3 of 4 — What matters most right now?</p>
+                  <p className={labelClass}>Step 3 of 5 — Systems & tools</p>
+                  <div className="flex flex-col gap-2">
+                    <label className={labelClass} htmlFor="systemCount">
+                      Roughly how many core software systems does the business run on?
+                    </label>
+                    <select
+                      id="systemCount"
+                      className={inputClass}
+                      value={form.systemCount}
+                      onChange={(e) => setForm({ ...form, systemCount: e.target.value as AssessmentRequest["systemCount"] })}
+                    >
+                      <option value="">Select a range</option>
+                      {SYSTEM_COUNT_BANDS.map((c) => (
+                        <option key={c} value={c}>{c}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className={labelClass} htmlFor="duplicateDataEntry">
+                      Do different teams often re-enter the same data into multiple systems?
+                    </label>
+                    <select
+                      id="duplicateDataEntry"
+                      className={inputClass}
+                      value={form.duplicateDataEntry}
+                      onChange={(e) => setForm({ ...form, duplicateDataEntry: e.target.value as AssessmentRequest["duplicateDataEntry"] })}
+                    >
+                      <option value="">Select an answer</option>
+                      {DUPLICATE_DATA_ENTRY_OPTIONS.map((o) => (
+                        <option key={o} value={o}>{o}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              )}
+
+              {step === 3 && (
+                <div className="flex flex-col gap-5">
+                  <p className={labelClass}>Step 4 of 5 — What matters most right now?</p>
                   <p className="text-sm text-charcoal-dim">Pick up to two priority outcomes.</p>
                   <div className="grid grid-cols-2 gap-3">
                     {PRIORITY_OUTCOMES.map((priority) => (
@@ -195,27 +369,53 @@ export function Assessment() {
                 </div>
               )}
 
-              {step === 3 && (
+              {step === 4 && (
                 <div className="flex flex-col gap-5">
-                  <p className={labelClass}>Step 4 of 4 — Where should we send it?</p>
-                  <div className="flex flex-col gap-2">
-                    <label className={labelClass} htmlFor="contactName">Your name</label>
-                    <input
-                      id="contactName"
-                      className={inputClass}
-                      value={form.contactName}
-                      onChange={(e) => setForm({ ...form, contactName: e.target.value })}
-                    />
+                  <p className={labelClass}>Step 5 of 5 — Where should we send it?</p>
+                  <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                    <div className="flex flex-col gap-2">
+                      <label className={labelClass} htmlFor="contactName">Your name</label>
+                      <input
+                        id="contactName"
+                        className={inputClass}
+                        value={form.contactName}
+                        onChange={(e) => setForm({ ...form, contactName: e.target.value })}
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label className={labelClass} htmlFor="contactRole">Your role (optional)</label>
+                      <input
+                        id="contactRole"
+                        className={inputClass}
+                        value={form.contactRole}
+                        onChange={(e) => setForm({ ...form, contactRole: e.target.value })}
+                      />
+                    </div>
                   </div>
-                  <div className="flex flex-col gap-2">
-                    <label className={labelClass} htmlFor="contactEmail">Email</label>
-                    <input
-                      id="contactEmail"
-                      type="email"
-                      className={inputClass}
-                      value={form.contactEmail}
-                      onChange={(e) => setForm({ ...form, contactEmail: e.target.value })}
-                    />
+                  <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                    <div className="flex flex-col gap-2">
+                      <label className={labelClass} htmlFor="contactEmail">Email</label>
+                      <input
+                        id="contactEmail"
+                        type="email"
+                        required
+                        pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
+                        title="Enter a valid email address, e.g. name@company.com"
+                        className={inputClass}
+                        value={form.contactEmail}
+                        onChange={(e) => setForm({ ...form, contactEmail: e.target.value })}
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label className={labelClass} htmlFor="contactPhone">Phone (optional)</label>
+                      <input
+                        id="contactPhone"
+                        type="tel"
+                        className={inputClass}
+                        value={form.contactPhone}
+                        onChange={(e) => setForm({ ...form, contactPhone: e.target.value })}
+                      />
+                    </div>
                   </div>
                   {status === "error" && (
                     <p className="font-mono text-sm text-[#b5573e]" role="alert">{errorMessage}</p>
@@ -270,6 +470,23 @@ function ReportView({ report, companyName }: { report: AssessmentReport; company
             <span className="font-mono text-xs uppercase tracking-[0.06em] text-brass">Maturity snapshot</span>
             <p className="mt-3 text-charcoal-dim">{report.maturitySnapshot}</p>
           </Reveal>
+
+          <div className="mt-10 flex flex-col">
+            {report.domainSnapshot.map((entry, i) => (
+              <div
+                key={i}
+                className="grid grid-cols-1 gap-2 border-t border-charcoal/10 py-6 last:border-b sm:grid-cols-[200px_1fr] sm:gap-8"
+              >
+                <div>
+                  <span className="font-mono text-xs tracking-[0.04em] text-brass">
+                    {entry.selfRating}/5 — {MATURITY_TITLES[entry.selfRating]}
+                  </span>
+                  <h3 className="mt-1 text-charcoal">{entry.domain}</h3>
+                </div>
+                <p className="text-sm text-charcoal-dim">{entry.comment}</p>
+              </div>
+            ))}
+          </div>
         </Container>
       </Section>
 

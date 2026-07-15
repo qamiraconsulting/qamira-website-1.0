@@ -6,6 +6,23 @@ import type { AssessmentRequest, AssessmentReport } from "../src/lib/assessmentT
 // dashboard under Project Settings -> Environment Variables.
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
+// Vercel's function bundler only traces TYPE-ONLY imports out of src/ from
+// api/*.ts -- a runtime value import 404s in production
+// (ERR_MODULE_NOT_FOUND). These mirror src/lib/assessmentTypes.ts and
+// src/data/content/methodology.ts and must be hand-synced if those change.
+const KNOWN_DOMAINS = [
+  "Strategy",
+  "Financial Performance",
+  "Process",
+  "People",
+  "Data",
+  "Technology",
+  "Customer",
+  "Governance",
+] as const;
+
+const MATURITY_TITLES: Record<number, string> = { 1: "Ad Hoc", 2: "Emerging", 3: "Defined", 4: "Managed", 5: "Optimized" };
+
 const REPORT_TOOL = {
   name: "submit_opportunity_report",
   description: "Submit the completed AI Opportunity Report for this client's business assessment.",
@@ -14,6 +31,20 @@ const REPORT_TOOL = {
     properties: {
       summary: { type: "string", description: "2-3 sentence executive summary of the opportunity." },
       maturitySnapshot: { type: "string", description: "A brief, evidence-based read on where this business stands today, grounded only in what was submitted." },
+      domainSnapshot: {
+        type: "array",
+        minItems: 8,
+        maxItems: 8,
+        items: {
+          type: "object",
+          properties: {
+            domain: { type: "string", enum: KNOWN_DOMAINS as unknown as string[] },
+            selfRating: { type: "integer", minimum: 1, maximum: 5 },
+            comment: { type: "string", description: "1-2 sentence grounded read on this domain, referencing the submitted rating and note -- never invented or generic." },
+          },
+          required: ["domain", "selfRating", "comment"],
+        },
+      },
       recommendations: {
         type: "array",
         minItems: 3,
@@ -45,22 +76,46 @@ const REPORT_TOOL = {
       },
       roiEstimate: { type: "string", description: "A short, explicitly directional paragraph -- not a guarantee -- framing the rough ROI logic." },
     },
-    required: ["summary", "maturitySnapshot", "recommendations", "roadmap", "roiEstimate"],
+    required: ["summary", "maturitySnapshot", "domainSnapshot", "recommendations", "roadmap", "roiEstimate"],
   },
 };
 
 const SYSTEM_PROMPT = `You are the Qamira Business Discovery Expert agent, generating a preliminary AI Opportunity Report from a self-submitted business assessment intake.
 
+The intake includes a self-rated maturity score (1-5) for each of Qamira's eight performance domains -- Strategy, Financial Performance, Process, People, Data, Technology, Customer, Governance. Scale: 1 Ad Hoc (undocumented, dependent on individuals), 2 Emerging (some structure, inconsistently applied), 3 Defined (documented and standardized, not yet measured), 4 Managed (measured against KPIs with regular review), 5 Optimized (actively improved using data and AI).
+
 Ground rules, non-negotiable:
 - Follow the Strategy Foundation / Process Structure / People Capability / AI Accelerant hierarchy: every recommendation must serve a business outcome first. Never recommend a technology or automation fix as an end in itself.
 - Base every claim only on what the client actually submitted. Do not invent specifics about their business (customer names, exact financials, systems) that were not provided.
+- The eight domains are assessed independently but must be reasoned about jointly: a low score in one domain constrains what's credible in another (e.g. a low Data score limits what a Technology fix can honestly promise; a low Process score means new KPIs would measure a workflow that shouldn't exist in its current form). Recommendations should cite the specific domain(s) and rating driving them, not stay generic.
+- For domainSnapshot, write one grounded, specific comment per domain referencing the submitted rating and note (if provided) -- never a generic restatement of the maturity-level definition.
 - Every "estimatedImpact" and "roiEstimate" must read as directional and caveated (e.g. "typically", "often", "in comparable engagements") -- never a guaranteed number, since this is a preliminary self-assessment, not a completed diagnostic engagement.
 - This report is a starting point for a real conversation with a consultant, not a substitute for one. Do not overclaim certainty.
 - Cover a mix of the requested categories (GTM Optimization, Customer Churn Prediction, Process Automation, Analytics & Reporting) where genuinely relevant to what was submitted -- do not force a category that doesn't fit the input.
 - Write in Qamira's voice: executive, structured, evidence-based, free of unearned jargon.`;
 
-function truncate(value: string, max: number): string {
+function truncate(value: unknown, max: number): string {
   return typeof value === "string" ? value.slice(0, max) : "";
+}
+
+function sanitizeDomainRatings(value: unknown): AssessmentRequest["domainRatings"] | null {
+  if (!Array.isArray(value) || value.length !== 8) return null;
+  const byDomain = new Map<string, AssessmentRequest["domainRatings"][number]>();
+  for (const entry of value) {
+    if (!entry || typeof entry !== "object") return null;
+    const domain = (entry as Record<string, unknown>).domain;
+    const maturityLevel = (entry as Record<string, unknown>).maturityLevel;
+    const note = (entry as Record<string, unknown>).note;
+    if (typeof domain !== "string" || !(KNOWN_DOMAINS as readonly string[]).includes(domain)) return null;
+    if (typeof maturityLevel !== "number" || !Number.isInteger(maturityLevel) || maturityLevel < 1 || maturityLevel > 5) return null;
+    byDomain.set(domain, {
+      domain: domain as AssessmentRequest["domainRatings"][number]["domain"],
+      maturityLevel: maturityLevel as 1 | 2 | 3 | 4 | 5,
+      note: truncate(note, 500),
+    });
+  }
+  if (byDomain.size !== 8) return null; // duplicate or missing domain entries
+  return KNOWN_DOMAINS.map((d) => byDomain.get(d)!);
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -75,9 +130,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const body = req.body as Partial<AssessmentRequest>;
+  const domainRatings = sanitizeDomainRatings(body?.domainRatings);
 
-  if (!body?.companyName || !body?.contactEmail) {
-    res.status(400).json({ error: "Company name and email are required." });
+  if (!body?.companyName || !body?.contactEmail || !domainRatings) {
+    res.status(400).json({ error: "Company name, email, and all eight domain ratings are required." });
     return;
   }
 
@@ -85,19 +141,45 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     companyName: truncate(body.companyName, 200),
     industry: truncate(body.industry ?? "", 200),
     revenueRange: (body.revenueRange as AssessmentRequest["revenueRange"]) ?? "",
-    frictionDomains: Array.isArray(body.frictionDomains) ? body.frictionDomains.slice(0, 8).map((d) => truncate(d, 60)) : [],
+    employeeCount: (body.employeeCount as AssessmentRequest["employeeCount"]) ?? "",
+    yearsInOperation: (body.yearsInOperation as AssessmentRequest["yearsInOperation"]) ?? "",
+    ownershipStructure: (body.ownershipStructure as AssessmentRequest["ownershipStructure"]) ?? "",
+    website: truncate(body.website ?? "", 300),
+    domainRatings,
+    systemCount: (body.systemCount as AssessmentRequest["systemCount"]) ?? "",
+    duplicateDataEntry: (body.duplicateDataEntry as AssessmentRequest["duplicateDataEntry"]) ?? "",
     priorities: Array.isArray(body.priorities) ? body.priorities.slice(0, 4).map((p) => truncate(p, 60)) : [],
     context: truncate(body.context ?? "", 2000),
     contactName: truncate(body.contactName ?? "", 200),
     contactEmail: truncate(body.contactEmail, 320),
+    contactRole: truncate(body.contactRole ?? "", 200),
+    contactPhone: truncate(body.contactPhone ?? "", 50),
   };
 
+  const domainLines = input.domainRatings
+    .map((d) => `- ${d.domain}: ${d.maturityLevel}/5 (${MATURITY_TITLES[d.maturityLevel]}) — note: ${d.note || "none provided"}`)
+    .join("\n");
+
+  // contactRole and contactPhone are captured for future follow-up/CRM use
+  // but deliberately excluded from the prompt -- irrelevant to report
+  // generation and unnecessary PII to hand the model.
   const userMessage = `Business assessment intake submission:
 
 Company: ${input.companyName}
 Industry: ${input.industry || "not specified"}
 Revenue range: ${input.revenueRange || "not specified"}
-Domains where friction is felt: ${input.frictionDomains.join(", ") || "none specified"}
+Employee count: ${input.employeeCount || "not specified"}
+Years in operation: ${input.yearsInOperation || "not specified"}
+Ownership structure: ${input.ownershipStructure || "not specified"}
+Website: ${input.website || "not specified"}
+
+Eight-domain maturity self-assessment (1 = Ad Hoc, 5 = Optimized):
+${domainLines}
+
+Systems & tools:
+- Core systems in use: ${input.systemCount || "not specified"}
+- Teams re-enter the same data across systems: ${input.duplicateDataEntry || "not specified"}
+
 Priority outcomes: ${input.priorities.join(", ") || "none specified"}
 Additional context from the submitter:
 ${input.context || "(none provided)"}
@@ -107,7 +189,7 @@ Generate the AI Opportunity Report now via the submit_opportunity_report tool.`;
   try {
     const message = await anthropic.messages.create({
       model: "claude-sonnet-5",
-      max_tokens: 2048,
+      max_tokens: 3072,
       system: SYSTEM_PROMPT,
       messages: [{ role: "user", content: userMessage }],
       tools: [REPORT_TOOL],
