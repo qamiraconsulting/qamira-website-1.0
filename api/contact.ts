@@ -1,6 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { Resend } from "resend";
-import { site } from "../src/data/site";
 
 // Server-side only -- RESEND_API_KEY and CONTACT_FROM_EMAIL are set in the
 // Vercel dashboard under Project Settings -> Environment Variables.
@@ -8,6 +7,12 @@ import { site } from "../src/data/site";
 // (e.g. a subdomain like contact@mail.qamiraconsulting.com, kept separate
 // from the root domain so it doesn't collide with Google Workspace's own
 // SPF/DKIM records).
+//
+// CONTACT_TO_EMAIL is duplicated from src/data/site.ts (rather than
+// imported) because Vercel's function bundler only traces type-only
+// imports out of src/ -- a runtime value import from there 404s in
+// production with ERR_MODULE_NOT_FOUND. Keep this in sync with site.email.
+const CONTACT_TO_EMAIL = "enquiries@qamiraconsulting.com";
 const EMAIL_PATTERN = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 function truncate(value: unknown, max: number): string {
@@ -46,7 +51,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     const { error } = await resend.emails.send({
       from: `Qamira Consulting Website <${process.env.CONTACT_FROM_EMAIL}>`,
-      to: [site.email],
+      to: [CONTACT_TO_EMAIL],
       replyTo: `${name} <${email}>`,
       subject: `New enquiry from ${name}${company ? ` (${company})` : ""}`,
       text: `Name: ${name}\nEmail: ${email}\nCompany: ${company || "-"}\n\n${message}`,
