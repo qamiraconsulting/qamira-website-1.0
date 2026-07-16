@@ -1,4 +1,5 @@
 import { useState, type FormEvent } from "react";
+import { Link } from "react-router-dom";
 import { Seo } from "@/lib/Seo";
 import { PageHero } from "@/components/sections/PageHero";
 import { Section } from "@/components/ui/Section";
@@ -142,6 +143,16 @@ export function Contact() {
                 <p className="mt-2 text-charcoal-dim">
                   Ask about a Business Discovery workshop -- a one-to-two-day session that's often the lowest-risk
                   way to see how QBPES™ applies to your business.
+                </p>
+              </div>
+              <div>
+                <span className={labelClass}>Not ready to talk yet?</span>
+                <p className="mt-2 text-charcoal-dim">
+                  Take our free{" "}
+                  <Link to="/assessment" className="text-brass hover:text-brass-bright">
+                    AI Business Assessment
+                  </Link>{" "}
+                  first -- five minutes for an instant, personalized report you can review before reaching out.
                 </p>
               </div>
             </Reveal>

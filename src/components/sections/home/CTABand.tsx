@@ -12,17 +12,24 @@ export function CTABand() {
         <NeuronField className="h-full w-full" density={40} interactive={false} />
       </div>
       <Container className="relative z-10">
-        <Reveal className="mx-auto max-w-[42rem]">
+        <Reveal className="mx-auto max-w-[42rem] text-center">
           <Eyebrow center>{ctaBand.eyebrow}</Eyebrow>
           <h2 className="mt-4 text-charcoal">{ctaBand.heading}</h2>
           <p className="mx-auto mt-4 max-w-[52ch] text-charcoal-dim">{ctaBand.body}</p>
-          <div className="mt-9 flex flex-wrap justify-center gap-4">
-            <Button to={ctaBand.primaryCta.to}>{ctaBand.primaryCta.label}</Button>
-            <Button to={ctaBand.secondaryCta.to} variant="ghost" arrow={false}>
-              {ctaBand.secondaryCta.label}
-            </Button>
-          </div>
         </Reveal>
+        <div className="mx-auto mt-10 grid max-w-[56rem] gap-6 sm:grid-cols-2">
+          {ctaBand.paths.map((path, i) => (
+            <Reveal key={path.title} delay={i * 0.08} className="flex h-full flex-col border border-charcoal/10 bg-white p-8 text-left">
+              <h3 className="text-charcoal">{path.title}</h3>
+              <p className="mt-3 flex-1 text-sm text-charcoal-dim">{path.body}</p>
+              <div className="mt-6">
+                <Button to={path.cta.to} variant={i === 0 ? "primary" : "ghost"}>
+                  {path.cta.label}
+                </Button>
+              </div>
+            </Reveal>
+          ))}
+        </div>
       </Container>
     </section>
   );

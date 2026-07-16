@@ -13,6 +13,7 @@ import { Contact } from "@/pages/Contact";
 import { Login } from "@/pages/Login";
 import { Portal } from "@/pages/Portal";
 import { Assessment } from "@/pages/Assessment";
+import { Privacy } from "@/pages/Privacy";
 import { RequireAuth } from "@/components/layout/RequireAuth";
 import { NotFound } from "@/pages/NotFound";
 
@@ -32,6 +33,7 @@ export default function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<Login />} />
         <Route path="/assessment" element={<Assessment />} />
+        <Route path="/privacy" element={<Privacy />} />
         <Route
           path="/portal"
           element={

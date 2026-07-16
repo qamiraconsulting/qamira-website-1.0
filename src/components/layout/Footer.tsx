@@ -50,7 +50,12 @@ export function Footer() {
         </div>
         <div className="flex flex-col gap-3 border-t border-charcoal/10 pt-6 font-mono text-xs sm:flex-row sm:items-center sm:justify-between">
           <span>© {year} {site.name}. All rights reserved.</span>
-          <span>{site.motto}</span>
+          <div className="flex items-center gap-6">
+            <Link to="/privacy" className="transition-colors hover:text-brass">
+              Privacy Policy
+            </Link>
+            <span>{site.motto}</span>
+          </div>
         </div>
       </Container>
     </footer>

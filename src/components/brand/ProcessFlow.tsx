@@ -1,8 +1,8 @@
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { Search, Workflow, SlidersHorizontal, Users, Cpu, FileCheck2, BarChart3, RefreshCw } from "lucide-react";
+import { Search, Workflow, SlidersHorizontal, Users, Cpu, FileCheck2, BarChart3, RefreshCw, Lock } from "lucide-react";
 import { ease, staggerChildren, viewportOnce } from "@/lib/motion";
 
-const icons = { Search, Workflow, SlidersHorizontal, Users, Cpu, FileCheck2, BarChart3, RefreshCw };
+const icons = { Search, Workflow, SlidersHorizontal, Users, Cpu, FileCheck2, BarChart3, RefreshCw, Lock };
 
 type Step = {
   step: string;

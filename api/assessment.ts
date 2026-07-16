@@ -1,10 +1,17 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import Anthropic from "@anthropic-ai/sdk";
+import { Resend } from "resend";
 import type { AssessmentRequest, AssessmentReport } from "../src/lib/assessmentTypes";
 
 // Server-side only -- never exposed to the browser. Set in the Vercel
 // dashboard under Project Settings -> Environment Variables.
 const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
+// Reuses the same Resend project as api/contact.ts (RESEND_API_KEY,
+// CONTACT_FROM_EMAIL) to notify the team of a completed assessment --
+// duplicated rather than imported since these are two independent
+// Vercel functions. See api/contact.ts for the domain/SPF-DKIM rationale.
+const LEAD_NOTIFICATION_EMAIL = "enquiries@qamiraconsulting.com";
 
 // Vercel's function bundler only traces TYPE-ONLY imports out of src/ from
 // api/*.ts -- a runtime value import 404s in production
@@ -92,7 +99,8 @@ Ground rules, non-negotiable:
 - Every "estimatedImpact" and "roiEstimate" must read as directional and caveated (e.g. "typically", "often", "in comparable engagements") -- never a guaranteed number, since this is a preliminary self-assessment, not a completed diagnostic engagement.
 - This report is a starting point for a real conversation with a consultant, not a substitute for one. Do not overclaim certainty.
 - Cover a mix of the requested categories (GTM Optimization, Customer Churn Prediction, Process Automation, Analytics & Reporting) where genuinely relevant to what was submitted -- do not force a category that doesn't fit the input.
-- Write in Qamira's voice: executive, structured, evidence-based, free of unearned jargon.`;
+- Write in Qamira's voice: executive, structured, evidence-based, free of unearned jargon.
+- Stay at the level of WHAT the opportunity is and WHY it matters for this business -- never HOW to build it. Do not name specific vendors, tools, platforms, system architectures, data models, integration steps, or implementation sequences detailed enough to hand to an engineer. Roadmap phases describe business focus areas and timeframes, not technical build plans. This report is a diagnostic that motivates a consultation, not a blueprint that substitutes for one.`;
 
 function truncate(value: unknown, max: number): string {
   return typeof value === "string" ? value.slice(0, max) : "";
@@ -205,6 +213,40 @@ Generate the AI Opportunity Report now via the submit_opportunity_report tool.`;
 
     const report = toolUse.input as AssessmentReport;
     res.status(200).json({ report });
+
+    // Fire-and-forget lead notification -- the client's report has already
+    // been sent above, so a failure here must never affect their response.
+    if (process.env.RESEND_API_KEY && process.env.CONTACT_FROM_EMAIL) {
+      try {
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        await resend.emails.send({
+          from: `Qamira Assessment <${process.env.CONTACT_FROM_EMAIL}>`,
+          to: [LEAD_NOTIFICATION_EMAIL],
+          replyTo: input.contactEmail ? `${input.contactName || input.companyName} <${input.contactEmail}>` : undefined,
+          subject: `New AI Assessment completed: ${input.companyName}`,
+          text: `${input.companyName} completed the AI Business Assessment.
+
+Contact: ${input.contactName || "not provided"} (${input.contactRole || "role not provided"})
+Email: ${input.contactEmail}
+Phone: ${input.contactPhone || "not provided"}
+Website: ${input.website || "not provided"}
+Industry: ${input.industry || "not specified"}
+Revenue range: ${input.revenueRange ? `${input.revenueRange}${input.revenueCurrency ? ` ${input.revenueCurrency}` : ""}` : "not specified"}
+Employees: ${input.employeeCount || "not specified"}
+
+Domain ratings:
+${domainLines}
+
+Systems: ${input.systemCount || "not specified"} core systems, duplicate data entry: ${input.duplicateDataEntry || "not specified"}
+Priorities: ${input.priorities.join(", ") || "none specified"}
+Additional context: ${input.context || "(none provided)"}
+
+Report summary: ${report.summary}`,
+        });
+      } catch (notifyErr) {
+        console.error("Assessment lead notification failed:", notifyErr);
+      }
+    }
   } catch (err) {
     console.error("Assessment generation failed:", err);
     res.status(502).json({ error: "We couldn't generate your report just now. Please try again shortly." });

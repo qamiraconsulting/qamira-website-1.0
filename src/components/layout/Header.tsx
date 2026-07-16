@@ -40,7 +40,10 @@ export function Header() {
       <div className="mx-auto flex max-w-content items-center justify-between px-5 sm:px-8 lg:px-12">
         <Logo large />
         <div className="flex items-center gap-3 sm:gap-5">
-          <Button to="/contact" variant="ghost" arrow={false} className="hidden sm:inline-flex">
+          <Button to="/assessment" variant="ghost" arrow={false} className="hidden lg:inline-flex" title="Answer 8 quick questions, get an instant AI-generated report">
+            Free AI Assessment
+          </Button>
+          <Button to="/contact" variant="ghost" arrow={false} className="hidden sm:inline-flex" title="Talk directly with a consultant about your business">
             Start a conversation
           </Button>
           <button

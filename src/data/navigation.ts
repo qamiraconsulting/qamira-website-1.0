@@ -30,6 +30,7 @@ export const footerNav = {
     { label: "Services", path: "/services" },
     { label: "Industries", path: "/industries" },
     { label: "AI Solutions", path: "/ai-solutions" },
+    { label: "AI Business Assessment", path: "/assessment" },
     { label: "Insights", path: "/insights" },
   ],
 } satisfies Record<string, NavItem[]>;

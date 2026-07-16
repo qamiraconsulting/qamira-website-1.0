@@ -13,6 +13,7 @@ type ButtonProps = {
   arrow?: boolean;
   onClick?: () => void;
   className?: string;
+  title?: string;
 };
 
 const base =
@@ -23,7 +24,7 @@ const variantClasses: Record<Variant, string> = {
   ghost: "border-charcoal/20 text-charcoal hover:border-brass hover:text-brass",
 };
 
-export function Button({ children, to, href, variant = "primary", arrow = true, onClick, className }: ButtonProps) {
+export function Button({ children, to, href, variant = "primary", arrow = true, onClick, className, title }: ButtonProps) {
   const classes = clsx(base, variantClasses[variant], className);
   const content = (
     <>
@@ -39,20 +40,27 @@ export function Button({ children, to, href, variant = "primary", arrow = true, 
 
   if (to) {
     return (
-      <Link to={to} onClick={onClick} className={classes}>
+      <Link to={to} onClick={onClick} className={classes} title={title}>
         {content}
       </Link>
     );
   }
   if (href) {
     return (
-      <a href={href} onClick={onClick} className={classes} target={href.startsWith("http") ? "_blank" : undefined} rel={href.startsWith("http") ? "noreferrer" : undefined}>
+      <a
+        href={href}
+        onClick={onClick}
+        className={classes}
+        title={title}
+        target={href.startsWith("http") ? "_blank" : undefined}
+        rel={href.startsWith("http") ? "noreferrer" : undefined}
+      >
         {content}
       </a>
     );
   }
   return (
-    <button type="button" onClick={onClick} className={classes}>
+    <button type="button" onClick={onClick} className={classes} title={title}>
       {content}
     </button>
   );

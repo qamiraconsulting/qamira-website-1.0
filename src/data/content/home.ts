@@ -83,7 +83,17 @@ export const clientTiers = [
 export const ctaBand = {
   eyebrow: "Let's talk",
   heading: "Ready to find out where performance is actually leaking?",
-  body: "A first conversation is a diagnostic, not a pitch. We'll tell you plainly where the highest-leverage transformation lies.",
-  primaryCta: { label: "Start a conversation", to: "/contact" },
-  secondaryCta: { label: "Explore our services", to: "/services" },
+  body: "Two ways to start -- pick whichever fits where you are right now.",
+  paths: [
+    {
+      title: "Talk to a consultant",
+      body: "Best if you already know you want expert input. A first conversation is a diagnostic, not a pitch -- we'll tell you plainly where the highest-leverage transformation lies.",
+      cta: { label: "Start a conversation", to: "/contact" },
+    },
+    {
+      title: "Get your AI Opportunity Report",
+      body: "Prefer a data point first? Answer 8 quick questions and get an instant, personalized report you can review before deciding whether to talk to us.",
+      cta: { label: "Take the free assessment", to: "/assessment" },
+    },
+  ],
 };

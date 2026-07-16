@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Seo } from "@/lib/Seo";
 import { PageHero } from "@/components/sections/PageHero";
 import { Section } from "@/components/ui/Section";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
+import { ProcessFlow } from "@/components/brand/ProcessFlow";
 import {
   PERFORMANCE_DOMAINS,
   PRIORITY_OUTCOMES,
@@ -81,6 +83,33 @@ const MATURITY_LEVELS: { level: 1 | 2 | 3 | 4 | 5; title: string; body: string }
 ];
 
 const MATURITY_TITLES: Record<number, string> = { 1: "Ad Hoc", 2: "Emerging", 3: "Defined", 4: "Managed", 5: "Optimized" };
+
+const TRUST_STEPS = [
+  {
+    step: "01",
+    title: "You answer",
+    icon: "SlidersHorizontal",
+    body: "Eight quick domain ratings plus a few details about your business -- five minutes, no account required.",
+  },
+  {
+    step: "02",
+    title: "Sent securely",
+    icon: "Lock",
+    body: "Your answers travel over an encrypted connection straight to our assessment engine -- nothing sits in transit.",
+  },
+  {
+    step: "03",
+    title: "Analyzed instantly",
+    icon: "Cpu",
+    body: "Our AI reasons through your answers against the QBPES™ framework and drafts your report in seconds.",
+  },
+  {
+    step: "04",
+    title: "Kept for you, not shared",
+    icon: "FileCheck2",
+    body: "We only retain your submission if you continue into a consultation with us. It's never shared with third parties or used to train any AI model -- only used for your own ongoing engagement.",
+  },
+] as const;
 
 const emptyForm: AssessmentRequest = {
   companyName: "",
@@ -181,6 +210,27 @@ export function Assessment() {
         lede="Five short steps. We'll tell you plainly where the highest-leverage AI opportunity in your business likely sits -- a starting point for a real conversation, not a substitute for one."
         breadcrumbLabel="AI Business Assessment"
       />
+
+      <Container className="pt-10">
+        <p className="mx-auto max-w-[42rem] text-center text-sm text-charcoal-dim">
+          Prefer to just talk it through?{" "}
+          <Link to="/contact" className="text-brass hover:text-brass-bright">
+            Start a conversation
+          </Link>{" "}
+          with a consultant directly instead.
+        </p>
+      </Container>
+
+      <Section tone="surface" bordered>
+        <Container>
+          <p className="text-center font-mono text-xs uppercase tracking-[0.06em] text-charcoal-dim">
+            How your data is handled
+          </p>
+          <div className="mt-8">
+            <ProcessFlow steps={TRUST_STEPS} variant="compact" />
+          </div>
+        </Container>
+      </Section>
 
       <Section tone="white">
         <Container>
