@@ -140,6 +140,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const input: AssessmentRequest = {
     companyName: truncate(body.companyName, 200),
     industry: truncate(body.industry ?? "", 200),
+    revenueCurrency: (body.revenueCurrency as AssessmentRequest["revenueCurrency"]) ?? "",
     revenueRange: (body.revenueRange as AssessmentRequest["revenueRange"]) ?? "",
     employeeCount: (body.employeeCount as AssessmentRequest["employeeCount"]) ?? "",
     yearsInOperation: (body.yearsInOperation as AssessmentRequest["yearsInOperation"]) ?? "",
@@ -167,7 +168,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
 Company: ${input.companyName}
 Industry: ${input.industry || "not specified"}
-Revenue range: ${input.revenueRange || "not specified"}
+Revenue range: ${input.revenueRange ? `${input.revenueRange}${input.revenueCurrency ? ` ${input.revenueCurrency}` : ""}` : "not specified"}
 Employee count: ${input.employeeCount || "not specified"}
 Years in operation: ${input.yearsInOperation || "not specified"}
 Ownership structure: ${input.ownershipStructure || "not specified"}

@@ -8,6 +8,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import {
   PERFORMANCE_DOMAINS,
   PRIORITY_OUTCOMES,
+  REVENUE_CURRENCIES,
   REVENUE_RANGES,
   EMPLOYEE_BANDS,
   YEARS_IN_OPERATION,
@@ -20,26 +21,63 @@ import {
 
 const TOTAL_STEPS = 5;
 
-// Mirrors the domain questions published on the Methodology page
+// Mirrors the domains published on the Methodology page
 // (src/data/content/methodology.ts) -- duplicated here rather than
-// imported since this is a display-only lookup local to the form.
-const DOMAIN_QUESTIONS: Record<(typeof PERFORMANCE_DOMAINS)[number], string> = {
-  Strategy: "Are objectives and priorities clear and shared?",
-  "Financial Performance": "Is profitability and cost visible and explainable?",
-  Process: "Are workflows designed deliberately, or accumulated by accident?",
-  People: "Does the organization have the skills, culture, and capacity the strategy requires?",
-  Data: "Is information trustworthy, timely, and unified?",
-  Technology: "Do systems serve the business, or fragment it?",
-  Customer: "Is the client experience understood end-to-end?",
-  Governance: "Are decisions, metrics, and reviews owned and enforced?",
+// imported since this is a display-only lookup local to the form. The
+// question is the same one shown on /methodology; explanation and example
+// are additional context specific to this form.
+const DOMAIN_DETAILS: Record<(typeof PERFORMANCE_DOMAINS)[number], { question: string; explanation: string; example: string }> = {
+  Strategy: {
+    question: "Are objectives and priorities clear and shared?",
+    explanation: "Whether the business has clear, agreed goals that guide day-to-day decisions -- not just a plan that lives in a slide deck.",
+    example: "e.g. leadership and frontline managers would give the same answer if asked what the company's top priority is this quarter.",
+  },
+  "Financial Performance": {
+    question: "Is profitability and cost visible and explainable?",
+    explanation: "Whether you can see where money is actually made and lost, and explain why margins move the way they do.",
+    example: "e.g. you can say exactly why one customer or product line is more profitable than another -- not just that it is.",
+  },
+  Process: {
+    question: "Are workflows designed deliberately, or accumulated by accident?",
+    explanation: "How consistently the same task gets done, regardless of who's doing it.",
+    example: "e.g. two staff handling the same type of order follow the same steps, in the same order, every time.",
+  },
+  People: {
+    question: "Does the organization have the skills, culture, and capacity the strategy requires?",
+    explanation: "Whether the team has the right skills, workload, and clarity of ownership to actually execute on the plan.",
+    example: "e.g. everyone knows who owns a decision, and nobody is the single point of failure for a critical task.",
+  },
+  Data: {
+    question: "Is information trustworthy, timely, and unified?",
+    explanation: "Whether everyone in the business is working from the same numbers, updated often enough to be useful.",
+    example: "e.g. finance, sales, and operations would report the same revenue figure for the same month without reconciling first.",
+  },
+  Technology: {
+    question: "Do systems serve the business, or fragment it?",
+    explanation: "Whether your software tools actually support how the business works, or force people to work around them.",
+    example: "e.g. a piece of information is entered once and flows to every system that needs it, rather than being re-typed by hand.",
+  },
+  Customer: {
+    question: "Is the client experience understood end-to-end?",
+    explanation: "Whether you have real visibility into what customers experience at each stage, not just at the point of sale.",
+    example: "e.g. you'd know today which customers are at risk of leaving, before they actually cancel.",
+  },
+  Governance: {
+    question: "Are decisions, metrics, and reviews owned and enforced?",
+    explanation: "Whether there's a clear owner for key metrics and decisions, and a regular rhythm for reviewing them.",
+    example: "e.g. there's a standing meeting where the same numbers get reviewed every month, by someone accountable for them.",
+  },
 };
 
-const MATURITY_LEVELS: { level: 1 | 2 | 3 | 4 | 5; title: string }[] = [
-  { level: 1, title: "Ad Hoc" },
-  { level: 2, title: "Emerging" },
-  { level: 3, title: "Defined" },
-  { level: 4, title: "Managed" },
-  { level: 5, title: "Optimized" },
+// Mirrors methodology.ts's maturityLevels (same titles and descriptions
+// shown on /methodology) -- numeric levels here since form state and the
+// AI schema both need 1-5 ints, not the "01".."05" display codes.
+const MATURITY_LEVELS: { level: 1 | 2 | 3 | 4 | 5; title: string; body: string }[] = [
+  { level: 1, title: "Ad Hoc", body: "Undocumented, dependent on individuals." },
+  { level: 2, title: "Emerging", body: "Some structure exists but is inconsistently applied." },
+  { level: 3, title: "Defined", body: "Documented and standardized, not yet measured." },
+  { level: 4, title: "Managed", body: "Measured against KPIs with regular review." },
+  { level: 5, title: "Optimized", body: "Actively improved using data and, increasingly, AI." },
 ];
 
 const MATURITY_TITLES: Record<number, string> = { 1: "Ad Hoc", 2: "Emerging", 3: "Defined", 4: "Managed", 5: "Optimized" };
@@ -47,6 +85,7 @@ const MATURITY_TITLES: Record<number, string> = { 1: "Ad Hoc", 2: "Emerging", 3:
 const emptyForm: AssessmentRequest = {
   companyName: "",
   industry: "",
+  revenueCurrency: "",
   revenueRange: "",
   employeeCount: "",
   yearsInOperation: "",
@@ -177,6 +216,20 @@ export function Assessment() {
                   </div>
                   <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                     <div className="flex flex-col gap-2">
+                      <label className={labelClass} htmlFor="revenueCurrency">Currency</label>
+                      <select
+                        id="revenueCurrency"
+                        className={inputClass}
+                        value={form.revenueCurrency}
+                        onChange={(e) => setForm({ ...form, revenueCurrency: e.target.value as AssessmentRequest["revenueCurrency"] })}
+                      >
+                        <option value="">Select currency</option>
+                        {REVENUE_CURRENCIES.map((c) => (
+                          <option key={c} value={c}>{c}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="flex flex-col gap-2">
                       <label className={labelClass} htmlFor="revenueRange">Revenue range</label>
                       <select
                         id="revenueRange"
@@ -255,20 +308,37 @@ export function Assessment() {
                       framework behind our methodology. No wrong answers.
                     </p>
                   </div>
+
+                  <div className="border border-charcoal/10 bg-parchment-2 p-5">
+                    <p className={labelClass}>The scale, in plain terms</p>
+                    <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-5">
+                      {MATURITY_LEVELS.map((level) => (
+                        <div key={level.level}>
+                          <span className="font-mono text-xs text-brass">{level.level}. {level.title}</span>
+                          <p className="mt-1 text-xs text-charcoal-dim">{level.body}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
                   <div className="flex flex-col gap-6">
                     {PERFORMANCE_DOMAINS.map((domain) => {
                       const rating = form.domainRatings.find((d) => d.domain === domain)!;
                       const noteRequired = rating.maturityLevel > 0 && rating.maturityLevel <= 2;
+                      const details = DOMAIN_DETAILS[domain];
                       return (
                         <div key={domain} className="border border-charcoal/10 p-5">
                           <h4 className="text-charcoal">{domain}</h4>
-                          <p className="mt-1 text-sm text-charcoal-dim">{DOMAIN_QUESTIONS[domain]}</p>
+                          <p className="mt-1 text-sm text-charcoal-dim">{details.question}</p>
+                          <p className="mt-1.5 text-xs text-charcoal-dim/80">
+                            {details.explanation} {details.example}
+                          </p>
                           <div className="mt-4 flex flex-wrap gap-2">
                             {MATURITY_LEVELS.map((level) => (
                               <button
                                 key={level.level}
                                 type="button"
-                                title={level.title}
+                                title={level.body}
                                 onClick={() => setDomainRating(domain, level.level)}
                                 className={`border px-3 py-2 font-mono text-xs uppercase tracking-[0.04em] transition-colors ${
                                   rating.maturityLevel === level.level
@@ -305,6 +375,10 @@ export function Assessment() {
                     <label className={labelClass} htmlFor="systemCount">
                       Roughly how many core software systems does the business run on?
                     </label>
+                    <p className="text-xs text-charcoal-dim">
+                      e.g. CRM, accounting software, inventory system, email marketing tool, HR platform -- count the
+                      ones your team uses regularly, not every app anyone has ever opened.
+                    </p>
                     <select
                       id="systemCount"
                       className={inputClass}
@@ -321,6 +395,10 @@ export function Assessment() {
                     <label className={labelClass} htmlFor="duplicateDataEntry">
                       Do different teams often re-enter the same data into multiple systems?
                     </label>
+                    <p className="text-xs text-charcoal-dim">
+                      e.g. a sales rep enters a new customer in the CRM, then someone in finance re-types the same
+                      details into the invoicing system.
+                    </p>
                     <select
                       id="duplicateDataEntry"
                       className={inputClass}

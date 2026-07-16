@@ -27,12 +27,16 @@ export const PRIORITY_OUTCOMES = [
   "Sustainable Growth",
 ] as const;
 
+export const REVENUE_CURRENCIES = ["USD", "INR", "EUR", "GBP", "AED", "Other"] as const;
+
+// Currency-agnostic magnitude bands -- paired with revenueCurrency at
+// display and prompt time (e.g. "2M – 10M" + "INR").
 export const REVENUE_RANGES = [
-  "Under $2M",
-  "$2M – $10M",
-  "$10M – $50M",
-  "$50M – $100M",
-  "$100M+",
+  "Under 2M",
+  "2M – 10M",
+  "10M – 50M",
+  "50M – 100M",
+  "100M+",
 ] as const;
 
 export const EMPLOYEE_BANDS = ["1–10", "11–50", "51–200", "201–500", "500+"] as const;
@@ -60,6 +64,7 @@ export type DomainRating = {
 export type AssessmentRequest = {
   companyName: string;
   industry: string;
+  revenueCurrency: (typeof REVENUE_CURRENCIES)[number] | "";
   revenueRange: (typeof REVENUE_RANGES)[number] | "";
   employeeCount: (typeof EMPLOYEE_BANDS)[number] | "";
   yearsInOperation: (typeof YEARS_IN_OPERATION)[number] | "";
