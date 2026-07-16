@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import { Logo } from "@/components/brand/Logo";
 import { Container } from "@/components/ui/Container";
 import { footerNav } from "@/data/navigation";
@@ -32,18 +31,6 @@ export function Footer() {
                 <Link to="/contact" className="text-sm transition-colors hover:text-brass">
                   Our offices
                 </Link>
-              </li>
-              <li>
-                <SignedOut>
-                  <Link to="/login" className="text-sm transition-colors hover:text-brass">
-                    Login
-                  </Link>
-                </SignedOut>
-                <SignedIn>
-                  <Link to="/portal" className="text-sm transition-colors hover:text-brass">
-                    Client Portal
-                  </Link>
-                </SignedIn>
               </li>
             </ul>
           </div>

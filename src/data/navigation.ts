@@ -3,9 +3,7 @@ export type NavItem = {
   path: string;
 };
 
-// Primary nav -- every path has a routed page. Login/Client Portal is
-// rendered directly in Footer.tsx and NavOverlay.tsx (auth-state-aware via
-// Clerk's <SignedIn>/<SignedOut>), not listed here.
+// Primary nav -- every path has a routed page.
 export const primaryNav: NavItem[] = [
   { label: "Home", path: "/" },
   { label: "About", path: "/about" },

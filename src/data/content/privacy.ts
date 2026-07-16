@@ -1,6 +1,6 @@
 // Privacy Policy copy. Describes actual data handling as implemented in
-// api/contact.ts (Resend), api/assessment.ts (Anthropic Claude API), and
-// Clerk (Client Portal auth) -- keep in sync if any of those change.
+// api/contact.ts (Resend) and api/assessment.ts (Anthropic Claude API) --
+// keep in sync if either of those change.
 
 export const privacyHero = {
   eyebrow: "Privacy Policy",
@@ -16,7 +16,6 @@ export const sections = [
     body: [
       "Contact form (/contact): your name, email, company, and message.",
       "AI Business Assessment (/assessment): your company profile (industry, revenue range, employee count, and similar), your self-rated answers across our eight performance domains, the systems/tools questions, your stated priorities, and your contact details (name, email, role, phone).",
-      "Client Portal: standard authentication data (email and session information) handled by our sign-in provider, Clerk.",
     ],
   },
   {
@@ -40,7 +39,6 @@ export const sections = [
     body: [
       "Resend -- delivers contact form emails on our behalf.",
       "Anthropic -- processes assessment answers via the Claude API to generate your report.",
-      "Clerk -- handles authentication for the Client Portal.",
       "Vercel -- hosts this website and its backend functions.",
       "Each of these providers processes data only as needed to provide their service to us and is bound by their own privacy and security terms.",
     ],

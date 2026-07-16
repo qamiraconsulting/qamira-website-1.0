@@ -2,7 +2,6 @@ import { useEffect } from "react";
 import { motion } from "framer-motion";
 import { NavLink } from "react-router-dom";
 import clsx from "clsx";
-import { SignedIn, SignedOut } from "@clerk/clerk-react";
 import { footerNav } from "@/data/navigation";
 import { site } from "@/data/site";
 import { NeuronField } from "@/components/brand/NeuronField";
@@ -73,16 +72,6 @@ export function NavOverlay({ onClose }: { onClose: () => void }) {
           className="mt-auto flex flex-col gap-6 border-t border-charcoal/10 pt-8 sm:flex-row sm:items-end sm:justify-between"
         >
           <motion.div variants={itemVariants} className="flex flex-wrap gap-x-8 gap-y-2 font-mono text-xs uppercase tracking-[0.08em] text-charcoal-dim">
-            <SignedOut>
-              <NavLink to="/login" onClick={onClose} className="hover:text-brass">
-                Login
-              </NavLink>
-            </SignedOut>
-            <SignedIn>
-              <NavLink to="/portal" onClick={onClose} className="hover:text-brass">
-                Client Portal
-              </NavLink>
-            </SignedIn>
             <NavLink to="/contact" onClick={onClose} className="hover:text-brass">
               Contact
             </NavLink>

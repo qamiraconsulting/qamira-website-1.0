@@ -10,11 +10,8 @@ import { CaseStudies } from "@/pages/CaseStudies";
 import { Insights } from "@/pages/Insights";
 import { Careers } from "@/pages/Careers";
 import { Contact } from "@/pages/Contact";
-import { Login } from "@/pages/Login";
-import { Portal } from "@/pages/Portal";
 import { Assessment } from "@/pages/Assessment";
 import { Privacy } from "@/pages/Privacy";
-import { RequireAuth } from "@/components/layout/RequireAuth";
 import { NotFound } from "@/pages/NotFound";
 
 export default function App() {
@@ -31,17 +28,8 @@ export default function App() {
         <Route path="/insights" element={<Insights />} />
         <Route path="/careers" element={<Careers />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/login" element={<Login />} />
         <Route path="/assessment" element={<Assessment />} />
         <Route path="/privacy" element={<Privacy />} />
-        <Route
-          path="/portal"
-          element={
-            <RequireAuth>
-              <Portal />
-            </RequireAuth>
-          }
-        />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
