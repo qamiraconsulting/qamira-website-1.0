@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { waitUntil } from "@vercel/functions";
 import Anthropic from "@anthropic-ai/sdk";
 import { Resend } from "resend";
 import type { AssessmentRequest, AssessmentReport } from "../src/lib/assessmentTypes";
@@ -119,13 +120,6 @@ function truncate(value: unknown, max: number): string {
 async function appendAssessmentRow(input: AssessmentRequest, domainLines: string, report: AssessmentReport): Promise<void> {
   const webhookUrl = process.env.SHEETS_WEBHOOK_URL;
   const webhookSecret = process.env.SHEETS_WEBHOOK_SECRET;
-  // TEMPORARY DEBUG -- remove once the env vars are confirmed reaching runtime.
-  console.log("Sheets webhook env check:", {
-    hasUrl: !!webhookUrl,
-    hasSecret: !!webhookSecret,
-    urlLength: webhookUrl?.length ?? 0,
-    secretLength: webhookSecret?.length ?? 0,
-  });
   if (!webhookUrl || !webhookSecret) return;
 
   const row = [
@@ -271,27 +265,35 @@ Generate the AI Opportunity Report now via the submit_opportunity_report tool.`;
     const report = toolUse.input as AssessmentReport;
     res.status(200).json({ report });
 
-    // Fire-and-forget structured record -- appends the submission as a row
-    // in the lead-tracking Google Sheet. Independent of the email
-    // notification below: either can fail without affecting the other or
-    // the client's already-sent report.
-    try {
-      await appendAssessmentRow(input, domainLines, report);
-    } catch (sheetErr) {
-      console.error("Assessment sheet log failed:", sheetErr);
-    }
+    // Both of these run after the response above is already sent, so they
+    // must be wrapped in waitUntil -- without it, Fluid Compute is free to
+    // freeze or recycle the function's execution as soon as the response is
+    // flushed, silently killing an unawaited background task mid-flight
+    // (this is what was actually happening: the fetch to the Sheets
+    // webhook below was starting but never finishing).
 
-    // Fire-and-forget lead notification -- the client's report has already
-    // been sent above, so a failure here must never affect their response.
+    // Structured record -- appends the submission as a row in the
+    // lead-tracking Google Sheet. Independent of the email notification
+    // below: either can fail without affecting the other or the client's
+    // already-sent report.
+    waitUntil(
+      appendAssessmentRow(input, domainLines, report).catch((sheetErr) => {
+        console.error("Assessment sheet log failed:", sheetErr);
+      })
+    );
+
+    // Lead notification email -- the client's report has already been sent
+    // above, so a failure here must never affect their response.
     if (process.env.RESEND_API_KEY && process.env.CONTACT_FROM_EMAIL) {
-      try {
-        const resend = new Resend(process.env.RESEND_API_KEY);
-        await resend.emails.send({
-          from: `Qamira Assessment <${process.env.CONTACT_FROM_EMAIL}>`,
-          to: [LEAD_NOTIFICATION_EMAIL],
-          replyTo: input.contactEmail ? `${input.contactName || input.companyName} <${input.contactEmail}>` : undefined,
-          subject: `New AI Assessment completed: ${input.companyName}`,
-          text: `${input.companyName} completed the AI Business Assessment.
+      const resend = new Resend(process.env.RESEND_API_KEY);
+      waitUntil(
+        resend.emails
+          .send({
+            from: `Qamira Assessment <${process.env.CONTACT_FROM_EMAIL}>`,
+            to: [LEAD_NOTIFICATION_EMAIL],
+            replyTo: input.contactEmail ? `${input.contactName || input.companyName} <${input.contactEmail}>` : undefined,
+            subject: `New AI Assessment completed: ${input.companyName}`,
+            text: `${input.companyName} completed the AI Business Assessment.
 
 Contact: ${input.contactName || "not provided"} (${input.contactRole || "role not provided"})
 Email: ${input.contactEmail}
@@ -309,10 +311,11 @@ Priorities: ${input.priorities.join(", ") || "none specified"}
 Additional context: ${input.context || "(none provided)"}
 
 Report summary: ${report.summary}`,
-        });
-      } catch (notifyErr) {
-        console.error("Assessment lead notification failed:", notifyErr);
-      }
+          })
+          .catch((notifyErr) => {
+            console.error("Assessment lead notification failed:", notifyErr);
+          })
+      );
     }
   } catch (err) {
     console.error("Assessment generation failed:", err);
