@@ -119,6 +119,13 @@ function truncate(value: unknown, max: number): string {
 async function appendAssessmentRow(input: AssessmentRequest, domainLines: string, report: AssessmentReport): Promise<void> {
   const webhookUrl = process.env.SHEETS_WEBHOOK_URL;
   const webhookSecret = process.env.SHEETS_WEBHOOK_SECRET;
+  // TEMPORARY DEBUG -- remove once the env vars are confirmed reaching runtime.
+  console.log("Sheets webhook env check:", {
+    hasUrl: !!webhookUrl,
+    hasSecret: !!webhookSecret,
+    urlLength: webhookUrl?.length ?? 0,
+    secretLength: webhookSecret?.length ?? 0,
+  });
   if (!webhookUrl || !webhookSecret) return;
 
   const row = [
