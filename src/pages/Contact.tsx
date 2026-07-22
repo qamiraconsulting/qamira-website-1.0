@@ -133,6 +133,14 @@ export function Contact() {
                 </p>
               </div>
               <div>
+                <span className={labelClass}>Team Qamira</span>
+                <p className="mt-2 text-lg text-charcoal">
+                  <a href={`tel:${site.phone.replace(/\s+/g, "")}`} className="hover:text-brass">
+                    {site.phone}
+                  </a>
+                </p>
+              </div>
+              <div>
                 <span className={labelClass}>Response time</span>
                 <p className="mt-2 text-charcoal-dim">
                   We reply directly, usually within one business day -- no queue, no sales-team hand-off.

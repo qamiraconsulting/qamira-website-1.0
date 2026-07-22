@@ -6,5 +6,6 @@ export const site = {
   description:
     "Qamira Consulting is a Business Performance Excellence firm. We diagnose what's constraining growth, redesign the process and operating model beneath it, and deploy AI-native execution to make the fix permanent -- governed by QBPES™, our proprietary performance system.",
   email: "enquiries@qamiraconsulting.com",
+  phone: "+91 9096236852",
   url: "https://www.qamiraconsulting.com",
 } as const;

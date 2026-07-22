@@ -565,6 +565,13 @@ export function Assessment() {
                   {status === "error" && (
                     <p className="font-mono text-sm text-[#b5573e]" role="alert">{errorMessage}</p>
                   )}
+                  <p className="text-xs text-charcoal-dim">
+                    Note: only one assessment attempt is allowed per person. For further assistance, please{" "}
+                    <Link to="/contact" className="text-brass hover:text-brass-bright">
+                      contact us
+                    </Link>
+                    .
+                  </p>
                 </div>
               )}
             </Reveal>

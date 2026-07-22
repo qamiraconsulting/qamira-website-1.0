@@ -158,6 +158,27 @@ async function appendAssessmentRow(input: AssessmentRequest, domainLines: string
   }
 }
 
+// Checks whether this email already has a completed assessment on record,
+// via the same Apps Script webhook (type: "check-email" scans the Contact
+// Email column of the assessment tab). Fails OPEN -- if the webhook isn't
+// configured or errors, this returns false (allows the submission through)
+// rather than locking every user out of the assessment over a Sheets
+// hiccup; the duplicate check is a courtesy, not the system of record.
+async function hasCompletedAssessment(email: string): Promise<boolean> {
+  const webhookUrl = process.env.SHEETS_WEBHOOK_URL;
+  const webhookSecret = process.env.SHEETS_WEBHOOK_SECRET;
+  if (!webhookUrl || !webhookSecret) return false;
+
+  const webhookRes = await fetch(webhookUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ secret: webhookSecret, type: "check-email", email }),
+  });
+  if (!webhookRes.ok) return false;
+  const data = (await webhookRes.json()) as { exists?: boolean };
+  return data.exists === true;
+}
+
 function sanitizeDomainRatings(value: unknown): AssessmentRequest["domainRatings"] | null {
   if (!Array.isArray(value) || value.length !== 8) return null;
   const byDomain = new Map<string, AssessmentRequest["domainRatings"][number]>();
@@ -216,6 +237,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     contactRole: truncate(body.contactRole ?? "", 200),
     contactPhone: truncate(body.contactPhone ?? "", 50),
   };
+
+  let alreadySubmitted = false;
+  try {
+    alreadySubmitted = await hasCompletedAssessment(input.contactEmail);
+  } catch (checkErr) {
+    console.error("Assessment duplicate-check failed:", checkErr);
+  }
+  if (alreadySubmitted) {
+    res.status(409).json({
+      error: "This email has already completed the assessment. Only one attempt is allowed per person -- please contact us for further assistance.",
+    });
+    return;
+  }
 
   const domainLines = input.domainRatings
     .map((d) => `- ${d.domain}: ${d.maturityLevel}/5 (${MATURITY_TITLES[d.maturityLevel]}) — note: ${d.note || "none provided"}`)
