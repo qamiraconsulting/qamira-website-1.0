@@ -1,4 +1,5 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
+import { waitUntil } from "@vercel/functions";
 import { Resend } from "resend";
 
 // Server-side only -- RESEND_API_KEY and CONTACT_FROM_EMAIL are set in the
@@ -17,6 +18,32 @@ const EMAIL_PATTERN = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 function truncate(value: unknown, max: number): string {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
+}
+
+// Structured record -- appends the submission as a row in the "Contact Form
+// Leads" tab of the same lead-tracking Google Sheet used by
+// api/assessment.ts, via the same Apps Script webhook (routed by the
+// "type" field). See api/assessment.ts for why this goes through Apps
+// Script rather than the Sheets API directly.
+async function appendContactRow(input: { name: string; email: string; company: string; message: string }): Promise<void> {
+  const webhookUrl = process.env.SHEETS_WEBHOOK_URL;
+  const webhookSecret = process.env.SHEETS_WEBHOOK_SECRET;
+  if (!webhookUrl || !webhookSecret) return;
+
+  const row = [new Date().toISOString(), input.name, input.email, input.company, input.message];
+
+  const webhookRes = await fetch(webhookUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ secret: webhookSecret, type: "contact", row }),
+  });
+  if (!webhookRes.ok) {
+    throw new Error(`Sheets webhook append failed: ${webhookRes.status} ${await webhookRes.text()}`);
+  }
+  const webhookData = (await webhookRes.json()) as { ok?: boolean; error?: string };
+  if (!webhookData.ok) {
+    throw new Error(`Sheets webhook rejected the row: ${webhookData.error ?? "unknown error"}`);
+  }
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -64,6 +91,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     }
 
     res.status(200).json({ ok: true });
+
+    // Runs after the response above is sent, so it's wrapped in waitUntil
+    // -- Fluid Compute can otherwise freeze the function before this fetch
+    // completes. See api/assessment.ts for the full story on why this
+    // matters.
+    waitUntil(
+      appendContactRow({ name, email, company, message }).catch((sheetErr) => {
+        console.error("Contact sheet log failed:", sheetErr);
+      })
+    );
   } catch (err) {
     console.error("Contact form send failed:", err);
     res.status(502).json({ error: "We couldn't send that just now. Please try again shortly." });

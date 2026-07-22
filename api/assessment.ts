@@ -116,7 +116,8 @@ function truncate(value: unknown, max: number): string {
 // the Sheets API directly -- avoids a GCP project/service account/key file
 // entirely; the script checks SHEETS_WEBHOOK_SECRET as a shared secret
 // since Apps Script web apps set to "Anyone" access are otherwise
-// unauthenticated.
+// unauthenticated. The "type" field routes to the right tab -- this same
+// webhook is also used by api/contact.ts for the "Contact Form Leads" tab.
 async function appendAssessmentRow(input: AssessmentRequest, domainLines: string, report: AssessmentReport): Promise<void> {
   const webhookUrl = process.env.SHEETS_WEBHOOK_URL;
   const webhookSecret = process.env.SHEETS_WEBHOOK_SECRET;
@@ -146,7 +147,7 @@ async function appendAssessmentRow(input: AssessmentRequest, domainLines: string
   const webhookRes = await fetch(webhookUrl, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ secret: webhookSecret, row }),
+    body: JSON.stringify({ secret: webhookSecret, type: "assessment", row }),
   });
   if (!webhookRes.ok) {
     throw new Error(`Sheets webhook append failed: ${webhookRes.status} ${await webhookRes.text()}`);
