@@ -106,6 +106,56 @@ function truncate(value: unknown, max: number): string {
   return typeof value === "string" ? value.slice(0, max) : "";
 }
 
+// --- Google Sheets lead log ---------------------------------------------
+// Appends one row per completed assessment to a Google Sheet -- this is the
+// actual structured record of submissions (the Resend email further below
+// is just a human-facing heads-up, easy to lose track of in an inbox and
+// with no export path). Posts to a Google Apps Script Web App bound to the
+// sheet (Extensions -> Apps Script in the Sheet itself) rather than calling
+// the Sheets API directly -- avoids a GCP project/service account/key file
+// entirely; the script checks SHEETS_WEBHOOK_SECRET as a shared secret
+// since Apps Script web apps set to "Anyone" access are otherwise
+// unauthenticated.
+async function appendAssessmentRow(input: AssessmentRequest, domainLines: string, report: AssessmentReport): Promise<void> {
+  const webhookUrl = process.env.SHEETS_WEBHOOK_URL;
+  const webhookSecret = process.env.SHEETS_WEBHOOK_SECRET;
+  if (!webhookUrl || !webhookSecret) return;
+
+  const row = [
+    new Date().toISOString(),
+    input.companyName,
+    input.industry,
+    input.website,
+    input.revenueRange ? `${input.revenueRange}${input.revenueCurrency ? ` ${input.revenueCurrency}` : ""}` : "",
+    input.employeeCount,
+    input.yearsInOperation,
+    input.ownershipStructure,
+    input.contactName,
+    input.contactRole,
+    input.contactEmail,
+    input.contactPhone,
+    domainLines,
+    input.systemCount,
+    input.duplicateDataEntry,
+    input.priorities.join(", "),
+    input.context,
+    report.summary,
+  ];
+
+  const webhookRes = await fetch(webhookUrl, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ secret: webhookSecret, row }),
+  });
+  if (!webhookRes.ok) {
+    throw new Error(`Sheets webhook append failed: ${webhookRes.status} ${await webhookRes.text()}`);
+  }
+  const webhookData = (await webhookRes.json()) as { ok?: boolean; error?: string };
+  if (!webhookData.ok) {
+    throw new Error(`Sheets webhook rejected the row: ${webhookData.error ?? "unknown error"}`);
+  }
+}
+
 function sanitizeDomainRatings(value: unknown): AssessmentRequest["domainRatings"] | null {
   if (!Array.isArray(value) || value.length !== 8) return null;
   const byDomain = new Map<string, AssessmentRequest["domainRatings"][number]>();
@@ -213,6 +263,16 @@ Generate the AI Opportunity Report now via the submit_opportunity_report tool.`;
 
     const report = toolUse.input as AssessmentReport;
     res.status(200).json({ report });
+
+    // Fire-and-forget structured record -- appends the submission as a row
+    // in the lead-tracking Google Sheet. Independent of the email
+    // notification below: either can fail without affecting the other or
+    // the client's already-sent report.
+    try {
+      await appendAssessmentRow(input, domainLines, report);
+    } catch (sheetErr) {
+      console.error("Assessment sheet log failed:", sheetErr);
+    }
 
     // Fire-and-forget lead notification -- the client's report has already
     // been sent above, so a failure here must never affect their response.

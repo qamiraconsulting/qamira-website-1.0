@@ -141,6 +141,8 @@ function toggle(list: string[], value: string, max?: number): string[] {
   return [...list, value];
 }
 
+const EMAIL_PATTERN = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
 export function Assessment() {
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<AssessmentRequest>(emptyForm);
@@ -169,6 +171,15 @@ export function Assessment() {
     step === 2 ||
     (step === 3 && form.priorities.length > 0) ||
     step === 4;
+
+  async function handleSubmit() {
+    if (!EMAIL_PATTERN.test(form.contactEmail.trim())) {
+      setErrorMessage("Enter a valid email address, e.g. name@company.com.");
+      setStatus("error");
+      return;
+    }
+    await submit();
+  }
 
   async function submit() {
     setStatus("submitting");
@@ -531,7 +542,13 @@ export function Assessment() {
                         title="Enter a valid email address, e.g. name@company.com"
                         className={inputClass}
                         value={form.contactEmail}
-                        onChange={(e) => setForm({ ...form, contactEmail: e.target.value })}
+                        onChange={(e) => {
+                          setForm({ ...form, contactEmail: e.target.value });
+                          if (status === "error") {
+                            setStatus("idle");
+                            setErrorMessage("");
+                          }
+                        }}
                       />
                     </div>
                     <div className="flex flex-col gap-2">
@@ -567,7 +584,7 @@ export function Assessment() {
                 </Button>
               ) : (
                 <Button
-                  onClick={submit}
+                  onClick={handleSubmit}
                   className={!form.contactEmail || status === "submitting" ? "pointer-events-none opacity-40" : ""}
                 >
                   {status === "submitting" ? "Generating report..." : "Generate my report"}
