@@ -30,6 +30,13 @@ export default {
           teal: "#3e6f6f",
           "teal-bright": "#5c9797",
         },
+        // Muted rust -- used exclusively to flag a process "gap" in the
+        // home page banner illustrations. Not a general accent color.
+        rust: {
+          DEFAULT: "#9c3b2e",
+          dim: "#7a2e24",
+          wash: "#fbeae7",
+        },
         // Text on light surfaces
         charcoal: {
           DEFAULT: "#14182a",

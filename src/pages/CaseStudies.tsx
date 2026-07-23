@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import { Seo } from "@/lib/Seo";
 import { PageHero } from "@/components/sections/PageHero";
 import { Section } from "@/components/ui/Section";
@@ -7,6 +9,17 @@ import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
 import { caseStudiesHero, scenarios } from "@/data/content/caseStudies";
 
 export function CaseStudies() {
+  const location = useLocation();
+
+  // Deep-linked from the Home page gap-to-fix banner (e.g.
+  // /case-studies#process-optimization) -- React Router doesn't perform
+  // the browser's native anchor scroll on route change, so it's done here.
+  useEffect(() => {
+    if (!location.hash) return;
+    const el = document.querySelector(location.hash);
+    el?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }, [location.hash]);
+
   return (
     <>
       <Seo
@@ -26,7 +39,7 @@ export function CaseStudies() {
           <RevealGroup className="grid gap-6 lg:grid-cols-3">
             {scenarios.map((scenario) => (
               <RevealItem key={scenario.title}>
-                <div className="flex h-full flex-col border border-charcoal/10 bg-white p-8">
+                <div id={scenario.slug} className="flex h-full scroll-mt-28 flex-col border border-charcoal/10 bg-white p-8">
                   <span className="font-mono text-xs uppercase tracking-[0.05em] text-brass">{scenario.tier}</span>
                   <h3 className="mt-3 text-charcoal">{scenario.title}</h3>
 

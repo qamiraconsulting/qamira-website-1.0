@@ -18,6 +18,7 @@ export const caseStudiesHero = {
 
 export const scenarios = [
   {
+    slug: "revenue-leakage",
     tier: "Revenue Leakage",
     title: "Finding the money that was quietly slipping away",
     situation:
@@ -28,6 +29,7 @@ export const scenarios = [
       "The business recovered a meaningful chunk of revenue that was already theirs, and put a simple monthly check in place so the same leaks can't quietly reopen.",
   },
   {
+    slug: "customer-churn",
     tier: "Customer Churn",
     title: "Spotting the customers about to leave -- before they left",
     situation:
@@ -38,6 +40,7 @@ export const scenarios = [
       "The team could now reach out while there was still time to fix the relationship, winning back accounts that would previously have walked out the door unnoticed.",
   },
   {
+    slug: "process-optimization",
     tier: "Process Optimization",
     title: "Cutting a five-day approval into a same-day one",
     situation:
@@ -48,6 +51,7 @@ export const scenarios = [
       "What used to take the better part of a week now gets done in a day, and staff spend far less time chasing approvals instead of doing their actual jobs.",
   },
   {
+    slug: "system-optimization",
     tier: "System Optimization",
     title: "Retiring five tools that were only ever doing the job of two",
     situation:
@@ -58,6 +62,7 @@ export const scenarios = [
       "Lower software costs, one place to look for accurate information instead of three, and an end to staff re-entering the same data by hand.",
   },
   {
+    slug: "automation",
     tier: "Automation",
     title: "Letting AI take over the boring, repetitive work",
     situation:

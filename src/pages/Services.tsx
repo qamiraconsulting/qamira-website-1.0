@@ -6,6 +6,7 @@ import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
+import { ServiceIllustration } from "@/components/brand/ServiceIllustration";
 import { servicesHero, coreServices, managedServices, workshops } from "@/data/content/services";
 
 export function Services() {
@@ -34,6 +35,7 @@ export function Services() {
             {coreServices.map((service) => (
               <RevealItem key={service.title}>
                 <Card className="flex h-full flex-col">
+                  <ServiceIllustration icon={service.icon} className="mb-2" />
                   <span className="font-mono text-xs uppercase tracking-[0.05em] text-brass">{service.duration}</span>
                   <h3 className="mt-3 text-charcoal">{service.title}</h3>
                   <p className="mt-3 text-sm text-charcoal-dim">{service.body}</p>
@@ -55,6 +57,7 @@ export function Services() {
             {managedServices.map((service) => (
               <RevealItem key={service.title}>
                 <Card className="flex h-full flex-col">
+                  <ServiceIllustration icon={service.icon} className="mb-2" />
                   <h3 className="text-charcoal">{service.title}</h3>
                   <p className="mt-3 text-sm text-charcoal-dim">{service.body}</p>
                 </Card>
@@ -75,6 +78,7 @@ export function Services() {
             {workshops.map((item) => (
               <RevealItem key={item.title}>
                 <Card className="flex h-full flex-col">
+                  <ServiceIllustration icon={item.icon} className="mb-2" />
                   <span className="font-mono text-xs uppercase tracking-[0.05em] text-brass">{item.duration}</span>
                   <h3 className="mt-3 text-charcoal">{item.title}</h3>
                   <p className="mt-3 text-sm text-charcoal-dim">{item.body}</p>

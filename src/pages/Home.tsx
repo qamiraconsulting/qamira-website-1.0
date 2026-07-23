@@ -4,6 +4,7 @@ import { Hero } from "@/components/sections/home/Hero";
 import { StatsStrip } from "@/components/sections/home/StatsStrip";
 import { WhoWeAre } from "@/components/sections/home/WhoWeAre";
 import { Philosophy } from "@/components/sections/home/Philosophy";
+import { GapFixBanner } from "@/components/sections/home/GapFixBanner";
 import { MethodologyPreview } from "@/components/sections/home/MethodologyPreview";
 import { ClientTiers } from "@/components/sections/home/ClientTiers";
 import { CTABand } from "@/components/sections/home/CTABand";
@@ -24,6 +25,7 @@ export function Home() {
         }}
       />
       <Hero />
+      <GapFixBanner />
       <StatsStrip />
       <WhoWeAre />
       <Philosophy />
