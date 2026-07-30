@@ -22,6 +22,15 @@
 // existing, unaudited-for-SSR-safety component tree (Framer Motion,
 // canvas, matchMedia, etc.) rather than an app built for SSR from the
 // start.
+//
+// IMPORTANT: this step is best-effort, not required for a working
+// deployment. Vercel's build container doesn't reliably support launching
+// a real Chromium (missing OS-level shared libraries headless Chrome
+// needs, which a static build image was never meant to provide) -- if
+// Puppeteer can't launch here, this script logs a warning and exits 0
+// rather than failing the build. The site is a fully working SPA without
+// this step; losing prerendering costs some crawlability for JS-less
+// crawlers, but must never cost a deployment.
 
 import { preview } from "vite";
 import puppeteer from "puppeteer";
@@ -44,12 +53,22 @@ const staticRoutes = [
   "/privacy",
 ];
 
+// `server` and `browser` are tracked here (not local to main()) so the
+// top-level catch below can always tear them down, on any failure at any
+// point -- an unclosed preview server keeps the Node process alive
+// indefinitely, which would turn a Chromium-launch failure into a hung
+// build (timing out) instead of a fast, harmless skip.
+let server;
+let browser;
+
 async function main() {
-  const server = await preview({ preview: { port: 4173, strictPort: false } });
+  server = await preview({ preview: { port: 4173, strictPort: false } });
   const baseUrl = server.resolvedUrls.local[0];
   console.log(`[prerender] preview server at ${baseUrl}`);
 
-  const browser = await puppeteer.launch();
+  browser = await puppeteer.launch({
+    args: ["--no-sandbox", "--disable-setuid-sandbox"],
+  });
   const page = await browser.newPage();
 
   // Discover article and technology-solution routes from their rendered
@@ -79,12 +98,32 @@ async function main() {
     console.log(`[prerender] ${route} -> ${path.join(outDir, "index.html")}`);
   }
 
-  await browser.close();
-  await new Promise((resolve) => server.httpServer.close(resolve));
   console.log(`[prerender] done: ${routes.length} routes`);
 }
 
-main().catch((err) => {
-  console.error("[prerender] failed:", err);
-  process.exit(1);
-});
+async function cleanup() {
+  if (browser) {
+    await browser.close().catch(() => {});
+  }
+  if (server?.httpServer) {
+    await new Promise((resolve) => server.httpServer.close(resolve));
+  }
+}
+
+main()
+  .catch((err) => {
+    // Deliberately non-fatal: this is an SEO enhancement on top of a
+    // working SPA, not a build requirement. A hosting environment that
+    // can't launch Chromium (e.g. Vercel's build container) should still
+    // ship the site.
+    console.warn("[prerender] skipped -- could not complete prerendering, deploying without it.");
+    console.warn(`[prerender] reason: ${err.message}`);
+  })
+  .finally(async () => {
+    await cleanup();
+    // Explicit exit (rather than letting the event loop drain naturally)
+    // guarantees the process ends even if something -- an open browser
+    // connection, a lingering server socket -- would otherwise keep it
+    // alive, which matters far more in a CI/build context than locally.
+    process.exit(0);
+  });
