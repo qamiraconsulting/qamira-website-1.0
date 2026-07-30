@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
 import { Seo } from "@/lib/Seo";
 import { PageHero } from "@/components/sections/PageHero";
 import { Section } from "@/components/ui/Section";
@@ -9,17 +7,6 @@ import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
 import { caseStudiesHero, scenarios } from "@/data/content/caseStudies";
 
 export function CaseStudies() {
-  const location = useLocation();
-
-  // Deep-linked from the Home page gap-to-fix banner (e.g.
-  // /case-studies#process-optimization) -- React Router doesn't perform
-  // the browser's native anchor scroll on route change, so it's done here.
-  useEffect(() => {
-    if (!location.hash) return;
-    const el = document.querySelector(location.hash);
-    el?.scrollIntoView({ behavior: "smooth", block: "start" });
-  }, [location.hash]);
-
   return (
     <>
       <Seo
