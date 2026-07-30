@@ -1,6 +1,6 @@
 # Photography brief
 
-Seven placements need a real photograph, currently showing a "Photo pending" placeholder (`src/components/brand/PhotoSlot.tsx`). No image-generation tool is available in this environment. **Tool: Google AI Studio (Imagen)** -- chosen deliberately over Midjourney/DALL-E so the same account and skill also carries Qamira's planned AI content-creation offering (photos here, Veo video for social content later), rather than splitting across tools.
+Sixteen placements need a real photograph, currently showing a "Photo pending" placeholder (`src/components/brand/PhotoSlot.tsx`) -- the original 7 site placements, plus one per Technology solution detail page (9 pages, replacing the small line-art icon that was there). No image-generation tool is available in this environment. **Tool: Google AI Studio (Imagen)** -- chosen deliberately over Midjourney/DALL-E so the same account and skill also carries Qamira's planned AI content-creation offering (photos here, Veo video for social content later), rather than splitting across tools.
 
 ## Style direction (baked into every prompt below)
 
@@ -8,7 +8,7 @@ Seven placements need a real photograph, currently showing a "Photo pending" pla
 - **Lighting:** high-key, natural daylight -- soft, optimistic, energetic. Minimal shadow. Not dark, not moody, not underexposed.
 - **Composition:** conceptual and abstract -- hands, screens, documents, objects. **Never a posed "our team" group photo or a specific identifiable person's face** (Qamira doesn't have real team photography yet, and implying a bigger/established team than exists would be misleading).
 - **Avoid:** generic corporate-stock clichés (handshakes, forced smiles, thumbs up, people in a circle around a laptop), any visible/legible on-image text or logos, employees, watermarks, dark/gloomy/underexposed results.
-- **Aspect ratio:** set as a *generation setting* in AI Studio, not embedded in the prompt text -- Imagen supports `1:1`, `4:3`, `3:4`, `16:9`, `9:16`. All seven below use `4:3`.
+- **Aspect ratio:** set as a *generation setting* in AI Studio, not embedded in the prompt text -- Imagen supports `1:1`, `4:3`, `3:4`, `16:9`, `9:16`. All placements below use `4:3`.
 - **Prompting style:** Imagen reads best as a full natural-language photographic description (like briefing a photographer), not comma-stacked keywords.
 
 ## How to hand the files back
@@ -45,6 +45,57 @@ Generate via Google AI Studio, then either upload the files directly in chat, or
 **File:** `public/photos/technology-hero.jpg` -- **Aspect:** 4:3
 
 > A clean, bright, professional product-style photograph of a laptop screen on a minimal, sunlit desk, displaying a generic chatbot conversation interface or CRM dashboard mockup -- abstract UI elements and chart shapes only, no legible text. Natural daylight, warm and energetic, light color palette with brass-gold accent highlights in the interface. Shallow depth of field. No visible face, no logos, no watermark. This one can read more literally than the others since it's illustrating real software capability, not an abstract concept.
+
+---
+
+## Technology solution detail pages (one photo per page, replacing the icon)
+
+Each of these sits beside the hero copy on `/technology/<slug>`, same treatment as the Technology page hero above (literal, product-style, since these illustrate real software capability rather than an abstract concept). Filenames go in a subfolder to keep them grouped separately from the seven general site photos above.
+
+### 8. Custom SaaS Applications & AI Chatbots
+**File:** `public/photos/technology/custom-saas-chatbots.jpg` -- **Aspect:** 4:3
+
+> A bright, professional product-style photograph of a laptop screen on a sunlit desk, displaying a generic customer-service chat interface with a friendly AI assistant conversation bubble -- abstract UI elements only, no legible text. Natural daylight, warm and energetic, light color palette with brass-gold accent highlights in the interface. Shallow depth of field. No visible face, no logos, no watermark.
+
+### 9. CRM Build & Configuration
+**File:** `public/photos/technology/crm-build-configuration.jpg` -- **Aspect:** 4:3
+
+> A bright, professional product-style photograph of a laptop screen on a sunlit desk, displaying a generic CRM pipeline view with sales-stage columns and contact cards -- abstract UI elements only, no legible text. Natural daylight, warm and energetic, light color palette with brass-gold accent highlights in the interface. Shallow depth of field. No visible face, no logos, no watermark.
+
+### 10. AI Voice & Call Automation
+**File:** `public/photos/technology/ai-voice-call-automation.jpg` -- **Aspect:** 4:3
+
+> A bright, professional editorial photograph of a modern office desk with a sleek headset resting beside a laptop showing a generic call-log interface with a soft waveform graphic, bathed in warm natural daylight. Light, warm color palette with brass-gold accents, high-key lighting, minimal shadow. No visible face, no legible text, no logos, no watermark.
+
+### 11. AI Video Creation
+**File:** `public/photos/technology/ai-video-creation.jpg` -- **Aspect:** 4:3
+
+> A bright, professional product-style photograph of a laptop screen on a sunlit desk, displaying a generic video-editing timeline interface with a preview frame and waveform track -- abstract UI elements only, no legible text. Natural daylight, warm and energetic, light color palette with brass-gold accent highlights. Shallow depth of field. No visible face, no logos, no watermark.
+
+### 12. Content Creation & Scheduled Auto-Publishing
+**File:** `public/photos/technology/content-scheduling-automation.jpg` -- **Aspect:** 4:3
+
+> A bright, professional product-style photograph of a laptop screen on a sunlit desk, displaying a generic social-media content calendar with scheduled post tiles across a week grid -- abstract UI elements only, no legible text. Natural daylight, warm and energetic, light color palette with brass-gold accent highlights. Shallow depth of field. No visible face, no logos, no watermark.
+
+### 13. Marketing Automation & Lead Scoring
+**File:** `public/photos/technology/marketing-automation-lead-scoring.jpg` -- **Aspect:** 4:3
+
+> A bright, professional product-style photograph of a laptop screen on a sunlit desk, displaying a generic marketing funnel dashboard with a lead-scoring gauge and a contact list -- abstract UI elements only, no legible text. Natural daylight, warm and energetic, light color palette with brass-gold accent highlights. Shallow depth of field. No visible face, no logos, no watermark.
+
+### 14. Workflow & Systems Integration Automation
+**File:** `public/photos/technology/workflow-systems-integration.jpg` -- **Aspect:** 4:3
+
+> A bright, professional editorial photograph of a laptop screen on a sunlit desk, displaying a generic node-and-line workflow diagram connecting several abstract app icons -- no legible text. Natural daylight, warm and energetic, light color palette with brass-gold accent highlights in the connecting lines. Shallow depth of field. No visible face, no logos, no watermark.
+
+### 15. Internal Knowledge & Document Q&A Agents
+**File:** `public/photos/technology/internal-knowledge-agents.jpg` -- **Aspect:** 4:3
+
+> A bright, professional product-style photograph of a laptop screen on a sunlit desk, displaying a generic internal knowledge-base search interface with a question typed into a search bar and a document-citation card below -- abstract UI elements only, no legible text. Natural daylight, warm and energetic, light color palette with brass-gold accent highlights. Shallow depth of field. No visible face, no logos, no watermark.
+
+### 16. Document & Data Extraction Automation
+**File:** `public/photos/technology/document-data-extraction.jpg` -- **Aspect:** 4:3
+
+> A bright, professional editorial photograph of a sunlit desk with a printed invoice or form beside an open laptop displaying a generic data-extraction interface highlighting a few fields -- abstract UI elements only, no legible text. Natural daylight, warm and energetic, light color palette with brass-gold accent highlights. Shallow depth of field. No visible face, no logos, no watermark.
 
 ---
 

@@ -7,11 +7,26 @@ import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Button } from "@/components/ui/Button";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
-import { TechIllustration } from "@/components/brand/TechIllustration";
+import { PhotoSlot } from "@/components/brand/PhotoSlot";
 import { customerFacingAI, contentAndGrowthSystems, internalAutomation } from "@/data/content/technology";
 import { NotFound } from "@/pages/NotFound";
 
 const allOfferings = [...customerFacingAI, ...contentAndGrowthSystems, ...internalAutomation];
+
+// Placeholder descriptions shown until a real photo lands at
+// /photos/technology/<slug>.jpg -- see docs/photography-brief.md for the
+// prompts these correspond to.
+const photoDescriptions: Record<string, string> = {
+  "custom-saas-chatbots": "Laptop screen showing a generic AI customer-service chat interface, bright and sunlit.",
+  "crm-build-configuration": "Laptop screen showing a generic CRM pipeline view, bright and sunlit.",
+  "ai-voice-call-automation": "A headset beside a laptop showing a generic call-log interface, bright and sunlit.",
+  "ai-video-creation": "Laptop screen showing a generic video-editing timeline, bright and sunlit.",
+  "content-scheduling-automation": "Laptop screen showing a generic social content calendar, bright and sunlit.",
+  "marketing-automation-lead-scoring": "Laptop screen showing a generic lead-scoring dashboard, bright and sunlit.",
+  "workflow-systems-integration": "Laptop screen showing a generic workflow/integration diagram, bright and sunlit.",
+  "internal-knowledge-agents": "Laptop screen showing a generic internal knowledge-search interface, bright and sunlit.",
+  "document-data-extraction": "A printed document beside a laptop showing a generic data-extraction interface, bright and sunlit.",
+};
 
 export function TechnologyDetail() {
   const { slug } = useParams<{ slug: string }>();
@@ -52,7 +67,7 @@ export function TechnologyDetail() {
 
       <Section tone="parchment" className="pt-40 sm:pt-48">
         <Container>
-          <Reveal className="grid gap-10 lg:grid-cols-[1fr_auto] lg:items-center lg:gap-14">
+          <Reveal className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:gap-14">
             <div>
               <p className="font-mono text-xs uppercase tracking-[0.06em] text-charcoal-dim">
                 <Link to="/" className="hover:text-brass">
@@ -69,9 +84,12 @@ export function TechnologyDetail() {
               <h1 className="mt-4 max-w-[22ch] text-charcoal">{offering.title}</h1>
               <p className="mt-5 max-w-[56ch] text-base text-charcoal-dim sm:text-lg">{offering.body}</p>
             </div>
-            <div className="hidden shrink-0 items-center justify-center border border-charcoal/10 bg-white p-8 lg:flex">
-              <TechIllustration icon={offering.icon} className="h-28 w-28" />
-            </div>
+            <PhotoSlot
+              src={`/photos/technology/${offering.slug}.jpg`}
+              label={photoDescriptions[offering.slug]}
+              alt={`Illustration of ${offering.title}`}
+              className="hidden lg:block"
+            />
           </Reveal>
         </Container>
       </Section>
