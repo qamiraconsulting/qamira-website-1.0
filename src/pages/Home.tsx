@@ -6,7 +6,9 @@ import { WhoWeAre } from "@/components/sections/home/WhoWeAre";
 import { Philosophy } from "@/components/sections/home/Philosophy";
 import { GapFixBanner } from "@/components/sections/home/GapFixBanner";
 import { MethodologyPreview } from "@/components/sections/home/MethodologyPreview";
+import { TechnologyPreview } from "@/components/sections/home/TechnologyPreview";
 import { ClientTiers } from "@/components/sections/home/ClientTiers";
+import { CaseStudiesPreview } from "@/components/sections/home/CaseStudiesPreview";
 import { CTABand } from "@/components/sections/home/CTABand";
 
 export function Home() {
@@ -21,7 +23,15 @@ export function Home() {
           name: site.name,
           description: site.description,
           url: site.url,
+          logo: `${site.url}/logo/apple-touch-icon.png`,
+          image: `${site.url}/logo/apple-touch-icon.png`,
           areaServed: "Global",
+          contactPoint: {
+            "@type": "ContactPoint",
+            email: site.email,
+            telephone: site.phone,
+            contactType: "customer service",
+          },
         }}
       />
       <Hero />
@@ -30,6 +40,8 @@ export function Home() {
       <WhoWeAre />
       <Philosophy />
       <MethodologyPreview />
+      <TechnologyPreview />
+      <CaseStudiesPreview />
       <ClientTiers />
       <CTABand />
     </>

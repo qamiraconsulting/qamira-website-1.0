@@ -57,6 +57,29 @@ export const managedServices = [
   },
 ];
 
+export const servicesFaq = [
+  {
+    question: "How is this different from a typical automation agency?",
+    answer:
+      "An automation agency starts from the tool. We start from a diagnosis -- an automation agency will happily build you a chatbot for a process that shouldn't exist in its current form. QBPES™ identifies the root cause first, so what eventually gets automated is the right fix, not just the first one someone pitched you.",
+  },
+  {
+    question: "What does an engagement actually cost?",
+    answer:
+      "Pricing scales with client tier and engagement depth rather than a flat rate card -- a focused Operational Excellence engagement costs meaningfully less than a full Business Performance Transformation. A first conversation is a diagnostic, not a sales pitch, and includes a plain-language estimate before anything is scoped.",
+  },
+  {
+    question: "Do I need the full diagnostic before Technology gets built?",
+    answer:
+      "Not strictly, but it's the default path: most clients start with a Services diagnosis so any build on the Technology page is scoped against a confirmed bottleneck instead of a guess. If you already know exactly what you need built, that's a reasonable place to start a conversation too.",
+  },
+  {
+    question: "How long does a typical engagement take?",
+    answer:
+      "It depends on scope -- a focused Operational Excellence engagement can run a few weeks, while a full Business Performance Transformation typically runs 6-12 weeks. Workshops and masterclasses are single-session or short-program commitments, listed with their own duration above.",
+  },
+];
+
 export const workshops = [
   {
     title: "Business Discovery & Executive Visioning Workshops",

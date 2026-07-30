@@ -20,11 +20,34 @@
     @apply bg-parchment text-charcoal-dim font-body antialiased;
   }
 
+  /* Tailwind's preflight resets every heading to `font-size: inherit`, and
+     almost nothing in this codebase applies an explicit text-size utility
+     to an individual h1/h2/h3/h4 (a handful of card titles do, as
+     intentional smaller exceptions -- those utility classes still win over
+     these element-level defaults). Without this, every heading renders at
+     the inherited body size, which reads as a cramped, mobile-scale layout
+     even on desktop. */
   h1,
   h2,
   h3,
   h4 {
     @apply font-display font-medium text-charcoal tracking-tight;
+  }
+
+  h1 {
+    @apply text-4xl leading-[1.1] sm:text-5xl lg:text-6xl lg:leading-[1.05];
+  }
+
+  h2 {
+    @apply text-3xl leading-tight sm:text-4xl;
+  }
+
+  h3 {
+    @apply text-xl leading-snug sm:text-2xl;
+  }
+
+  h4 {
+    @apply text-lg leading-snug;
   }
 
   ::selection {

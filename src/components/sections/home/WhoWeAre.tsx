@@ -3,19 +3,27 @@ import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Card } from "@/components/ui/Card";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
+import { PhotoSlot } from "@/components/brand/PhotoSlot";
 import { pillars } from "@/data/content/home";
 
 export function WhoWeAre() {
   return (
     <Section tone="white">
       <Container>
-        <Reveal className="max-w-[46rem]">
-          <Eyebrow>Who we are</Eyebrow>
-          <h2 className="mt-4 text-charcoal">A Business Performance Excellence firm, built AI-native from day one.</h2>
-          <p className="mt-4 text-base text-charcoal-dim sm:text-lg">
-            Most firms treat AI as a bolt-on. Qamira treats business performance as the foundation, AI-native execution
-            as the mechanism, and reusable intellectual property as the moat that keeps getting stronger.
-          </p>
+        <Reveal className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-14">
+          <div>
+            <Eyebrow>Who we are</Eyebrow>
+            <h2 className="mt-4 text-charcoal">A Business Performance Excellence firm, built AI-native from day one.</h2>
+            <p className="mt-4 text-base text-charcoal-dim sm:text-lg">
+              Most firms treat AI as a bolt-on. Qamira treats business performance as the foundation, AI-native
+              execution as the mechanism, and reusable intellectual property as the moat that keeps getting stronger.
+            </p>
+          </div>
+          <PhotoSlot
+            src="/photos/who-we-are.jpg"
+            label="Diagnosis in progress -- hands annotating a printed process map, or a laptop screen showing a data model. Charcoal/brass duotone, editorial lighting."
+            alt="Hands annotating a printed business process diagram"
+          />
         </Reveal>
 
         <RevealGroup className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">

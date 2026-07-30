@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Seo } from "@/lib/Seo";
 import { PageHero } from "@/components/sections/PageHero";
 import { Section } from "@/components/ui/Section";
@@ -26,15 +27,15 @@ export function Insights() {
         <Container>
           <RevealGroup className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {articles.map((article) => (
-              <RevealItem key={article.title}>
-                <Card className="flex h-full flex-col">
-                  <span className="font-mono text-xs uppercase tracking-[0.05em] text-brass">{article.category}</span>
-                  <h3 className="mt-3 text-lg text-charcoal">{article.title}</h3>
-                  <p className="mt-3 flex-1 text-sm text-charcoal-dim">{article.summary}</p>
-                  <span className="mt-5 font-mono text-xs uppercase tracking-[0.05em] text-charcoal-dim/70">
-                    Full article in progress
-                  </span>
-                </Card>
+              <RevealItem key={article.slug}>
+                <Link to={`/insights/${article.slug}`} className="block h-full">
+                  <Card className="flex h-full flex-col">
+                    <span className="font-mono text-xs uppercase tracking-[0.05em] text-brass">{article.category}</span>
+                    <h3 className="mt-3 text-lg text-charcoal">{article.title}</h3>
+                    <p className="mt-3 flex-1 text-sm text-charcoal-dim">{article.summary}</p>
+                    <span className="mt-5 font-mono text-xs uppercase tracking-[0.05em] text-brass">Read the article &rarr;</span>
+                  </Card>
+                </Link>
               </RevealItem>
             ))}
           </RevealGroup>

@@ -1,4 +1,27 @@
 User-agent: *
 Allow: /
 
+# Explicit allow lines for AI answer-engine crawlers -- functionally
+# redundant with the wildcard above, but documents intent clearly.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
 Sitemap: https://www.qamiraconsulting.com/sitemap.xml

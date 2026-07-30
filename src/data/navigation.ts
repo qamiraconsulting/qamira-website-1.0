@@ -8,6 +8,7 @@ export const primaryNav: NavItem[] = [
   { label: "Home", path: "/" },
   { label: "About", path: "/about" },
   { label: "Services", path: "/services" },
+  { label: "Technology", path: "/technology" },
   { label: "Industries", path: "/industries" },
   { label: "Methodology", path: "/methodology" },
   { label: "AI Solutions", path: "/ai-solutions" },
@@ -26,6 +27,7 @@ export const footerNav = {
   ],
   work: [
     { label: "Services", path: "/services" },
+    { label: "Technology", path: "/technology" },
     { label: "Industries", path: "/industries" },
     { label: "AI Solutions", path: "/ai-solutions" },
     { label: "AI Business Assessment", path: "/assessment" },
