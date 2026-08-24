@@ -33,20 +33,19 @@ export const transformationMatrix = {
     { title: "Quick-win automation", body: "High suitability, high impact -- built now." },
     { title: "Roadmap candidate", body: "High impact, lower suitability -- flagged as future readiness work." },
     { title: "Monitor-only", body: "Low impact regardless of suitability -- not worth automating yet." },
-    { title: "Do-not-automate", body: "Low suitability, high judgment dependency -- explicitly recommended against." },
+    { title: "Do-not-automate", body: "Low suitability -- explicitly recommended against, with the reasoning documented, never a quiet default." },
   ],
 };
 
 export const pipeline = [
-  { title: "Discovery Agent", body: "Structures the raw request against our discovery framework, tags stated pain points to the eight QBPES™ domains, and flags missing information." },
-  { title: "Analysis Agents", body: "Score current-state maturity per domain, then run root cause analysis against every domain below target maturity, producing a ranked list of gaps with quantified impact." },
-  { title: "Solution Architect Agent", body: "Produces the recommendation set -- process, KPI, and AI-automation opportunities -- each labeled with its Cognitive Transformation Matrix quadrant." },
-  { title: "Quality Review Agent", body: "A mandatory gate: checks every recommendation traces to evidence and respects the strategy-first hierarchy before anything reaches a client." },
-  { title: "Reporting Agent", body: "Structures and narrates the final, human-reviewed recommendation set into a client-facing report -- never permitted to introduce new findings of its own." },
+  { title: "Discovery", body: "Every request is structured against our discovery framework before any analysis starts, so nothing gets diagnosed against an incomplete picture." },
+  { title: "Analysis & Recommendation", body: "Current-state maturity and root causes are assessed, and a recommendation set is produced -- each item labeled with how confidently it should be acted on." },
+  { title: "Quality Review", body: "A mandatory gate: every recommendation is checked against cited evidence and the strategy-first hierarchy before anything reaches a client." },
+  { title: "Client Reporting", body: "The final, human-reviewed recommendation set is narrated into a client-facing report -- never permitted to introduce a new finding of its own." },
 ];
 
 export const stack = {
   eyebrow: "Infrastructure",
-  heading: "Built on the Microsoft AI stack, chosen deliberately.",
-  body: "When a future-state design calls for new infrastructure, we default to Microsoft Fabric, Azure OpenAI, Power Platform, and Copilot as our supported and validated deployment environment. A different stack is proposed only when a client's existing environment makes the default materially more expensive or infeasible -- and any such deviation is explicitly flagged and justified, never presented as equivalent by default.",
+  heading: "Built on a validated stack, chosen deliberately.",
+  body: "When a future-state design calls for new infrastructure, we default to a small set of proven, enterprise-grade platforms as our supported and validated deployment environment -- selected for security, reliability, and fit with how our own methodology operates, not brand preference. A different stack is proposed only when a client's existing environment makes the default materially more expensive or infeasible -- and any such deviation is explicitly flagged and justified, never presented as equivalent by default.",
 };

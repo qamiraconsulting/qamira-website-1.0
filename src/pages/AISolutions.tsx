@@ -14,7 +14,7 @@ export function AISolutions() {
       <Seo
         title="AI Solutions"
         path="/ai-solutions"
-        description="AI that augments our judgment, never replaces it -- responsible AI principles, the Cognitive Transformation Matrix, and our multi-agent assessment pipeline."
+        description="AI that augments our judgment, never replaces it -- responsible AI principles, the Cognitive Transformation Matrix, and how our AI-assisted assessment process is governed."
       />
       <PageHero
         eyebrow={aiSolutionsHero.eyebrow}
@@ -68,7 +68,7 @@ export function AISolutions() {
         <Container>
           <Reveal className="max-w-[46rem]">
             <Eyebrow>How an assessment runs</Eyebrow>
-            <h2 className="mt-4 text-charcoal">A five-agent pipeline, with a mandatory human-review gate.</h2>
+            <h2 className="mt-4 text-charcoal">A structured, multi-stage process, with a mandatory human-review gate.</h2>
           </Reveal>
 
           <RevealGroup className="mt-12 flex flex-col">

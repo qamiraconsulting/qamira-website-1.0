@@ -7,6 +7,7 @@ import { Technology } from "@/pages/Technology";
 import { TechnologyDetail } from "@/pages/TechnologyDetail";
 import { Industries } from "@/pages/Industries";
 import { Methodology } from "@/pages/Methodology";
+import { GrowthOS } from "@/pages/GrowthOS";
 import { AISolutions } from "@/pages/AISolutions";
 import { CaseStudies } from "@/pages/CaseStudies";
 import { Insights } from "@/pages/Insights";
@@ -28,6 +29,7 @@ export default function App() {
         <Route path="/technology/:slug" element={<TechnologyDetail />} />
         <Route path="/industries" element={<Industries />} />
         <Route path="/methodology" element={<Methodology />} />
+        <Route path="/growth-os" element={<GrowthOS />} />
         <Route path="/ai-solutions" element={<AISolutions />} />
         <Route path="/case-studies" element={<CaseStudies />} />
         <Route path="/insights" element={<Insights />} />

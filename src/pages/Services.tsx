@@ -137,6 +137,9 @@ export function Services() {
             </p>
             <div className="mt-9 flex flex-wrap justify-center gap-4">
               <Button to="/contact">Start a conversation</Button>
+              <Button to="/growth-os" variant="ghost" arrow={false}>
+                See Qamira GrowthOS™
+              </Button>
               <Button to="/industries" variant="ghost" arrow={false}>
                 See industry accelerators
               </Button>

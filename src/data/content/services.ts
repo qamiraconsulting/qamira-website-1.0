@@ -78,6 +78,11 @@ export const servicesFaq = [
     answer:
       "It depends on scope -- a focused Operational Excellence engagement can run a few weeks, while a full Business Performance Transformation typically runs 6-12 weeks. Workshops and masterclasses are single-session or short-program commitments, listed with their own duration above.",
   },
+  {
+    question: "Where does growth and marketing fit in?",
+    answer:
+      "That's Qamira GrowthOS™ -- our AI-powered growth and performance operating system, built on the same diagnostic discipline as everything above but scoped specifically to customer acquisition, conversion, delivery, and measurement. See the GrowthOS™ page for the full picture.",
+  },
 ];
 
 export const workshops = [

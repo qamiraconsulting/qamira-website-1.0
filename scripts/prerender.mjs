@@ -44,6 +44,7 @@ const staticRoutes = [
   "/technology",
   "/industries",
   "/methodology",
+  "/growth-os",
   "/ai-solutions",
   "/assessment",
   "/case-studies",

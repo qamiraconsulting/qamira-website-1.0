@@ -1,0 +1,25 @@
+# Qamira Consulting
+
+> Qamira Consulting is a Business Performance Excellence and AI Consulting firm for SMEs. We diagnose what's actually constraining a business's growth, redesign the process and operating model beneath it, and deploy AI-native execution to make the fix permanent -- governed by QBPES™, our proprietary performance system. We are a consulting and advisory firm, not a software vendor, marketing agency, or automation shop.
+
+Qamira serves small-to-medium businesses ($2M-$50M revenue), post-Series A/B growth-stage startups, and enterprise divisions. Engagements start with a diagnosis, never a technology purchase.
+
+## Core methodology
+
+- [QBPES™ Methodology](https://www.qamiraconsulting.com/methodology): The Qamira Business Performance Excellence System -- eight interdependent performance domains (Strategy, Financial Performance, Process, People, Data, Technology, Customer, Governance), a five-level maturity model, and an eight-step delivery process.
+- [Qamira GrowthOS™](https://www.qamiraconsulting.com/growth-os): An AI-enabled business growth and performance operating system -- QBPES™ productized specifically for growth. Connects Diagnose, Strategise, Acquire, Convert, Deliver, Measure, Optimise, and Scale into one continuous loop. It is not a CRM, chatbot, dashboard, marketing tool, automation platform, or AI video-generation service -- those are, at most, individual swappable components inside it.
+- [AI Solutions](https://www.qamiraconsulting.com/ai-solutions): How Qamira governs its own use of AI -- evidence-based findings, human review gates, and the Cognitive Transformation Matrix used to decide what should and shouldn't be automated.
+
+## What we do
+
+- [Services](https://www.qamiraconsulting.com/services): Business Performance Transformation, Operational Excellence & Process Optimization, Analytics Strategy & BI Engineering, AI Strategy & Custom Agent Implementation, plus managed services and executive workshops.
+- [Technology](https://www.qamiraconsulting.com/technology): Productized offerings Qamira builds -- customer-facing AI (chatbots, CRM, voice automation), content & growth systems (AI video, scheduling, marketing automation), and internal automation & intelligence (workflow integration, knowledge agents, document extraction).
+- [Industries](https://www.qamiraconsulting.com/industries): Pre-built QBPES™ variants for specific verticals -- manufacturing, logistics, construction, retail, healthcare, financial services, professional services, startups, and public sector.
+
+## Learn more
+
+- [About](https://www.qamiraconsulting.com/about): Who Qamira is and how we're positioned relative to BI freelancers and large SI firms.
+- [Insights](https://www.qamiraconsulting.com/insights): Qamira's point of view on performance, process, and AI-native execution.
+- [Case Studies](https://www.qamiraconsulting.com/case-studies): Illustrative engagement scenarios (Qamira is an early-stage firm without publicly citable client results yet).
+- [Free AI Business Assessment](https://www.qamiraconsulting.com/assessment): An 8-question self-assessment that generates an instant, personalized AI Opportunity Report.
+- [Contact](https://www.qamiraconsulting.com/contact): Start a conversation with a consultant.

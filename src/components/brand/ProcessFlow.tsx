@@ -1,8 +1,44 @@
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { Search, Workflow, SlidersHorizontal, Users, Cpu, FileCheck2, BarChart3, RefreshCw, Lock } from "lucide-react";
+import {
+  Search,
+  Workflow,
+  SlidersHorizontal,
+  Users,
+  Cpu,
+  FileCheck2,
+  BarChart3,
+  RefreshCw,
+  Lock,
+  Stethoscope,
+  Compass,
+  Megaphone,
+  Handshake,
+  PackageCheck,
+  LineChart,
+  Sparkles,
+  TrendingUp,
+} from "lucide-react";
 import { ease, staggerChildren, viewportOnce } from "@/lib/motion";
 
-const icons = { Search, Workflow, SlidersHorizontal, Users, Cpu, FileCheck2, BarChart3, RefreshCw, Lock };
+const icons = {
+  Search,
+  Workflow,
+  SlidersHorizontal,
+  Users,
+  Cpu,
+  FileCheck2,
+  BarChart3,
+  RefreshCw,
+  Lock,
+  Stethoscope,
+  Compass,
+  Megaphone,
+  Handshake,
+  PackageCheck,
+  LineChart,
+  Sparkles,
+  TrendingUp,
+};
 
 type Step = {
   step: string;

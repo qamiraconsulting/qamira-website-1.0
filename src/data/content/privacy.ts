@@ -1,6 +1,10 @@
 // Privacy Policy copy. Describes actual data handling as implemented in
-// api/contact.ts (Resend) and api/assessment.ts (Anthropic Claude API) --
-// keep in sync if either of those change.
+// api/contact.ts (Resend) and api/assessment.ts (Anthropic Claude API).
+// Resend and Vercel are deliberately not named in the "Who else touches
+// it" section below (2026-08-24, user decision) -- they're infrastructure
+// (email delivery, hosting), not methodology, so omitting them doesn't
+// change what data actually flows where, only what's disclosed publicly.
+// Keep in sync if the Anthropic integration changes.
 
 export const privacyHero = {
   eyebrow: "Privacy Policy",
@@ -8,7 +12,7 @@ export const privacyHero = {
   lede: "Plain-language description of what we collect, why, and what we do with it -- no dense legal boilerplate.",
 };
 
-export const lastUpdated = "16 July 2026";
+export const lastUpdated = "24 August 2026";
 
 export const sections = [
   {
@@ -22,7 +26,7 @@ export const sections = [
     heading: "How we use it",
     body: [
       "Contact form submissions are used solely to respond to your enquiry.",
-      "Assessment submissions are sent to Anthropic's Claude API to generate your personalized AI Opportunity Report. Per Anthropic's API terms, data submitted through the API is not used to train Anthropic's models.",
+      "Assessment submissions are sent to Anthropic's Claude API to generate your personalized AI Opportunity Report. Per Anthropic's commercial API terms (anthropic.com/legal/commercial-terms), data submitted through the API is not used to train Anthropic's models, and is retained only briefly for abuse and safety monitoring.",
       "We do not sell your information, and we do not share it with third parties for marketing or any other unrelated purpose.",
     ],
   },
@@ -37,10 +41,8 @@ export const sections = [
   {
     heading: "Who else touches it",
     body: [
-      "Resend -- delivers contact form emails on our behalf.",
       "Anthropic -- processes assessment answers via the Claude API to generate your report.",
-      "Vercel -- hosts this website and its backend functions.",
-      "Each of these providers processes data only as needed to provide their service to us and is bound by their own privacy and security terms.",
+      "Anthropic processes data only as needed to provide this service to us, and is bound by its own privacy and security terms.",
     ],
   },
   {
