@@ -1,7 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { Check } from "lucide-react";
 import { Seo } from "@/lib/Seo";
-import { site } from "@/data/site";
+import { site, orgRef } from "@/data/site";
 import { Section } from "@/components/ui/Section";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -50,7 +50,7 @@ export function TechnologyDetail() {
             "@type": "Service",
             name: offering.title,
             description: offering.body,
-            provider: { "@type": "Organization", name: site.name },
+            provider: orgRef,
             url,
           },
           {

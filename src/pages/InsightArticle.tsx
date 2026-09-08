@@ -1,6 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { Seo } from "@/lib/Seo";
-import { site } from "@/data/site";
+import { site, orgRef } from "@/data/site";
 import { Section } from "@/components/ui/Section";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
@@ -34,8 +34,8 @@ export function InsightArticle() {
             datePublished: article.datePublished,
             dateModified: article.datePublished,
             articleSection: article.category,
-            author: { "@type": "Organization", name: site.name },
-            publisher: { "@type": "Organization", name: site.name },
+            author: orgRef,
+            publisher: orgRef,
             mainEntityOfPage: url,
             url,
           },

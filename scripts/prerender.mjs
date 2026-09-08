@@ -1,130 +1,128 @@
 // Post-build static prerendering.
 //
-// This site is a 100%-client-side React SPA (Vite + react-router-dom).
-// Crawlers that don't execute JavaScript -- which reportedly includes many
-// AI-answer-engine crawlers (GPTBot, ClaudeBot, PerplexityBot), even where
-// Googlebot itself generally does -- would otherwise see nothing but the
-// empty `<div id="root">` shell in dist/index.html.
+// Renders every real route to HTML with react-dom/server and writes the
+// result into the client build as that route's index.html, so crawlers
+// that don't execute JavaScript get the page's actual content, title,
+// description and JSON-LD instead of an empty `<div id="root">` shell.
 //
-// This script serves the built `dist/` output with Vite's own preview
-// server (which already does SPA history-fallback to index.html for every
-// route), visits every real route with a headless Chromium via Puppeteer,
-// waits for the page to fully render (including react-helmet-async's
-// per-page <title>/meta/JSON-LD, which mutate document.head after mount),
-// and writes the resulting live DOM back to disk as that route's
-// index.html.
+// This runs after two Vite builds (see package.json):
+//   1. `vite build`                       -> dist/        (the client SPA)
+//   2. `vite build --ssr src/entry-server.tsx --outDir dist-ssr`
 //
-// This intentionally does NOT switch the app to hydrateRoot -- main.tsx
-// still calls createRoot(...).render(...), so the client JS simply
-// replaces the prerendered markup with a fresh client render on load.
-// There's a brief visible "swap" for a real visitor, but zero hydration-
-// mismatch risk, which matters far more given this is a retrofit onto an
-// existing, unaudited-for-SSR-safety component tree (Framer Motion,
-// canvas, matchMedia, etc.) rather than an app built for SSR from the
-// start.
+// The app is NOT switched to hydrateRoot -- main.tsx still calls
+// createRoot(...).render(...), so the client simply replaces this markup
+// with a fresh client render on load. That means zero hydration-mismatch
+// risk on a component tree that was never audited for SSR safety, which
+// matters more here than saving one render pass.
 //
-// IMPORTANT: this step is best-effort, not required for a working
-// deployment. Vercel's build container doesn't reliably support launching
-// a real Chromium (missing OS-level shared libraries headless Chrome
-// needs, which a static build image was never meant to provide) -- if
-// Puppeteer can't launch here, this script logs a warning and exits 0
-// rather than failing the build. The site is a fully working SPA without
-// this step; losing prerendering costs some crawlability for JS-less
-// crawlers, but must never cost a deployment.
+// Unlike the Puppeteer-based version this replaces, nothing here depends
+// on the build environment being able to launch a browser, so a failure
+// is a real bug and is allowed to fail the build rather than skipping
+// silently and shipping an empty shell.
 
-import { preview } from "vite";
-import puppeteer from "puppeteer";
-import { mkdir, writeFile } from "node:fs/promises";
+import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { pathToFileURL } from "node:url";
 
-const staticRoutes = [
-  "/",
-  "/about",
-  "/services",
-  "/technology",
-  "/industries",
-  "/methodology",
-  "/growth-os",
-  "/ai-solutions",
-  "/assessment",
-  "/case-studies",
-  "/insights",
-  "/careers",
-  "/contact",
-  "/privacy",
-];
+const DIST = path.resolve("dist");
+const SITE_URL = "https://www.qamiraconsulting.com";
+const SSR_ENTRY = path.resolve("dist-ssr/entry-server.js");
 
-// `server` and `browser` are tracked here (not local to main()) so the
-// top-level catch below can always tear them down, on any failure at any
-// point -- an unclosed preview server keeps the Node process alive
-// indefinitely, which would turn a Chromium-launch failure into a hung
-// build (timing out) instead of a fast, harmless skip.
-let server;
-let browser;
+/**
+ * Strip the static <title> and <meta name="description"> that index.html
+ * carries for the un-prerendered SPA case, so Helmet's per-page versions
+ * don't end up duplicated alongside them.
+ */
+function stripStaticHead(template) {
+  return template
+    .replace(/[ \t]*<title>[\s\S]*?<\/title>\r?\n?/, "")
+    .replace(/[ \t]*<meta\s+name="description"[\s\S]*?\/>\r?\n?/, "");
+}
+
+/**
+ * Reveal/RevealGroup use Framer Motion's `initial="hidden"` with
+ * `whileInView`, which serializes to `opacity:0` inline styles because
+ * IntersectionObserver never fires during renderToString. Text in an
+ * opacity-0 element is still extracted by text-only crawlers, but a
+ * crawler that renders CSS can treat it as hidden content -- so strip
+ * exactly Framer Motion's hidden-variant signature and let the elements
+ * sit visible at rest.
+ *
+ * This only changes what a non-JS visitor sees: main.tsx calls createRoot
+ * (never hydrateRoot), so the client re-renders the whole tree from
+ * scratch and the real scroll animations run untouched.
+ */
+function unhideRevealVariants(body) {
+  return body.replace(/ style="opacity:0;transform:translateY\(\d+px\)"/g, "");
+}
+
+function buildPage(template, { body, head }) {
+  return stripStaticHead(template)
+    .replace("</head>", `  ${head}\n  </head>`)
+    .replace('<div id="root"></div>', `<div id="root">${unhideRevealVariants(body)}</div>`);
+}
+
+/**
+ * Build sitemap.xml from the same route list that was just prerendered,
+ * so the two can never disagree. The previous sitemap lived in public/
+ * and was maintained by hand, which is why it had already drifted.
+ *
+ * <priority> is deliberately omitted -- Google has ignored it for years,
+ * and a signal nobody reads is just a second thing to keep in sync.
+ */
+function buildSitemap(routes, lastModified) {
+  const urls = routes
+    .map((route) => {
+      const loc = `${SITE_URL}${route === "/" ? "/" : route}`;
+      const lastmod = lastModified[route];
+      return `  <url><loc>${loc}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ""}</url>`;
+    })
+    .join("\n");
+
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
+}
 
 async function main() {
-  server = await preview({ preview: { port: 4173, strictPort: false } });
-  const baseUrl = server.resolvedUrls.local[0];
-  console.log(`[prerender] preview server at ${baseUrl}`);
+  const template = await readFile(path.join(DIST, "index.html"), "utf-8");
 
-  browser = await puppeteer.launch({
-    args: ["--no-sandbox", "--disable-setuid-sandbox"],
-  });
-  const page = await browser.newPage();
+  if (!template.includes('<div id="root"></div>')) {
+    throw new Error('dist/index.html has no empty <div id="root"></div> to render into');
+  }
 
-  // Discover article and technology-solution routes from their rendered
-  // listing pages themselves, rather than importing the TS content files
-  // into this plain Node script -- this also means the crawl list never
-  // drifts out of sync with real content.
-  await page.goto(new URL("/insights", baseUrl).toString(), { waitUntil: "networkidle0", timeout: 30000 });
-  const articleHrefs = await page.$$eval('a[href^="/insights/"]', (as) => as.map((a) => new URL(a.href).pathname));
+  const { render, routes, notFoundRoute, lastModified } = await import(pathToFileURL(SSR_ENTRY).href);
+  console.log(`[prerender] ${routes.length} routes`);
 
-  await page.goto(new URL("/technology", baseUrl).toString(), { waitUntil: "networkidle0", timeout: 30000 });
-  const technologyHrefs = await page.$$eval('a[href^="/technology/"]', (as) => as.map((a) => new URL(a.href).pathname));
+  const write = async (route, outFile) => {
+    const { body, head } = render(route);
 
-  const routes = [...staticRoutes, ...new Set([...articleHrefs, ...technologyHrefs])];
-  console.log(`[prerender] discovered ${articleHrefs.length} article route(s), ${technologyHrefs.length} technology-solution route(s)`);
+    if (!body.trim()) {
+      throw new Error(`${route} rendered empty markup`);
+    }
+
+    await mkdir(path.dirname(outFile), { recursive: true });
+    await writeFile(outFile, buildPage(template, { body, head }), "utf-8");
+    console.log(`[prerender] ${route} -> ${path.relative(process.cwd(), outFile)}`);
+  };
 
   for (const route of routes) {
-    const target = new URL(route, baseUrl).toString();
-    await page.goto(target, { waitUntil: "networkidle0", timeout: 30000 });
-    // A short settle window for any deferred client-side rendering
-    // (Framer Motion viewport reveals, Helmet head mutations) to finish.
-    await new Promise((resolve) => setTimeout(resolve, 300));
-
-    const html = await page.content();
-    const outDir = route === "/" ? "dist" : path.join("dist", route);
-    await mkdir(outDir, { recursive: true });
-    await writeFile(path.join(outDir, "index.html"), html, "utf-8");
-    console.log(`[prerender] ${route} -> ${path.join(outDir, "index.html")}`);
+    await write(route, path.join(route === "/" ? DIST : path.join(DIST, route), "index.html"));
   }
 
-  console.log(`[prerender] done: ${routes.length} routes`);
+  // Vercel serves dist/404.html with a 404 status for any unmatched path.
+  // Every real route above is now a real file, so nothing legitimate
+  // reaches this -- which is why vercel.json no longer rewrites unknown
+  // paths to index.html (that returned the home page, with a 200, for
+  // every typo and dead link).
+  await write(notFoundRoute, path.join(DIST, "404.html"));
+
+  await writeFile(path.join(DIST, "sitemap.xml"), buildSitemap(routes, lastModified), "utf-8");
+  console.log(`[prerender] sitemap.xml -> ${routes.length} urls`);
+
+  console.log(`[prerender] done: ${routes.length} routes + 404.html`);
 }
 
-async function cleanup() {
-  if (browser) {
-    await browser.close().catch(() => {});
-  }
-  if (server?.httpServer) {
-    await new Promise((resolve) => server.httpServer.close(resolve));
-  }
-}
-
-main()
-  .catch((err) => {
-    // Deliberately non-fatal: this is an SEO enhancement on top of a
-    // working SPA, not a build requirement. A hosting environment that
-    // can't launch Chromium (e.g. Vercel's build container) should still
-    // ship the site.
-    console.warn("[prerender] skipped -- could not complete prerendering, deploying without it.");
-    console.warn(`[prerender] reason: ${err.message}`);
-  })
-  .finally(async () => {
-    await cleanup();
-    // Explicit exit (rather than letting the event loop drain naturally)
-    // guarantees the process ends even if something -- an open browser
-    // connection, a lingering server socket -- would otherwise keep it
-    // alive, which matters far more in a CI/build context than locally.
-    process.exit(0);
-  });
+main().catch((err) => {
+  console.error("[prerender] FAILED -- the site would ship an empty shell to crawlers, so this fails the build.");
+  console.error(err);
+  process.exit(1);
+});

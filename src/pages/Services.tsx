@@ -1,5 +1,5 @@
 import { Seo } from "@/lib/Seo";
-import { site } from "@/data/site";
+import { orgRef } from "@/data/site";
 import { PageHero } from "@/components/sections/PageHero";
 import { Section } from "@/components/ui/Section";
 import { Container } from "@/components/ui/Container";
@@ -22,7 +22,7 @@ const serviceListJsonLd = {
       "@type": "Service",
       name: s.title,
       description: s.body,
-      provider: { "@type": "Organization", name: site.name },
+      provider: orgRef,
     },
   })),
 };

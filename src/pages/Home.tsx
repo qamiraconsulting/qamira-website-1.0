@@ -1,5 +1,5 @@
 import { Seo } from "@/lib/Seo";
-import { site } from "@/data/site";
+import { organizationSchema } from "@/data/site";
 import { Hero } from "@/components/sections/home/Hero";
 import { StatsStrip } from "@/components/sections/home/StatsStrip";
 import { WhoWeAre } from "@/components/sections/home/WhoWeAre";
@@ -17,22 +17,7 @@ export function Home() {
       <Seo
         title="Home"
         path="/"
-        jsonLd={{
-          "@context": "https://schema.org",
-          "@type": "ProfessionalService",
-          name: site.name,
-          description: site.description,
-          url: site.url,
-          logo: `${site.url}/logo/apple-touch-icon.png`,
-          image: `${site.url}/logo/apple-touch-icon.png`,
-          areaServed: "Global",
-          contactPoint: {
-            "@type": "ContactPoint",
-            email: site.email,
-            telephone: site.phone,
-            contactType: "customer service",
-          },
-        }}
+        jsonLd={organizationSchema}
       />
       <Hero />
       <GapFixBanner />

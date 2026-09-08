@@ -17,6 +17,16 @@ export default defineConfig({
   },
   build: {
     outDir: "dist",
-    sourcemap: true,
+    // Deliberately off. A published sourcemap put the full unminified
+    // source -- comments included -- on the public origin, and added
+    // ~1.8 MB to every deploy. For a firm whose asset is its IP that is
+    // not a trade worth making for production debuggability.
+    sourcemap: false,
+  },
+  ssr: {
+    // react-helmet-async ships CommonJS, which Node's ESM loader can't
+    // take named imports from once Vite leaves it external. Bundling it
+    // into the prerender entry lets Vite apply the interop instead.
+    noExternal: ["react-helmet-async"],
   },
 });

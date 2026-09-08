@@ -1,5 +1,5 @@
 import { Seo } from "@/lib/Seo";
-import { site } from "@/data/site";
+import { site, orgRef } from "@/data/site";
 import { PageHero } from "@/components/sections/PageHero";
 import { Section } from "@/components/ui/Section";
 import { Container } from "@/components/ui/Container";
@@ -52,7 +52,7 @@ export function GrowthOS() {
             name: "Qamira GrowthOS™",
             alternateName: "GrowthOS",
             description: whatItIs.body,
-            provider: { "@type": "Organization", name: site.name, url: site.url },
+            provider: orgRef,
             areaServed: "Global",
             audience: { "@type": "BusinessAudience", audienceType: "Small and medium-sized businesses" },
             url,
