@@ -9,7 +9,8 @@
     "postbuild": "node scripts/prerender.mjs",
     "preview": "vite preview",
     "lint": "tsc -b --noEmit",
-    "typecheck:api": "tsc --noEmit -p tsconfig.api.json"
+    "typecheck:api": "tsc --noEmit -p tsconfig.api.json",
+    "indexnow": "node scripts/indexnow.mjs"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.111.0",
