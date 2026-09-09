@@ -70,10 +70,14 @@ export const organizationSchema = {
     areaServed: ["IN", "AU"],
     availableLanguage: ["English", "Hindi", "Marathi"],
   },
-  // sameAs is the strongest entity-disambiguation signal available, and
-  // it stays empty until the profiles actually exist -- listing a URL
-  // that 404s is worse than listing nothing. Add the LinkedIn company
-  // page here the day it goes live, then Crunchbase and the Google
-  // Business Profile.
-  // sameAs: ["https://www.linkedin.com/company/..."],
+  // sameAs is the strongest entity-disambiguation signal available: it
+  // tells search engines this site and these profiles are one entity,
+  // which is what separates Qamira from the unrelated (deadpooled) US
+  // company of the same name on Crunchbase and Tracxn, and from
+  // Qamr/Qamar Consulting in India.
+  //
+  // Only ever list profiles that actually resolve -- a URL that 404s is
+  // worse than an absent one. Add the Google Business Profile and
+  // Crunchbase entries here as they go live.
+  sameAs: ["https://www.linkedin.com/company/qamira-consulting/"],
 } as const;
