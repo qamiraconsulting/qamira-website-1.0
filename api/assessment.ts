@@ -13,6 +13,31 @@ const anthropic = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 // duplicated rather than imported since these are two independent
 // Vercel functions. See api/contact.ts for the domain/SPF-DKIM rationale.
 const LEAD_NOTIFICATION_EMAIL = "enquiries@qamiraconsulting.com";
+const SITE_URL = "https://www.qamiraconsulting.com";
+
+// Replies to anything the prospect receives should reach a human, not the
+// no-reply sending identity.
+const REPLY_TO = LEAD_NOTIFICATION_EMAIL;
+
+// There is no subscription store, so unsubscribe is a mailto rather than a
+// one-click endpoint. It is honest and it works -- but it means an opt-out
+// has to be actioned by hand: cancel that lead's scheduled sends with the
+// email ids in the internal notification. Worth replacing with a real
+// preference store once there is a CRM to hold one.
+const UNSUBSCRIBE_MAILTO = `mailto:${LEAD_NOTIFICATION_EMAIL}?subject=Unsubscribe`;
+
+// --- Brand tokens, mirroring tailwind.config.ts -------------------------
+// Email clients strip <style> blocks and never load webfonts, so these are
+// applied inline and the type falls back down the site's own display stack
+// (Fraunces -> Iowan Old Style -> Georgia).
+const INK = "#14182a";
+const DIM = "#4b4f60";
+const BRASS = "#b8863a";
+const PARCHMENT = "#fbfaf7";
+const PARCHMENT_2 = "#f3f0e8";
+const RULE = "#ded8c8";
+const SERIF = "'Iowan Old Style', Georgia, 'Times New Roman', serif";
+const SANS = "-apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif";
 
 // Vercel's function bundler only traces TYPE-ONLY imports out of src/ from
 // api/*.ts -- a runtime value import 404s in production
@@ -199,6 +224,231 @@ function sanitizeDomainRatings(value: unknown): AssessmentRequest["domainRatings
   return KNOWN_DOMAINS.map((d) => byDomain.get(d)!);
 }
 
+// --- Prospect-facing email ----------------------------------------------
+// Until now a completed assessment sent one internal notification and
+// nothing else: the person who had just handed over their operational pain
+// in structured form received no copy of their own report and no next
+// step. These build the report email plus a two-touch follow-up, all
+// queued at submission time.
+
+function esc(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+/**
+ * ISO timestamp N days out at 04:00 UTC (09:30 IST). Leads can be
+ * anywhere -- the intake has a currency selector -- so no hour is right
+ * for everyone; this at least avoids landing at 3am in the primary market.
+ */
+function scheduledIso(daysFromNow: number): string {
+  const when = new Date();
+  when.setUTCDate(when.getUTCDate() + daysFromNow);
+  when.setUTCHours(4, 0, 0, 0);
+  return when.toISOString();
+}
+
+function button(href: string, label: string): string {
+  return `<a href="${href}" style="display:inline-block;background:${BRASS};color:#ffffff;font-family:${SANS};font-size:14px;font-weight:600;text-decoration:none;padding:13px 26px;border-radius:2px;">${esc(label)}</a>`;
+}
+
+/** Shared shell: wordmark, body, footer. `preheader` is the inbox preview line. */
+function shell(preheader: string, bodyHtml: string): string {
+  // The charset declaration is load-bearing, not boilerplate: the report
+  // body is model-generated prose full of em-dashes and curly quotes, and
+  // any client that falls back to Windows-1252 renders those as mojibake
+  // ("stated â€" the strongest domain"). Caught exactly that in preview.
+  return `<!doctype html><html><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>${esc(preheader)}</title>
+</head><body style="margin:0;padding:0;background:${PARCHMENT_2};">
+<div style="display:none;max-height:0;overflow:hidden;opacity:0;">${esc(preheader)}</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:${PARCHMENT_2};padding:28px 12px;">
+<tr><td align="center">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:640px;background:${PARCHMENT};border:1px solid ${RULE};">
+  <tr><td style="padding:28px 32px 0;border-bottom:1px solid ${RULE};">
+    <p style="margin:0 0 18px;font-family:${SERIF};font-size:22px;color:${INK};">Qamira Consulting<span style="color:${BRASS};">.</span></p>
+  </td></tr>
+  <tr><td style="padding:28px 32px 32px;font-family:${SANS};font-size:15px;line-height:1.6;color:${INK};">
+${bodyHtml}
+  </td></tr>
+  <tr><td style="padding:20px 32px 26px;border-top:1px solid ${RULE};font-family:${SANS};font-size:12px;line-height:1.6;color:${DIM};">
+    <p style="margin:0 0 6px;">Qamira Consulting &middot; Business Performance Excellence, AI-Native Execution</p>
+    <p style="margin:0;"><a href="${SITE_URL}" style="color:${DIM};">qamiraconsulting.com</a> &nbsp;&middot;&nbsp; <a href="${UNSUBSCRIBE_MAILTO}" style="color:${DIM};">Unsubscribe</a></p>
+  </td></tr>
+</table>
+</td></tr></table></body></html>`;
+}
+
+function reportEmailHtml(input: AssessmentRequest, report: AssessmentReport): string {
+  const firstName = (input.contactName || "").trim().split(/\s+/)[0];
+  const greeting = firstName ? `Hi ${esc(firstName)},` : "Hello,";
+
+  const domainRows = report.domainSnapshot
+    .map(
+      (d) => `<tr>
+      <td style="padding:9px 10px 9px 0;border-bottom:1px solid ${RULE};font-weight:600;white-space:nowrap;vertical-align:top;">${esc(d.domain)}</td>
+      <td style="padding:9px 10px;border-bottom:1px solid ${RULE};color:${BRASS};font-weight:600;white-space:nowrap;vertical-align:top;">${d.selfRating}/5</td>
+      <td style="padding:9px 0 9px 10px;border-bottom:1px solid ${RULE};color:${DIM};">${esc(d.comment)}</td>
+    </tr>`,
+    )
+    .join("");
+
+  const recommendations = report.recommendations
+    .map(
+      (r) => `<div style="margin:0 0 18px;padding:16px 18px;background:#ffffff;border:1px solid ${RULE};">
+      <p style="margin:0 0 4px;font-family:${SANS};font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:${BRASS};">${esc(r.category)}</p>
+      <p style="margin:0 0 8px;font-size:16px;font-weight:600;color:${INK};">${esc(r.title)}</p>
+      <p style="margin:0 0 10px;color:${DIM};">${esc(r.description)}</p>
+      <p style="margin:0;font-size:14px;color:${INK};"><strong>Likely impact:</strong> ${esc(r.estimatedImpact)}</p>
+    </div>`,
+    )
+    .join("");
+
+  const roadmap = report.roadmap
+    .map(
+      (p) => `<tr>
+      <td style="padding:9px 10px 9px 0;border-bottom:1px solid ${RULE};font-weight:600;white-space:nowrap;vertical-align:top;">${esc(p.phase)}</td>
+      <td style="padding:9px 10px;border-bottom:1px solid ${RULE};color:${BRASS};white-space:nowrap;vertical-align:top;">${esc(p.timeframe)}</td>
+      <td style="padding:9px 0 9px 10px;border-bottom:1px solid ${RULE};color:${DIM};">${esc(p.focus)}</td>
+    </tr>`,
+    )
+    .join("");
+
+  const heading = (text: string) =>
+    `<p style="margin:30px 0 12px;font-family:${SERIF};font-size:19px;color:${INK};">${esc(text)}</p>`;
+
+  return shell(
+    `Your AI Opportunity Report for ${input.companyName}`,
+    `<p style="margin:0 0 16px;">${greeting}</p>
+<p style="margin:0 0 16px;">Here is your AI Opportunity Report for <strong>${esc(input.companyName)}</strong>, generated from the eight-domain assessment you completed. It is yours to keep and share internally.</p>
+<p style="margin:0 0 16px;color:${DIM};">One caveat worth stating plainly: this is built entirely from what you told us in a short self-assessment. It is a starting point for a conversation, not a completed diagnostic.</p>
+
+${heading("Summary")}
+<p style="margin:0 0 16px;">${esc(report.summary)}</p>
+
+${heading("Where you stand today")}
+<p style="margin:0 0 16px;">${esc(report.maturitySnapshot)}</p>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-family:${SANS};font-size:14px;border-collapse:collapse;">${domainRows}</table>
+
+${heading("What we would look at first")}
+${recommendations}
+
+${heading("A sequence that would make sense")}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-family:${SANS};font-size:14px;border-collapse:collapse;">${roadmap}</table>
+
+${heading("On the return")}
+<p style="margin:0 0 24px;color:${DIM};">${esc(report.roiEstimate)}</p>
+
+<div style="margin:32px 0 0;padding:22px 24px;background:${PARCHMENT_2};border-left:3px solid ${BRASS};">
+  <p style="margin:0 0 10px;font-family:${SERIF};font-size:18px;color:${INK};">Want to know which of these is actually costing you the most?</p>
+  <p style="margin:0 0 18px;color:${DIM};">That is the question a self-assessment cannot answer. A short conversation usually can &mdash; and if it is worth going further, our Operations Diagnostic Workshop puts a number against the one or two findings that matter, with a written findings pack you keep either way.</p>
+  ${button(`${SITE_URL}/contact`, "Start a conversation")}
+</div>`,
+  );
+}
+
+function followUpOneHtml(input: AssessmentRequest, report: AssessmentReport): string {
+  const firstName = (input.contactName || "").trim().split(/\s+/)[0];
+  const lowest = [...report.domainSnapshot].sort((a, b) => a.selfRating - b.selfRating)[0];
+
+  return shell(
+    `The domain you rated lowest, and what usually sits behind it`,
+    `<p style="margin:0 0 16px;">${firstName ? `Hi ${esc(firstName)},` : "Hello,"}</p>
+<p style="margin:0 0 16px;">You ran the assessment for <strong>${esc(input.companyName)}</strong> a few days ago. One thing in it is worth pulling out.</p>
+${
+  lowest
+    ? `<p style="margin:0 0 16px;">You rated <strong>${esc(lowest.domain)}</strong> lowest, at ${lowest.selfRating}/5. In our experience that is rarely where the problem starts &mdash; it is usually where an upstream problem finally becomes visible. A weak Data score is often a Process score in disguise; a weak Process score is often an unmade Strategy decision.</p>`
+    : `<p style="margin:0 0 16px;">The domains you rated lowest are rarely where a problem starts &mdash; they are usually where an upstream problem finally becomes visible.</p>`
+}
+<p style="margin:0 0 16px;">That is the reason we do not lead with a tool. Automating a process that should not exist in its current form just makes the wrong thing happen faster.</p>
+<p style="margin:0 0 24px;">If you want a second pair of eyes on which of your eight domains is actually carrying the cost, that is a 30-minute conversation, not a project.</p>
+${button(`${SITE_URL}/contact`, "Book a conversation")}
+<p style="margin:24px 0 0;color:${DIM};font-size:14px;">If the timing is wrong, just ignore this &mdash; you will hear from us once more and then not again.</p>`,
+  );
+}
+
+function followUpTwoHtml(input: AssessmentRequest): string {
+  const firstName = (input.contactName || "").trim().split(/\s+/)[0];
+
+  return shell(
+    `Last one from us`,
+    `<p style="margin:0 0 16px;">${firstName ? `Hi ${esc(firstName)},` : "Hello,"}</p>
+<p style="margin:0 0 16px;">This is the last email we will send about the assessment you ran for <strong>${esc(input.companyName)}</strong>.</p>
+<p style="margin:0 0 16px;">Nothing has changed on our side and there is no offer attached. If the report was useful, keep it. If the timing was wrong, that is the most common reason &mdash; these problems tend to get addressed when something forces the issue, not when a report suggests it.</p>
+<p style="margin:0 0 24px;">Whenever that moment comes, the method we would use is published in full on our site. You are welcome to read it, borrow from it, or bring us in.</p>
+${button(`${SITE_URL}/methodology`, "Read the methodology")}
+<p style="margin:24px 0 0;color:${DIM};font-size:14px;">We will not email you again about this.</p>`,
+  );
+}
+
+type DeliveryOutcome = { label: string; id?: string; error?: string };
+
+/**
+ * Sends the report immediately and queues both follow-ups via Resend's
+ * scheduled sending, so no cron job or scheduler state is needed. Returns
+ * one line per send for the internal notification -- including the ids,
+ * which are what you need to cancel a scheduled follow-up if the lead
+ * converts or opts out before it fires.
+ */
+async function deliverToProspect(
+  resend: Resend,
+  from: string,
+  input: AssessmentRequest,
+  report: AssessmentReport,
+): Promise<DeliveryOutcome[]> {
+  const to = [input.contactEmail];
+  const headers = { "List-Unsubscribe": `<${UNSUBSCRIBE_MAILTO}>` };
+
+  const sends: Array<{ label: string; subject: string; html: string; scheduledAt?: string }> = [
+    {
+      label: "Report (immediate)",
+      subject: `Your AI Opportunity Report — ${input.companyName}`,
+      html: reportEmailHtml(input, report),
+    },
+    {
+      label: "Follow-up 1 (day 4)",
+      subject: `One thing worth pulling out of your assessment`,
+      html: followUpOneHtml(input, report),
+      scheduledAt: scheduledIso(4),
+    },
+    {
+      label: "Follow-up 2 (day 11)",
+      subject: `Last one from us, ${input.companyName}`,
+      html: followUpTwoHtml(input),
+      scheduledAt: scheduledIso(11),
+    },
+  ];
+
+  const outcomes: DeliveryOutcome[] = [];
+  for (const send of sends) {
+    try {
+      const { data, error } = await resend.emails.send({
+        from,
+        to,
+        replyTo: REPLY_TO,
+        subject: send.subject,
+        html: send.html,
+        headers,
+        ...(send.scheduledAt ? { scheduledAt: send.scheduledAt } : {}),
+      });
+      if (error) {
+        outcomes.push({ label: send.label, error: error.message });
+      } else {
+        outcomes.push({ label: send.label, id: data?.id });
+      }
+    } catch (err) {
+      outcomes.push({ label: send.label, error: err instanceof Error ? err.message : String(err) });
+    }
+  }
+  return outcomes;
+}
+
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {
     res.status(405).json({ error: "Method not allowed" });
@@ -317,14 +567,22 @@ Generate the AI Opportunity Report now via the submit_opportunity_report tool.`;
       })
     );
 
-    // Lead notification email -- the client's report has already been sent
-    // above, so a failure here must never affect their response.
-    if (process.env.RESEND_API_KEY && process.env.CONTACT_FROM_EMAIL) {
+    // The prospect's own copy of the report and both follow-ups, then an
+    // internal notification saying what was queued. All of it runs after
+    // the response has already been sent, so nothing here can affect what
+    // the client received.
+    const fromAddress = process.env.CONTACT_FROM_EMAIL;
+    if (process.env.RESEND_API_KEY && fromAddress) {
       const resend = new Resend(process.env.RESEND_API_KEY);
       waitUntil(
-        resend.emails
-          .send({
-            from: `Qamira Assessment <${process.env.CONTACT_FROM_EMAIL}>`,
+        (async () => {
+          const outcomes = await deliverToProspect(resend, `Qamira Consulting <${fromAddress}>`, input, report);
+          const deliveryLines = outcomes
+            .map((o) => `- ${o.label}: ${o.error ? `FAILED -- ${o.error}` : `queued (id ${o.id ?? "unknown"})`}`)
+            .join("\n");
+
+          await resend.emails.send({
+            from: `Qamira Assessment <${fromAddress}>`,
             to: [LEAD_NOTIFICATION_EMAIL],
             replyTo: input.contactEmail ? `${input.contactName || input.companyName} <${input.contactEmail}>` : undefined,
             subject: `New AI Assessment completed: ${input.companyName}`,
@@ -345,11 +603,16 @@ Systems: ${input.systemCount || "not specified"} core systems, duplicate data en
 Priorities: ${input.priorities.join(", ") || "none specified"}
 Additional context: ${input.context || "(none provided)"}
 
-Report summary: ${report.summary}`,
-          })
-          .catch((notifyErr) => {
-            console.error("Assessment lead notification failed:", notifyErr);
-          })
+Report summary: ${report.summary}
+
+Emails to the prospect:
+${deliveryLines}
+
+To stop a scheduled follow-up -- lead converted, replied, or asked to opt out -- cancel it in Resend using the id above.`,
+          });
+        })().catch((notifyErr) => {
+          console.error("Assessment prospect delivery failed:", notifyErr);
+        })
       );
     }
   } catch (err) {
