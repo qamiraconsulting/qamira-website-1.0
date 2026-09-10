@@ -45,32 +45,32 @@ export const industryGroups: IndustryGroup[] = [
         slug: "professional-services",
         group: "Professional Services & Digital",
         title: "Professional Services",
-        focus: "Resource utilization, project profitability",
-        body: "Pre-built resource utilization and project profitability KPI templates suited to firms that sell time and expertise rather than physical output -- the accelerator we can validate fastest using our own operating data as a reference case.",
+        focus: "Utilization and realization, project profitability, WIP to cash",
+        body: "Pre-built utilization and project profitability KPI templates for firms that sell time and expertise rather than physical output -- accountancy and audit practices, law firms, recruitment agencies, engineering consultancies, and creative and IT shops. It is also the one accelerator we can validate against our own operating data, because Qamira is itself a professional services firm.",
         metaDescription:
-          "QBPES™ Industry Accelerator for professional services -- pre-built resource utilization and project profitability KPI templates for firms that sell time and expertise.",
+          "QBPES™ Industry Accelerator for professional services -- utilization and realization as a pair, engagement-level profitability, and WIP read as a cash cycle.",
         constraints: [
-          "Utilization is tracked and profitability is tracked, but a fully-booked team and a profitable one are quietly assumed to be the same thing.",
-          "Scope creep is absorbed by delivery rather than surfaced as a commercial decision, which turns a margin problem into a burnout problem.",
-          "Pricing is set from precedent rather than from what the last comparable engagement actually cost to deliver.",
-          "Knowledge stays with whoever did the work, so every similar engagement is rebuilt at full cost.",
+          "Utilization is measured and reported while realization is not, so a fully-booked team and a team actually collecting its standard rate look identical until the cash lands.",
+          "Scope creep on fixed-fee work is absorbed by delivery rather than surfaced as a commercial decision, which turns a margin problem into a retention problem.",
+          "Work in progress ages quietly between delivery and invoice, and the firm ends up funding its clients' working capital without ever deciding to.",
+          "Proposals, onboarding and approvals all route through the same partners who sell and deliver, which caps how much work the firm can take on.",
         ],
         prebuilt: [
-          "Resource utilization KPI templates built for firms where \"non-billable\" currently hides both the best investments and the worst leakage.",
-          "Project profitability definitions connecting delivery effort to realised margin at engagement level, not just at firm level.",
-          "A scope-change pattern that routes creep to a commercial decision instead of leaving it with the delivery team to absorb.",
-          "A reusable-asset rubric, so knowledge that should become firm IP is identified during delivery rather than after it.",
+          "Utilization and realization defined as a pair, so the gap between hours worked and rate collected stops being invisible -- and \"non-billable\" stops hiding both the best investments and the worst leakage.",
+          "Project profitability definitions connecting delivery effort to realized margin at engagement level, not just at firm level.",
+          "A scope-change pattern that routes creep to a priced commercial decision instead of leaving the delivery team to absorb it.",
+          "WIP and lock-up read as a cash cycle rather than an accounting artefact, so ageing work surfaces while it can still be billed.",
         ],
         outcomes: [
           "You can see which engagements are actually profitable, and which are busy work that looks like success.",
+          "The gap between what you bill and what you collect becomes a number with an owner, not a year-end surprise.",
           "Scope changes become a priced decision rather than a silent margin leak.",
-          "Pricing draws on what delivery genuinely costs, which makes proposals both more competitive and more defensible.",
           "Repeat work gets cheaper to deliver, because the second engagement of a kind starts from an asset rather than a blank page.",
         ],
         goodFitIf: [
-          "Your team is fully utilised and the margin still is not there.",
-          "Scope creep is normal and absorbed rather than priced.",
-          "Every engagement feels like it is being built from scratch.",
+          "Your team is fully utilized and the margin still is not there.",
+          "Scope creep on fixed-fee work is normal, absorbed, and never priced.",
+          "Proposals, onboarding and approvals still wait on a partner who is also selling and delivering.",
         ],
       },
       {
@@ -80,7 +80,7 @@ export const industryGroups: IndustryGroup[] = [
         focus: "Agility mapping, burn-rate optimization",
         body: "An agility mapping template that assesses whether process and governance can survive the next funding round, plus burn-rate optimization models tuned to venture-backed cost structures.",
         metaDescription:
-          "QBPES™ Industry Accelerator for growing startups and tech -- agility mapping against the next funding round, plus burn-rate models tuned to venture-backed cost structures.",
+          "QBPES™ Accelerator for growing startups and tech -- agility mapping against the next funding round, plus burn-rate models for venture-backed cost structures.",
         constraints: [
           "The process that got you to this headcount is the same process, and it stopped scaling somewhere around the last two hires.",
           "Burn is tracked as a monthly total rather than by what it buys, so cost decisions are made by percentage cut rather than by priority.",
@@ -112,7 +112,7 @@ export const industryGroups: IndustryGroup[] = [
         focus: "Resource allocation, compliance management",
         body: "Pre-built resource allocation models and a compliance management template suited to public sector and education procurement and reporting requirements.",
         metaDescription:
-          "QBPES™ Industry Accelerator for public sector and education -- pre-built resource allocation models and a compliance management template built for procurement and reporting rules.",
+          "QBPES™ Accelerator for public sector and education -- resource allocation models and a compliance template built for procurement and reporting rules.",
         constraints: [
           "Allocation follows last year's budget line rather than this year's demand, because changing it costs more political capital than it saves.",
           "Reporting obligations are satisfied by producing documents, not by the process producing evidence as it runs.",
@@ -148,7 +148,7 @@ export const industryGroups: IndustryGroup[] = [
         focus: "Fleet utilization, route efficiency, warehouse analytics",
         body: "Pre-built KPI and process templates for fleet utilization, route efficiency, and warehouse throughput, mapped to common logistics sub-processes -- dispatch, last-mile, returns -- for maturity scoring against vertical-specific evidence.",
         metaDescription:
-          "QBPES™ Industry Accelerator for logistics and supply chain -- pre-built fleet utilization, route efficiency, and warehouse throughput templates mapped to real sub-processes.",
+          "QBPES™ Accelerator for logistics and supply chain -- fleet utilization, route efficiency and warehouse throughput templates mapped to real sub-processes.",
         constraints: [
           "Fleet utilization is reported as a single percentage nobody can decompose into idle, deadhead, and revenue-earning time.",
           "Route planning optimises for distance, while the real cost accumulates after the vehicle arrives -- dwell time, failed deliveries, and re-attempts.",
@@ -180,7 +180,7 @@ export const industryGroups: IndustryGroup[] = [
         focus: "Operational OEE, supply chain logistics, demand analytics",
         body: "Standard Overall Equipment Effectiveness (OEE) KPI definitions, a supply chain process taxonomy from procurement through fulfillment, and demand forecasting benchmarks by sub-sector -- so your current-state assessment starts against known-good comparison data, not generic benchmarks.",
         metaDescription:
-          "QBPES™ Industry Accelerator for manufacturing -- pre-built OEE definitions, a procurement-to-fulfillment process taxonomy, and demand forecasting benchmarks by sub-sector.",
+          "QBPES™ Accelerator for manufacturing -- OEE definitions decomposed to loss category, a procurement-to-fulfillment taxonomy, and demand benchmarks by sub-sector.",
         constraints: [
           "OEE is quoted as a single plant-level number, which averages away the specific losses -- changeover, minor stops, quality rework -- that are actually costing you.",
           "Procurement, production, and fulfillment each hold a piece of the same process, and nobody owns the handoffs between them.",
@@ -212,7 +212,7 @@ export const industryGroups: IndustryGroup[] = [
         focus: "Resource management, project drift tracking",
         body: "Built for project-based businesses where the core performance risk is drift -- scope, schedule, and cost variance against baseline -- with standard resource utilization KPIs and a drift-tracking template that plugs directly into governance.",
         metaDescription:
-          "QBPES™ Industry Accelerator for construction and infrastructure -- resource utilization KPIs and a scope, schedule, and cost drift-tracking template wired into governance.",
+          "QBPES™ Accelerator for construction and infrastructure -- utilization KPIs and a scope, schedule and cost drift-tracking template wired into governance.",
         constraints: [
           "Variance against baseline is discovered at month-end reporting, by which point the decision that caused it is weeks old.",
           "Scope, schedule, and cost are tracked in three different systems by three different people, so nobody sees drift compounding across all three.",
@@ -281,7 +281,7 @@ export const industryGroups: IndustryGroup[] = [
         focus: "Patient flow, cost optimization, resource allocation",
         body: "Pre-built patient flow process maps, standard cost-per-encounter benchmarking, and resource allocation models tuned to healthcare's regulatory and staffing constraints, cross-referenced against relevant compliance requirements.",
         metaDescription:
-          "QBPES™ Industry Accelerator for healthcare -- pre-built patient flow maps, cost-per-encounter benchmarking, and resource allocation models tuned to regulatory constraints.",
+          "QBPES™ Accelerator for healthcare -- patient flow maps, cost-per-encounter benchmarking, and resource allocation models built for real staffing constraints.",
         constraints: [
           "Patient flow is managed department by department, so the queue simply moves to whichever step has the least slack.",
           "Cost is understood at the facility level but not per encounter, which makes service-line decisions guesswork.",
@@ -313,7 +313,7 @@ export const industryGroups: IndustryGroup[] = [
         focus: "Risk architecture, operational throughput, executive reporting",
         body: "Pre-built risk architecture templates, operational throughput KPIs for transaction-heavy processes, and executive reporting formats built for financial services' typically heavier governance expectations.",
         metaDescription:
-          "QBPES™ Industry Accelerator for financial services -- pre-built risk architecture templates, throughput KPIs for transaction-heavy processes, and governance-grade reporting.",
+          "QBPES™ Accelerator for financial services -- risk architecture templates, throughput KPIs for transaction-heavy processes, and governance-grade reporting.",
         constraints: [
           "Risk is documented in a register updated for the committee rather than used to run the business between meetings.",
           "Throughput is measured as volume processed, which says nothing about how much of that volume had to be touched twice.",
