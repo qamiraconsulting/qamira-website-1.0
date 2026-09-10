@@ -151,13 +151,13 @@ export const industryGroups: IndustryGroup[] = [
         metaDescription:
           "QBPES™ Industry Accelerator for retail and e-commerce -- pre-built CAC/LTV modeling, inventory turn benchmarks by category, and a standard customer journey map.",
         constraints: [
-          "Channel spend is judged on what it costs to acquire a customer, never on what that customer turns out to be worth.",
+          "Acquisition cost is measured per channel while lifetime value is measured in aggregate, so channel spend is judged on what a customer costs and never on what they turn out to be worth.",
           "Inventory turns are reported across the whole catalogue, which lets fast-moving lines subsidise dead stock indefinitely.",
           "The customer journey is owned in pieces -- marketing, site, fulfillment, support -- and the breaks happen exactly at the seams.",
           "Discounting is used to hit revenue targets without a model showing what it costs in margin and in future full-price behaviour.",
         ],
         prebuilt: [
-          "CAC and LTV models built so the two can actually be read against each other, rather than reported as two unrelated headline figures.",
+          "CAC and LTV models built to be read against each other cohort by cohort and channel by channel, rather than reported as two unrelated headline figures.",
           "Inventory turn benchmarks segmented by category, so slow lines are identified instead of hidden inside a blended average.",
           "A standard customer journey map with the points where customers most commonly fall out already identified.",
           "A contribution-margin view that makes the real cost of promotional activity visible before the promotion runs, not after.",
