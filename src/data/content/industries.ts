@@ -39,40 +39,108 @@ export type IndustryGroup = {
 
 export const industryGroups: IndustryGroup[] = [
   {
-    group: "Asset-Heavy Verticals",
+    group: "Professional Services & Digital",
     industries: [
       {
-        slug: "manufacturing",
-        group: "Asset-Heavy Verticals",
-        title: "Manufacturing",
-        focus: "Operational OEE, supply chain logistics, demand analytics",
-        body: "Standard Overall Equipment Effectiveness (OEE) KPI definitions, a supply chain process taxonomy from procurement through fulfillment, and demand forecasting benchmarks by sub-sector -- so your current-state assessment starts against known-good comparison data, not generic benchmarks.",
+        slug: "professional-services",
+        group: "Professional Services & Digital",
+        title: "Professional Services",
+        focus: "Resource utilization, project profitability",
+        body: "Pre-built resource utilization and project profitability KPI templates suited to firms that sell time and expertise rather than physical output -- the accelerator we can validate fastest using our own operating data as a reference case.",
         metaDescription:
-          "QBPES™ Industry Accelerator for manufacturing -- pre-built OEE definitions, a procurement-to-fulfillment process taxonomy, and demand forecasting benchmarks by sub-sector.",
+          "QBPES™ Industry Accelerator for professional services -- pre-built resource utilization and project profitability KPI templates for firms that sell time and expertise.",
         constraints: [
-          "OEE is quoted as a single plant-level number, which averages away the specific losses -- changeover, minor stops, quality rework -- that are actually costing you.",
-          "Procurement, production, and fulfillment each hold a piece of the same process, and nobody owns the handoffs between them.",
-          "Throughput is measured at the line but never reconciled against demand, so overproduction on one SKU hides underproduction on another and the plant hits its numbers while the business misses its orders.",
-          "Maintenance runs to a calendar rather than to condition -- you pay for interventions you didn't need and still take the breakdowns you didn't see coming.",
+          "Utilization is tracked and profitability is tracked, but a fully-booked team and a profitable one are quietly assumed to be the same thing.",
+          "Scope creep is absorbed by delivery rather than surfaced as a commercial decision, which turns a margin problem into a burnout problem.",
+          "Pricing is set from precedent rather than from what the last comparable engagement actually cost to deliver.",
+          "Knowledge stays with whoever did the work, so every similar engagement is rebuilt at full cost.",
         ],
         prebuilt: [
-          "Standard OEE definitions -- availability, performance, quality -- decomposed to loss category, so the number points at a cause instead of just reporting a score.",
-          "A supply chain process taxonomy running procurement through fulfillment, with the handoffs between functions already mapped.",
-          "Demand forecasting benchmark ranges by sub-sector, so current-state is scored against comparable operations rather than a generic industry average.",
-          "Maturity scoring rubrics for planning, scheduling, and maintenance governance, ready to apply against evidence from day one of Discovery.",
+          "Resource utilization KPI templates built for firms where \"non-billable\" currently hides both the best investments and the worst leakage.",
+          "Project profitability definitions connecting delivery effort to realised margin at engagement level, not just at firm level.",
+          "A scope-change pattern that routes creep to a commercial decision instead of leaving it with the delivery team to absorb.",
+          "A reusable-asset rubric, so knowledge that should become firm IP is identified during delivery rather than after it.",
         ],
         outcomes: [
-          "Discovery starts against known-good comparison data, so the assessment phase is shorter and the findings are harder to argue with.",
-          "Losses are attributed to a named cause and a named owner, rather than absorbed into a plant-wide average nobody can act on.",
-          "The KPI architecture outlives the engagement, because it is defined once and governed -- not rebuilt from scratch for each month's report.",
-          "AI-native execution lands where it earns its keep -- forecasting, scheduling, exception handling -- instead of being spread thin across everything at once.",
+          "You can see which engagements are actually profitable, and which are busy work that looks like success.",
+          "Scope changes become a priced decision rather than a silent margin leak.",
+          "Pricing draws on what delivery genuinely costs, which makes proposals both more competitive and more defensible.",
+          "Repeat work gets cheaper to deliver, because the second engagement of a kind starts from an asset rather than a blank page.",
         ],
         goodFitIf: [
-          "You have plenty of plant data but no agreed definition of what good actually looks like.",
-          "Improvement projects keep getting delivered and then quietly decaying back to the old way.",
-          "Production and supply chain are optimising against numbers that quietly conflict.",
+          "Your team is fully utilised and the margin still is not there.",
+          "Scope creep is normal and absorbed rather than priced.",
+          "Every engagement feels like it is being built from scratch.",
         ],
       },
+      {
+        slug: "startups-tech",
+        group: "Professional Services & Digital",
+        title: "Growing Startups & Tech",
+        focus: "Agility mapping, burn-rate optimization",
+        body: "An agility mapping template that assesses whether process and governance can survive the next funding round, plus burn-rate optimization models tuned to venture-backed cost structures.",
+        metaDescription:
+          "QBPES™ Industry Accelerator for growing startups and tech -- agility mapping against the next funding round, plus burn-rate models tuned to venture-backed cost structures.",
+        constraints: [
+          "The process that got you to this headcount is the same process, and it stopped scaling somewhere around the last two hires.",
+          "Burn is tracked as a monthly total rather than by what it buys, so cost decisions are made by percentage cut rather than by priority.",
+          "Governance is deliberately light, which is right until a diligence process asks for evidence that was never produced.",
+          "Founders remain the escalation path for operational decisions, which caps how fast the company can actually move.",
+        ],
+        prebuilt: [
+          "An agility mapping template that assesses whether current process and governance survive the next stage of growth, not just today's headcount.",
+          "Burn-rate optimization models tuned to venture-backed cost structures, framed by what spend buys rather than by department line.",
+          "A minimum-viable governance pattern -- enough evidence for diligence, deliberately not enough to slow the company down.",
+          "A decision-rights rubric identifying which calls should stop reaching the founders, and what has to be true first.",
+        ],
+        outcomes: [
+          "You know which parts of how you work will break at the next stage, before they break.",
+          "Cost decisions are made against priority rather than by trimming a uniform percentage from everything.",
+          "Diligence finds evidence that already exists, instead of triggering a scramble to reconstruct it.",
+          "Founder time moves off operational escalation and back onto the things only founders can do.",
+        ],
+        goodFitIf: [
+          "Headcount has grown faster than how you work has changed.",
+          "You are raising in the next few quarters and want the operating story to hold up.",
+          "Everything still routes through one or two people.",
+        ],
+      },
+      {
+        slug: "public-sector-education",
+        group: "Professional Services & Digital",
+        title: "Public Sector & Education",
+        focus: "Resource allocation, compliance management",
+        body: "Pre-built resource allocation models and a compliance management template suited to public sector and education procurement and reporting requirements.",
+        metaDescription:
+          "QBPES™ Industry Accelerator for public sector and education -- pre-built resource allocation models and a compliance management template built for procurement and reporting rules.",
+        constraints: [
+          "Allocation follows last year's budget line rather than this year's demand, because changing it costs more political capital than it saves.",
+          "Reporting obligations are satisfied by producing documents, not by the process producing evidence as it runs.",
+          "Procurement rules are treated as a constraint on improvement rather than designed into how improvement is planned.",
+          "Improvement initiatives depend on individuals, so they end when those individuals move roles.",
+        ],
+        prebuilt: [
+          "Resource allocation models connecting funding to demand and outcome, so reallocation arguments rest on evidence rather than precedent.",
+          "A compliance management template built around the reporting obligations this sector actually carries, rather than a generic control library.",
+          "Process designs that respect procurement rules from the outset, so the recommended fix is one you are permitted to implement.",
+          "Governance that attaches ownership to roles rather than to individuals, so improvement survives a change of postholder.",
+        ],
+        outcomes: [
+          "Allocation decisions can be defended with evidence, which is what makes reallocation politically survivable.",
+          "Reporting becomes a by-product of the work instead of a parallel exercise run alongside it.",
+          "Recommendations are implementable within procurement rules, rather than technically correct and practically blocked.",
+          "Improvements outlast the people who started them, because ownership sits with a role and a governance forum.",
+        ],
+        goodFitIf: [
+          "Budgets are allocated by precedent and nobody can evidence whether it is still the right split.",
+          "Reporting requirements consume capacity that should be going into delivery.",
+          "Past improvement programmes faded when their sponsor moved on.",
+        ],
+      },
+    ],
+  },  {
+    group: "Asset-Heavy Verticals",
+    industries: [
       {
         slug: "logistics-supply-chain",
         group: "Asset-Heavy Verticals",
@@ -103,6 +171,38 @@ export const industryGroups: IndustryGroup[] = [
           "Your cost per delivery is rising and no single report explains why.",
           "Exceptions -- failed deliveries, re-routes, returns -- consume more management time than the core operation.",
           "You have bought a TMS or WMS and the underlying process never changed to match it.",
+        ],
+      },
+      {
+        slug: "manufacturing",
+        group: "Asset-Heavy Verticals",
+        title: "Manufacturing",
+        focus: "Operational OEE, supply chain logistics, demand analytics",
+        body: "Standard Overall Equipment Effectiveness (OEE) KPI definitions, a supply chain process taxonomy from procurement through fulfillment, and demand forecasting benchmarks by sub-sector -- so your current-state assessment starts against known-good comparison data, not generic benchmarks.",
+        metaDescription:
+          "QBPES™ Industry Accelerator for manufacturing -- pre-built OEE definitions, a procurement-to-fulfillment process taxonomy, and demand forecasting benchmarks by sub-sector.",
+        constraints: [
+          "OEE is quoted as a single plant-level number, which averages away the specific losses -- changeover, minor stops, quality rework -- that are actually costing you.",
+          "Procurement, production, and fulfillment each hold a piece of the same process, and nobody owns the handoffs between them.",
+          "Throughput is measured at the line but never reconciled against demand, so overproduction on one SKU hides underproduction on another and the plant hits its numbers while the business misses its orders.",
+          "Maintenance runs to a calendar rather than to condition -- you pay for interventions you didn't need and still take the breakdowns you didn't see coming.",
+        ],
+        prebuilt: [
+          "Standard OEE definitions -- availability, performance, quality -- decomposed to loss category, so the number points at a cause instead of just reporting a score.",
+          "A supply chain process taxonomy running procurement through fulfillment, with the handoffs between functions already mapped.",
+          "Demand forecasting benchmark ranges by sub-sector, so current-state is scored against comparable operations rather than a generic industry average.",
+          "Maturity scoring rubrics for planning, scheduling, and maintenance governance, ready to apply against evidence from day one of Discovery.",
+        ],
+        outcomes: [
+          "Discovery starts against known-good comparison data, so the assessment phase is shorter and the findings are harder to argue with.",
+          "Losses are attributed to a named cause and a named owner, rather than absorbed into a plant-wide average nobody can act on.",
+          "The KPI architecture outlives the engagement, because it is defined once and governed -- not rebuilt from scratch for each month's report.",
+          "AI-native execution lands where it earns its keep -- forecasting, scheduling, exception handling -- instead of being spread thin across everything at once.",
+        ],
+        goodFitIf: [
+          "You have plenty of plant data but no agreed definition of what good actually looks like.",
+          "Improvement projects keep getting delivered and then quietly decaying back to the old way.",
+          "Production and supply chain are optimising against numbers that quietly conflict.",
         ],
       },
       {
@@ -236,107 +336,6 @@ export const industryGroups: IndustryGroup[] = [
           "Control cost keeps rising without a matching rise in assurance.",
           "Month-end reporting consumes senior capacity that should be spent on decisions.",
           "Exception handling is a permanent workaround rather than an exception.",
-        ],
-      },
-    ],
-  },
-  {
-    group: "Professional Services & Digital",
-    industries: [
-      {
-        slug: "professional-services",
-        group: "Professional Services & Digital",
-        title: "Professional Services",
-        focus: "Resource utilization, project profitability",
-        body: "Pre-built resource utilization and project profitability KPI templates suited to firms that sell time and expertise rather than physical output -- the accelerator we can validate fastest using our own operating data as a reference case.",
-        metaDescription:
-          "QBPES™ Industry Accelerator for professional services -- pre-built resource utilization and project profitability KPI templates for firms that sell time and expertise.",
-        constraints: [
-          "Utilization is tracked and profitability is tracked, but a fully-booked team and a profitable one are quietly assumed to be the same thing.",
-          "Scope creep is absorbed by delivery rather than surfaced as a commercial decision, which turns a margin problem into a burnout problem.",
-          "Pricing is set from precedent rather than from what the last comparable engagement actually cost to deliver.",
-          "Knowledge stays with whoever did the work, so every similar engagement is rebuilt at full cost.",
-        ],
-        prebuilt: [
-          "Resource utilization KPI templates built for firms where \"non-billable\" currently hides both the best investments and the worst leakage.",
-          "Project profitability definitions connecting delivery effort to realised margin at engagement level, not just at firm level.",
-          "A scope-change pattern that routes creep to a commercial decision instead of leaving it with the delivery team to absorb.",
-          "A reusable-asset rubric, so knowledge that should become firm IP is identified during delivery rather than after it.",
-        ],
-        outcomes: [
-          "You can see which engagements are actually profitable, and which are busy work that looks like success.",
-          "Scope changes become a priced decision rather than a silent margin leak.",
-          "Pricing draws on what delivery genuinely costs, which makes proposals both more competitive and more defensible.",
-          "Repeat work gets cheaper to deliver, because the second engagement of a kind starts from an asset rather than a blank page.",
-        ],
-        goodFitIf: [
-          "Your team is fully utilised and the margin still is not there.",
-          "Scope creep is normal and absorbed rather than priced.",
-          "Every engagement feels like it is being built from scratch.",
-        ],
-      },
-      {
-        slug: "startups-tech",
-        group: "Professional Services & Digital",
-        title: "Growing Startups & Tech",
-        focus: "Agility mapping, burn-rate optimization",
-        body: "An agility mapping template that assesses whether process and governance can survive the next funding round, plus burn-rate optimization models tuned to venture-backed cost structures.",
-        metaDescription:
-          "QBPES™ Industry Accelerator for growing startups and tech -- agility mapping against the next funding round, plus burn-rate models tuned to venture-backed cost structures.",
-        constraints: [
-          "The process that got you to this headcount is the same process, and it stopped scaling somewhere around the last two hires.",
-          "Burn is tracked as a monthly total rather than by what it buys, so cost decisions are made by percentage cut rather than by priority.",
-          "Governance is deliberately light, which is right until a diligence process asks for evidence that was never produced.",
-          "Founders remain the escalation path for operational decisions, which caps how fast the company can actually move.",
-        ],
-        prebuilt: [
-          "An agility mapping template that assesses whether current process and governance survive the next stage of growth, not just today's headcount.",
-          "Burn-rate optimization models tuned to venture-backed cost structures, framed by what spend buys rather than by department line.",
-          "A minimum-viable governance pattern -- enough evidence for diligence, deliberately not enough to slow the company down.",
-          "A decision-rights rubric identifying which calls should stop reaching the founders, and what has to be true first.",
-        ],
-        outcomes: [
-          "You know which parts of how you work will break at the next stage, before they break.",
-          "Cost decisions are made against priority rather than by trimming a uniform percentage from everything.",
-          "Diligence finds evidence that already exists, instead of triggering a scramble to reconstruct it.",
-          "Founder time moves off operational escalation and back onto the things only founders can do.",
-        ],
-        goodFitIf: [
-          "Headcount has grown faster than how you work has changed.",
-          "You are raising in the next few quarters and want the operating story to hold up.",
-          "Everything still routes through one or two people.",
-        ],
-      },
-      {
-        slug: "public-sector-education",
-        group: "Professional Services & Digital",
-        title: "Public Sector & Education",
-        focus: "Resource allocation, compliance management",
-        body: "Pre-built resource allocation models and a compliance management template suited to public sector and education procurement and reporting requirements.",
-        metaDescription:
-          "QBPES™ Industry Accelerator for public sector and education -- pre-built resource allocation models and a compliance management template built for procurement and reporting rules.",
-        constraints: [
-          "Allocation follows last year's budget line rather than this year's demand, because changing it costs more political capital than it saves.",
-          "Reporting obligations are satisfied by producing documents, not by the process producing evidence as it runs.",
-          "Procurement rules are treated as a constraint on improvement rather than designed into how improvement is planned.",
-          "Improvement initiatives depend on individuals, so they end when those individuals move roles.",
-        ],
-        prebuilt: [
-          "Resource allocation models connecting funding to demand and outcome, so reallocation arguments rest on evidence rather than precedent.",
-          "A compliance management template built around the reporting obligations this sector actually carries, rather than a generic control library.",
-          "Process designs that respect procurement rules from the outset, so the recommended fix is one you are permitted to implement.",
-          "Governance that attaches ownership to roles rather than to individuals, so improvement survives a change of postholder.",
-        ],
-        outcomes: [
-          "Allocation decisions can be defended with evidence, which is what makes reallocation politically survivable.",
-          "Reporting becomes a by-product of the work instead of a parallel exercise run alongside it.",
-          "Recommendations are implementable within procurement rules, rather than technically correct and practically blocked.",
-          "Improvements outlast the people who started them, because ownership sits with a role and a governance forum.",
-        ],
-        goodFitIf: [
-          "Budgets are allocated by precedent and nobody can evidence whether it is still the right split.",
-          "Reporting requirements consume capacity that should be going into delivery.",
-          "Past improvement programmes faded when their sponsor moved on.",
         ],
       },
     ],
