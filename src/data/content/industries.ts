@@ -50,9 +50,9 @@ export const industryGroups: IndustryGroup[] = [
         metaDescription:
           "QBPES™ Industry Accelerator for manufacturing -- pre-built OEE definitions, a procurement-to-fulfillment process taxonomy, and demand forecasting benchmarks by sub-sector.",
         constraints: [
-          "OEE is quoted as a single plant-level number, which averages away the specific losses that are actually costing you.",
+          "OEE is quoted as a single plant-level number, which averages away the specific losses -- changeover, minor stops, quality rework -- that are actually costing you.",
           "Procurement, production, and fulfillment each hold a piece of the same process, and nobody owns the handoffs between them.",
-          "Throughput is measured at the line but never reconciled against demand, so the plant can hit its numbers while the business still misses its orders.",
+          "Throughput is measured at the line but never reconciled against demand, so overproduction on one SKU hides underproduction on another and the plant hits its numbers while the business misses its orders.",
           "Maintenance runs to a calendar rather than to condition -- you pay for interventions you didn't need and still take the breakdowns you didn't see coming.",
         ],
         prebuilt: [
@@ -82,13 +82,13 @@ export const industryGroups: IndustryGroup[] = [
         metaDescription:
           "QBPES™ Industry Accelerator for logistics and supply chain -- pre-built fleet utilization, route efficiency, and warehouse throughput templates mapped to real sub-processes.",
         constraints: [
-          "Fleet utilization is reported as a single percentage that can't tell you which of those hours actually earned anything.",
-          "Route planning optimises for distance, while the costs that genuinely hurt accumulate after the vehicle has already arrived.",
-          "Warehouse performance is measured at the dock but not through the steps inside it, so the internal bottleneck stays invisible.",
+          "Fleet utilization is reported as a single percentage nobody can decompose into idle, deadhead, and revenue-earning time.",
+          "Route planning optimises for distance, while the real cost accumulates after the vehicle arrives -- dwell time, failed deliveries, and re-attempts.",
+          "Warehouse performance is measured at the dock but not through pick, pack, and returns, so the internal bottleneck stays invisible.",
           "Dispatch, last-mile, and returns run as separate teams against separate targets that pull against each other.",
         ],
         prebuilt: [
-          "KPI templates for fleet utilization, route efficiency, and warehouse throughput, each defined to the level where the number becomes something you can act on.",
+          "KPI templates for fleet utilization, route efficiency, and warehouse throughput, each decomposed to the sub-process that actually drives the number.",
           "A logistics process taxonomy covering dispatch, line-haul, last-mile, and returns, mapped as one continuous flow rather than four disconnected functions.",
           "Maturity scoring against vertical-specific evidence, so a claim that the capability already exists is tested against artefacts rather than accepted as an assertion.",
           "Exception-handling patterns for the events -- failed delivery, damage, re-route -- that consume a disproportionate share of cost and management attention.",
