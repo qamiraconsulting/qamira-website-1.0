@@ -192,7 +192,7 @@ export const industryGroups: IndustryGroup[] = [
           "Patient flow process maps covering the full encounter, with the handoffs where delay accumulates already identified.",
           "Standard cost-per-encounter benchmarking, so service-line performance can be compared rather than debated.",
           "Resource allocation models built around healthcare's real staffing and licensing constraints, not a generic workforce template.",
-          "Compliance requirements cross-referenced into the process design, so governance is a by-product of how the work runs.",
+          "The regulatory regimes that apply to your operation identified at intake and designed into the process, rather than checked at the end.",
         ],
         outcomes: [
           "Bottlenecks are addressed where they actually form, instead of being pushed into the next department's queue.",

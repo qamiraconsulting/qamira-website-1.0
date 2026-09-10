@@ -124,11 +124,12 @@ export function IndustryDetail() {
         <Container>
           <div className="grid gap-12 lg:grid-cols-2 lg:items-start">
             <Reveal>
-              <Eyebrow>What's already built</Eyebrow>
-              <h2 className="mt-4 text-charcoal">Your engagement starts from a mostly complete toolkit.</h2>
+              <Eyebrow>What the accelerator covers</Eyebrow>
+              <h2 className="mt-4 text-charcoal">What the accelerator gives you a head start on.</h2>
               <p className="mt-4 text-charcoal-dim">
-                The accelerator is the same QBPES™ architecture every engagement runs on, pre-populated for this
-                vertical -- so Discovery begins with comparison data and a working taxonomy rather than a blank page.
+                An accelerator is the same QBPES™ architecture every engagement runs on, shaped for this vertical --
+                so Discovery starts from a working taxonomy and a defined KPI set rather than a blank page. Each one
+                deepens with every engagement we run in the vertical.
               </p>
             </Reveal>
             <RevealGroup className="flex flex-col gap-4">
