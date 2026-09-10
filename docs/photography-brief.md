@@ -20,16 +20,32 @@ Generate via Google AI Studio, then either upload the files directly in chat, or
 ### 1. Home -- "Who we are" section
 **File:** `public/photos/who-we-are.jpg` -- **Aspect:** 4:3
 
-> A bright, professional editorial photograph, close-up shot, of a pair of hands annotating a printed business-process diagram on a light wooden desk with a pen. Papers overlap slightly. Soft, warm natural daylight floods in from a window, creating an airy, optimistic mood with minimal shadow. Light, warm color palette -- soft neutral tones with brass-gold as an accent color. High-key lighting, shallow depth of field, clean and energetic. No visible face, no text, no logos, no watermark.
+> A bright, professional editorial photograph in 4:3 landscape format, shot close-up from above: a pair of hands annotating a printed business-process flow diagram on a light wooden desk with a gold-barrelled pen. Two or three other printed sheets overlap around it -- a process map and a phased roadmap -- alongside a notebook, a brass pen pot and a small plant at the edge of frame. The documents can carry ordinary generic labels: process stage names, phase headings, simple flow-chart boxes and arrows. **No percentage figures, no performance results, no "X% improvement" or "X% reduction" cards, and no before/after metrics anywhere in the image** -- the papers should read as work in progress, not as a results summary. Soft, warm natural daylight floods in from a window: airy, optimistic, high-key, minimal shadow. Light, warm colour palette of cream and soft neutrals with brass-gold accents. Shallow depth of field, clean and energetic. No face in frame, no logos, no watermark.
+
+**Why this was rewritten (Sept 2026).** The shipped version of this image renders a "Value Impact" card reading
+"15–20% Reduction in Cycle Time", "10–15% Improvement in On-Time Delivery" and "20–30% Faster Cash Collection" --
+fabricated client results, legible, on the home page, while `/case-studies` states plainly that Qamira is an
+early-stage firm without publicly citable client results yet. A prospect who reads both has caught the site
+contradicting itself on the one claim that matters most.
+
+Note the original prompt said "no text" and the generator produced a page of it anyway. Blanket bans get ignored;
+naming the specific forbidden thing works better, which is why the rule above is about *percentages and outcome
+claims* rather than text in general. Generic methodology labels are fine and add credibility -- see
+`client-tier-growth.jpg`, which is full of them. The fuller reasoning is in `photography-brief-industries.md`.
 
 ### 2-4. Home -- "Client Tiers" (one per tier)
 **Files:** `public/photos/client-tier-smb.jpg`, `public/photos/client-tier-growth.jpg`, `public/photos/client-tier-enterprise.jpg` -- **Aspect:** 4:3
 
-> **SMB tier:** A bright, professional editorial photograph of a small, focused office workspace: a single desk with a laptop and neatly organized papers, bathed in warm natural window light, airy and energetic. Light, warm color palette with brass-gold accents, high-key lighting, minimal shadow. No visible faces, no text, no logos, no watermark.
+> **SMB tier:** A bright, professional editorial photograph in 4:3 landscape format of a small, focused office workspace: a single sunlit wooden desk with an open laptop showing a clean, generic business dashboard, and two printed sheets laid out in front of it -- a phased "Process Improvement Roadmap" and a "Process Map". A notebook, brass pen pot and small plant sit alongside; a few sticky notes on the wall behind carry short phrases like "Process Efficiency" and "Customer Value". Warm natural window light, airy and energetic, high-key with minimal shadow. Light, warm colour palette with brass-gold accents. The documents may carry phase names, process stage labels and metric *names*. **No percentage figures anywhere, and specifically no "Expected Outcomes" or results summary block** -- nothing on any sheet or screen may state an efficiency, cost, time or satisfaction improvement. No faces, no logos, no watermark.
 >
 > **Growth-stage tier:** A bright, professional editorial photograph of a lean startup workspace: an open-plan area filled with natural daylight, a whiteboard covered in sticky notes and diagrams visible in the background, a sense of energy and forward motion. Light, warm color palette with brass-gold accents, high-key lighting. No visible faces, no text, no logos, no watermark.
 >
-> **Enterprise tier:** A bright, professional editorial photograph of a large, structured office setting: a glass-walled meeting room or long conference table, filled with natural daylight, spacious and optimistic. Light, warm color palette with brass-gold accents, high-key lighting. No visible faces, no text, no logos, no watermark.
+> **Enterprise tier:** A bright, professional editorial photograph in 4:3 landscape format of a large, structured boardroom: a long sunlit conference table with leather chairs, city windows behind, and two open leather folders in the foreground holding printed documents -- a phased "Process Improvement Roadmap" and a "Business Performance Overview" with simple bar and line charts. A brass pen and water glass alongside. Spacious, optimistic, high-key with warm natural daylight. Light, warm colour palette with brass-gold accents. Documents may carry phase names and chart axes. **No percentage figures anywhere, and specifically no "Expected Outcomes" or results summary block** -- nothing may state an efficiency, cost, time or satisfaction improvement. No faces, no logos, no watermark.
+
+**Why the SMB and Enterprise prompts were rewritten (Sept 2026).** Both shipped images render an "Expected
+Outcomes" card reading "15–25% Increase in Efficiency", "20–30% Cost Optimization" and "10–20% Faster Time to
+Market" on what is plainly a Qamira "Process Improvement Roadmap" -- the same fabricated-results problem as the
+original `who-we-are.jpg`, and on the same page. The growth-tier image is unaffected and should be kept as is.
 
 ### 5. Home -- "Technology Preview" section
 **File:** `public/photos/technology-preview.jpg` -- **Aspect:** 4:3
@@ -44,7 +60,14 @@ Generate via Google AI Studio, then either upload the files directly in chat, or
 ### 7. Technology page hero
 **File:** `public/photos/technology-hero.jpg` -- **Aspect:** 4:3
 
-> A clean, bright, professional product-style photograph of a laptop screen on a minimal, sunlit desk, displaying a generic chatbot conversation interface or CRM dashboard mockup -- abstract UI elements and chart shapes only, no legible text. Natural daylight, warm and energetic, light color palette with brass-gold accent highlights in the interface. Shallow depth of field. No visible face, no logos, no watermark. This one can read more literally than the others since it's illustrating real software capability, not an abstract concept.
+> A clean, bright, professional product-style photograph in 4:3 landscape format of a laptop screen on a minimal, sunlit desk, displaying a generic AI customer-assistant interface: a conversation thread on the left, and side panels showing conversation status, contact details and quick actions. Realistic placeholder content throughout -- a demo contact name, an `@example.com` address, a `(555)` phone number, ordinary statuses like "In Progress" and "High". **No panel may present a results or impact claim** -- specifically nothing along the lines of "Potential Impact: increase efficiency by up to X%", and no percentage breakdown of improvement areas. Ordinary product metrics such as response times or counts are fine. Natural daylight, warm and energetic, light colour palette with brass-gold accent highlights in the interface. Shallow depth of field. No logos, no watermark. This one can read more literally than the others since it's illustrating real software capability.
+
+**Why this was rewritten (Sept 2026).** The shipped image's bottom-right "Smart Insights" panel reads "Potential
+Impact: Increase efficiency by up to 35%" above a 45/30/15/10% breakdown -- a performance claim rendered legibly
+on the Technology page hero. Demo data inside a product mockup is fine and every other technology image uses it
+without issue; a stated improvement percentage is not, because it reads as something Qamira is promising. The
+same image also carries minor duplicated-text artifacts ("Customer Assistant / Assistant", "Topic / Topic")
+worth fixing in the same pass.
 
 ---
 

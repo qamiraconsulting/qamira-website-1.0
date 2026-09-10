@@ -7,7 +7,7 @@ import { PhotoSlot } from "@/components/brand/PhotoSlot";
 import { clientTiers } from "@/data/content/home";
 
 const tierPhotoLabels = [
-  "SMB context -- a small, focused office/workspace, charcoal/brass duotone.",
+  "SMB context -- a small, focused office/workspace.",
   "Growth-stage context -- a lean startup workspace, energetic but not chaotic.",
   "Enterprise-division context -- a larger, more structured office setting.",
 ];

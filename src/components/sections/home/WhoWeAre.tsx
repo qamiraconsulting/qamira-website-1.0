@@ -21,8 +21,8 @@ export function WhoWeAre() {
           </div>
           <PhotoSlot
             src="/photos/who-we-are.jpg"
-            label="Diagnosis in progress -- hands annotating a printed process map, or a laptop screen showing a data model. Charcoal/brass duotone, editorial lighting."
-            alt="Hands annotating a printed business process diagram"
+            label="Diagnosis in progress -- hands annotating a printed process map on a sunlit desk, warm and high-key."
+            alt="Hands annotating a printed business process map on a sunlit desk"
           />
         </Reveal>
 
