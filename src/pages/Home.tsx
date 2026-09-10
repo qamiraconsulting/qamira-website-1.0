@@ -8,6 +8,7 @@ import { GapFixBanner } from "@/components/sections/home/GapFixBanner";
 import { MethodologyPreview } from "@/components/sections/home/MethodologyPreview";
 import { TechnologyPreview } from "@/components/sections/home/TechnologyPreview";
 import { ClientTiers } from "@/components/sections/home/ClientTiers";
+import { IndustriesPreview } from "@/components/sections/home/IndustriesPreview";
 import { CaseStudiesPreview } from "@/components/sections/home/CaseStudiesPreview";
 import { CTABand } from "@/components/sections/home/CTABand";
 
@@ -28,6 +29,7 @@ export function Home() {
       <TechnologyPreview />
       <CaseStudiesPreview />
       <ClientTiers />
+      <IndustriesPreview />
       <CTABand />
     </>
   );
