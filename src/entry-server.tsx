@@ -24,6 +24,7 @@ import { StaticRouter } from "react-router-dom/server";
 import { HelmetProvider, type HelmetServerState } from "react-helmet-async";
 import App from "@/App";
 import { articles } from "@/data/content/insights";
+import { allIndustries } from "@/data/content/industries";
 import { customerFacingAI, contentAndGrowthSystems, internalAutomation } from "@/data/content/technology";
 
 const staticRoutes = [
@@ -46,11 +47,13 @@ const staticRoutes = [
 /**
  * Every route to prerender, derived from the same content modules the app
  * itself renders from -- so the crawl list can never drift out of sync
- * with the published articles and technology offerings.
+ * with the published articles, industry accelerators, and technology
+ * offerings.
  */
 export const routes: string[] = [
   ...staticRoutes,
   ...articles.map((a) => `/insights/${a.slug}`),
+  ...allIndustries.map((i) => `/industries/${i.slug}`),
   ...[...customerFacingAI, ...contentAndGrowthSystems, ...internalAutomation].map((o) => `/technology/${o.slug}`),
 ];
 

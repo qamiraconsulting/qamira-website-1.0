@@ -16,6 +16,20 @@ Qamira serves small-to-medium businesses ($2M-$50M revenue), post-Series A/B gro
 - [Technology](https://www.qamiraconsulting.com/technology): Productized offerings Qamira builds -- customer-facing AI (chatbots, CRM, voice automation), content & growth systems (AI video, scheduling, marketing automation), and internal automation & intelligence (workflow integration, knowledge agents, document extraction).
 - [Industries](https://www.qamiraconsulting.com/industries): Pre-built QBPES™ variants for specific verticals -- manufacturing, logistics, construction, retail, healthcare, financial services, professional services, startups, and public sector.
 
+## Industry accelerators
+
+Each is a pre-built QBPES™ variant for that vertical -- the same eight domains and eight-step delivery process, pre-populated with the KPIs, process taxonomies, and benchmark ranges the vertical typically needs.
+
+- [Manufacturing](https://www.qamiraconsulting.com/industries/manufacturing): Operational OEE, supply chain logistics, demand analytics.
+- [Logistics & Supply Chain](https://www.qamiraconsulting.com/industries/logistics-supply-chain): Fleet utilization, route efficiency, warehouse analytics.
+- [Construction & Infrastructure](https://www.qamiraconsulting.com/industries/construction-infrastructure): Resource management, project drift tracking.
+- [Retail & E-Commerce](https://www.qamiraconsulting.com/industries/retail-ecommerce): CAC/LTV models, inventory turns, customer journey.
+- [Healthcare](https://www.qamiraconsulting.com/industries/healthcare): Patient flow, cost optimization, resource allocation.
+- [Financial Services](https://www.qamiraconsulting.com/industries/financial-services): Risk architecture, operational throughput, executive reporting.
+- [Professional Services](https://www.qamiraconsulting.com/industries/professional-services): Resource utilization, project profitability.
+- [Growing Startups & Tech](https://www.qamiraconsulting.com/industries/startups-tech): Agility mapping, burn-rate optimization.
+- [Public Sector & Education](https://www.qamiraconsulting.com/industries/public-sector-education): Resource allocation, compliance management.
+
 ## Learn more
 
 - [About](https://www.qamiraconsulting.com/about): Who Qamira is and how we're positioned relative to BI freelancers and large SI firms.
