@@ -136,8 +136,13 @@ export function newEventId(): string {
  */
 export function track(event: MetaStandardEvent, params?: Record<string, unknown>, eventId?: string): void {
   if (typeof window === "undefined" || !resolvePixelId()) return;
-  if (eventId) window.fbq?.("track", event, params, { eventID: eventId });
-  else window.fbq?.("track", event, params);
+  // Arity matters: passing an explicit `undefined` third argument made
+  // fbevents.js classify PageView as a custom event rather than the
+  // standard one (Contact, which passes a real params object, classified
+  // correctly). Only ever pass the arguments that actually exist.
+  if (eventId) window.fbq?.("track", event, params ?? {}, { eventID: eventId });
+  else if (params) window.fbq?.("track", event, params);
+  else window.fbq?.("track", event);
 }
 
 /** Fire a PageView. Called on first paint and on every route change. */

@@ -4,6 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0b0f1a" />
+    <!-- Proves ownership of qamiraconsulting.com to Meta, which is what lets
+         this Business Portfolio control link-click attribution and ad
+         permissions for its own domain. Lives in the index.html template so
+         the prerender step (scripts/prerender.mjs) copies it into every
+         route's HTML -- Meta only checks the root, but a crawler landing
+         anywhere should see the same proof. Do not remove: verification is
+         re-checked periodically, not just once. -->
+    <meta name="facebook-domain-verification" content="lvnc1rhnu9zaprbhg3cbd2jp865x9t" />
     <link rel="icon" type="image/png" href="/logo/favicon-32.png" />
     <link rel="apple-touch-icon" href="/logo/apple-touch-icon.png" />
     <title>Qamira Consulting</title>
