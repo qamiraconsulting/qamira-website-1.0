@@ -1,6 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { waitUntil } from "@vercel/functions";
 import { Resend } from "resend";
+import { sendMetaEvent } from "./_meta-capi";
 
 // Server-side only -- RESEND_API_KEY and CONTACT_FROM_EMAIL are set in the
 // Vercel dashboard under Project Settings -> Environment Variables.
@@ -62,6 +63,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const email = truncate(body?.email, 320);
   const company = truncate(body?.company, 200);
   const message = truncate(body?.message, 5000);
+  const eventId = truncate(body?.eventId, 100);
 
   if (!name || !email || !message) {
     res.status(400).json({ error: "Name, email, and a message are required." });
@@ -101,6 +103,24 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         console.error("Contact sheet log failed:", sheetErr);
       })
     );
+
+    // Server-side copy of the conversion the browser pixel also reports.
+    // Shares eventId with it so Meta counts one conversion, not two. Fails
+    // soft -- the enquiry has already been emailed and answered by now.
+    if (eventId) {
+      waitUntil(
+        sendMetaEvent(req, {
+          eventName: "Contact",
+          eventId,
+          eventSourceUrl: (req.headers.referer as string | undefined) ?? "https://www.qamiraconsulting.com/contact",
+          email,
+          name,
+          customData: { content_name: "Contact form" },
+        }).catch((capiErr) => {
+          console.error("Meta CAPI contact event failed:", capiErr);
+        })
+      );
+    }
   } catch (err) {
     console.error("Contact form send failed:", err);
     res.status(502).json({ error: "We couldn't send that just now. Please try again shortly." });

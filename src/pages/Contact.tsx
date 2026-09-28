@@ -6,6 +6,7 @@ import { Section } from "@/components/ui/Section";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { site } from "@/data/site";
+import { newEventId, track } from "@/lib/metaPixel";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -24,7 +25,11 @@ export function Contact() {
     setErrorMessage("");
 
     try {
-      const payload = Object.fromEntries(new FormData(form));
+      // Shared with the Conversions API copy of this conversion so Meta
+      // deduplicates the two into one. Generated before the POST because
+      // both sides have to carry the same value.
+      const eventId = newEventId();
+      const payload = { ...Object.fromEntries(new FormData(form)), eventId };
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -32,6 +37,7 @@ export function Contact() {
       });
       if (res.ok) {
         setStatus("success");
+        track("Contact", { content_name: "Contact form" }, eventId);
         form.reset();
       } else {
         const data = await res.json().catch(() => ({}));

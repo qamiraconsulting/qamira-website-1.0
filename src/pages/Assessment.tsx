@@ -7,6 +7,7 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { ProcessFlow } from "@/components/brand/ProcessFlow";
+import { newEventId, track } from "@/lib/metaPixel";
 import {
   PERFORMANCE_DOMAINS,
   PRIORITY_OUTCOMES,
@@ -185,10 +186,13 @@ export function Assessment() {
     setStatus("submitting");
     setErrorMessage("");
     try {
+      // Shared with the Conversions API copy of this conversion so Meta
+      // deduplicates the two into one.
+      const eventId = newEventId();
       const res = await fetch("/api/assessment", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, eventId }),
       });
       const data = await res.json();
       if (!res.ok) {
@@ -196,6 +200,7 @@ export function Assessment() {
         setStatus("error");
         return;
       }
+      track("Lead", { content_name: "AI Business Assessment" }, eventId);
       setReport(data.report);
       setStatus("idle");
     } catch {
