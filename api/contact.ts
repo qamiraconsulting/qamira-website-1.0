@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { waitUntil } from "@vercel/functions";
 import { Resend } from "resend";
-import { sendMetaEvent } from "./_meta-capi";
+import { sendMetaEvent } from "./_meta-capi.js";
 
 // Server-side only -- RESEND_API_KEY and CONTACT_FROM_EMAIL are set in the
 // Vercel dashboard under Project Settings -> Environment Variables.

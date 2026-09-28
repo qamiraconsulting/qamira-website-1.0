@@ -2,7 +2,7 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { waitUntil } from "@vercel/functions";
 import Anthropic from "@anthropic-ai/sdk";
 import { Resend } from "resend";
-import { sendMetaEvent } from "./_meta-capi";
+import { sendMetaEvent } from "./_meta-capi.js";
 import type { AssessmentRequest, AssessmentReport } from "../src/lib/assessmentTypes";
 
 // Server-side only -- never exposed to the browser. Set in the Vercel
