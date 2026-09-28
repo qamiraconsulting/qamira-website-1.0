@@ -2,6 +2,7 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { waitUntil } from "@vercel/functions";
 import Anthropic from "@anthropic-ai/sdk";
 import { Resend } from "resend";
+import { sendMetaEvent } from "./_meta-capi.js";
 import type { AssessmentRequest, AssessmentReport } from "../src/lib/assessmentTypes";
 
 // Server-side only -- never exposed to the browser. Set in the Vercel
@@ -460,8 +461,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return;
   }
 
-  const body = req.body as Partial<AssessmentRequest>;
+  const body = req.body as Partial<AssessmentRequest> & { eventId?: unknown };
   const domainRatings = sanitizeDomainRatings(body?.domainRatings);
+  const eventId = truncate(body?.eventId, 100);
 
   if (!body?.companyName || !body?.contactEmail || !domainRatings) {
     res.status(400).json({ error: "Company name, email, and all eight domain ratings are required." });
@@ -566,6 +568,27 @@ Generate the AI Opportunity Report now via the submit_opportunity_report tool.`;
         console.error("Assessment sheet log failed:", sheetErr);
       })
     );
+
+    // Server-side copy of the conversion the browser pixel also reports.
+    // Shares eventId with it so Meta counts one conversion, not two. This
+    // is the event ad delivery optimises against, so it matters more than
+    // the Contact one -- but it still fails soft: the prospect already has
+    // their report.
+    if (eventId) {
+      waitUntil(
+        sendMetaEvent(req, {
+          eventName: "Lead",
+          eventId,
+          eventSourceUrl: (req.headers.referer as string | undefined) ?? `${SITE_URL}/assessment`,
+          email: input.contactEmail,
+          phone: input.contactPhone,
+          name: input.contactName,
+          customData: { content_name: "AI Business Assessment" },
+        }).catch((capiErr) => {
+          console.error("Meta CAPI lead event failed:", capiErr);
+        })
+      );
+    }
 
     // The prospect's own copy of the report and both follow-ups, then an
     // internal notification saying what was queued. All of it runs after
