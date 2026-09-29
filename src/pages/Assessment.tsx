@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { ProcessFlow } from "@/components/brand/ProcessFlow";
 import { newEventId, track } from "@/lib/metaPixel";
+import { trackGoogleLead } from "@/lib/googleTag";
 import {
   PERFORMANCE_DOMAINS,
   PRIORITY_OUTCOMES,
@@ -201,6 +202,7 @@ export function Assessment() {
         return;
       }
       track("Lead", { content_name: "AI Business Assessment" }, eventId);
+      trackGoogleLead("AI Business Assessment");
       setReport(data.report);
       setStatus("idle");
     } catch {

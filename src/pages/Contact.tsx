@@ -7,6 +7,7 @@ import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { site } from "@/data/site";
 import { newEventId, track } from "@/lib/metaPixel";
+import { trackGoogleLead } from "@/lib/googleTag";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -38,6 +39,7 @@ export function Contact() {
       if (res.ok) {
         setStatus("success");
         track("Contact", { content_name: "Contact form" }, eventId);
+        trackGoogleLead("Contact form");
         form.reset();
       } else {
         const data = await res.json().catch(() => ({}));
