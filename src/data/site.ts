@@ -7,10 +7,58 @@ export const site = {
     "Qamira Consulting is a Business Performance Excellence firm. We diagnose what's constraining growth, redesign the process and operating model beneath it, and deploy AI-native execution to make the fix permanent -- governed by QBPES™, our proprietary performance system.",
   email: "enquiries@qamiraconsulting.com",
   phone: "+91 9096236852",
+  /**
+   * The same line as `phone`, in the form wa.me requires: country code
+   * first, no `+`, no spaces. Kept beside `phone` rather than derived from
+   * it so there is one obvious place to change the number, and so a
+   * stray space in `phone` can never silently produce a dead chat link.
+   */
+  whatsapp: "919096236852",
   url: "https://www.qamiraconsulting.com",
   /** 1200x630 social card. Used for og:image and twitter:image site-wide. */
   ogImage: "/og/qamira-og.png",
 } as const;
+
+/**
+ * Public profiles, in the order the connect dock and the footer show them.
+ *
+ * A profile with an empty `url` is skipped everywhere -- in the dock, in
+ * the footer, and in the organization schema's `sameAs`. That is
+ * deliberate: a social link that 404s is worse than an absent one, so an
+ * unknown or unpublished profile stays blank until its real URL is known,
+ * rather than shipping a guess.
+ */
+export type SocialProfile = {
+  label: "LinkedIn" | "Instagram" | "Facebook";
+  url: string;
+};
+
+export const socialProfiles: readonly SocialProfile[] = [
+  { label: "LinkedIn", url: "https://www.linkedin.com/company/qamira-consulting/" },
+  { label: "Instagram", url: "https://www.instagram.com/qamiraconsulting/" },
+  // The Page has no vanity handle yet, so this is the ID-based URL.
+  // Facebook redirects profile.php?id=61594467201992 here, and this is the
+  // form it serves publicly -- using it directly saves a redirect hop.
+  // Swap in facebook.com/<handle> once a username is claimed for the Page.
+  {
+    label: "Facebook",
+    url: "https://www.facebook.com/people/Qamira-Consulting/61594467201992/",
+  },
+];
+
+/** The profiles that actually resolve. Everything renders from this. */
+export const activeSocialProfiles = socialProfiles.filter((profile) => profile.url !== "");
+
+/**
+ * A wa.me deep link that opens WhatsApp on the firm's line with `message`
+ * already typed but not sent, so the visitor still chooses to send it.
+ *
+ * wa.me works on desktop web, the desktop app and both mobile OSes, which
+ * is why it is used instead of the api.whatsapp.com or whatsapp:// forms.
+ */
+export function whatsappUrl(message: string): string {
+  return `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(message)}`;
+}
 
 /**
  * Stable identifier for the one Organization node on the site.
@@ -76,8 +124,9 @@ export const organizationSchema = {
   // company of the same name on Crunchbase and Tracxn, and from
   // Qamr/Qamar Consulting in India.
   //
-  // Only ever list profiles that actually resolve -- a URL that 404s is
-  // worse than an absent one. Add the Google Business Profile and
-  // Crunchbase entries here as they go live.
-  sameAs: ["https://www.linkedin.com/company/qamira-consulting/"],
+  // Driven by socialProfiles above so the dock, the footer and this list
+  // can never drift apart. Only profiles that actually resolve appear --
+  // a URL that 404s is worse than an absent one. Add the Google Business
+  // Profile and Crunchbase entries to socialProfiles as they go live.
+  sameAs: activeSocialProfiles.map((profile) => profile.url),
 } as const;

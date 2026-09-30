@@ -15,6 +15,9 @@ export function BackToTop() {
   return (
     <AnimatePresence>
       {visible && (
+        // Sits directly above the ConnectDock trigger and centred on its
+        // axis: the trigger is 56px wide inset 24px, so its centre is 52px
+        // from the right edge; this button is 44px wide, so 52 - 22 = 30px.
         <motion.button
           type="button"
           aria-label="Back to top"
@@ -23,7 +26,7 @@ export function BackToTop() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 10 }}
           transition={{ duration: 0.2 }}
-          className="fixed bottom-6 right-6 z-[70] flex h-11 w-11 items-center justify-center rounded-full border border-charcoal/15 bg-white text-brass shadow-card transition-colors hover:border-brass"
+          className="fixed bottom-24 right-[30px] z-[70] flex h-11 w-11 items-center justify-center rounded-full border border-charcoal/15 bg-white text-brass shadow-card transition-colors hover:border-brass"
         >
           <ArrowUp className="h-4 w-4" aria-hidden="true" />
         </motion.button>
