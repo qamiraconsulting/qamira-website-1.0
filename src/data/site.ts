@@ -36,14 +36,9 @@ export type SocialProfile = {
 export const socialProfiles: readonly SocialProfile[] = [
   { label: "LinkedIn", url: "https://www.linkedin.com/company/qamira-consulting/" },
   { label: "Instagram", url: "https://www.instagram.com/qamiraconsulting/" },
-  // The Page has no vanity handle yet, so this is the ID-based URL.
-  // Facebook redirects profile.php?id=61594467201992 here, and this is the
-  // form it serves publicly -- using it directly saves a redirect hop.
-  // Swap in facebook.com/<handle> once a username is claimed for the Page.
-  {
-    label: "Facebook",
-    url: "https://www.facebook.com/people/Qamira-Consulting/61594467201992/",
-  },
+  // Same handle as Instagram, deliberately. The Page's numeric id is
+  // 61594467201992 if the username ever needs to be traced back to it.
+  { label: "Facebook", url: "https://www.facebook.com/qamiraconsulting" },
 ];
 
 /** The profiles that actually resolve. Everything renders from this. */
