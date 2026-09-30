@@ -166,15 +166,23 @@ export function Assessment() {
     });
   }
 
+  // Ordered so nothing identifying is asked until the last step: a visitor
+  // arriving cold from an ad rates their business first and only names the
+  // company once they want the report sent. Notes on low ratings are
+  // encouraged, not enforced -- eight required text boxes lost people on mobile.
   const canProceed =
-    (step === 0 && form.companyName.trim().length > 0) ||
-    (step === 1 &&
-      form.domainRatings.every((d) => d.maturityLevel > 0 && (d.maturityLevel >= 3 || d.note.trim().length > 0))) ||
-    step === 2 ||
-    (step === 3 && form.priorities.length > 0) ||
+    (step === 0 && form.domainRatings.every((d) => d.maturityLevel > 0)) ||
+    step === 1 ||
+    (step === 2 && form.priorities.length > 0) ||
+    step === 3 ||
     step === 4;
 
   async function handleSubmit() {
+    if (!form.companyName.trim()) {
+      setErrorMessage("Enter your company name so we can put it on your report.");
+      setStatus("error");
+      return;
+    }
     if (!EMAIL_PATTERN.test(form.contactEmail.trim())) {
       setErrorMessage("Enter a valid email address, e.g. name@company.com.");
       setStatus("error");
@@ -239,20 +247,12 @@ export function Assessment() {
         </p>
       </Container>
 
-      <Section tone="surface" bordered>
-        <Container>
-          <p className="text-center font-mono text-xs uppercase tracking-[0.06em] text-charcoal-dim">
-            How your data is handled
-          </p>
-          <div className="mt-8">
-            <ProcessFlow steps={TRUST_STEPS} variant="compact" />
-          </div>
-        </Container>
-      </Section>
-
       <Section tone="white">
         <Container>
           <div className="mx-auto max-w-[42rem]">
+            <p className="mb-6 text-center font-mono text-xs uppercase tracking-[0.06em] text-charcoal-dim">
+              About 5 minutes · No account needed · Report on screen instantly
+            </p>
             <div className="mb-10 flex items-center gap-2" role="progressbar" aria-valuenow={step + 1} aria-valuemin={1} aria-valuemax={TOTAL_STEPS}>
               {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
                 <div key={i} className={`h-1 flex-1 ${i <= step ? "bg-brass" : "bg-charcoal/10"}`} />
@@ -261,116 +261,9 @@ export function Assessment() {
 
             <Reveal key={step}>
               {step === 0 && (
-                <div className="flex flex-col gap-5">
-                  <p className={labelClass}>Step 1 of 5 — About your business</p>
-                  <div className="flex flex-col gap-2">
-                    <label className={labelClass} htmlFor="companyName">Company name</label>
-                    <input
-                      id="companyName"
-                      className={inputClass}
-                      value={form.companyName}
-                      onChange={(e) => setForm({ ...form, companyName: e.target.value })}
-                    />
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label className={labelClass} htmlFor="industry">Industry</label>
-                    <input
-                      id="industry"
-                      className={inputClass}
-                      value={form.industry}
-                      onChange={(e) => setForm({ ...form, industry: e.target.value })}
-                      placeholder="e.g. Manufacturing, Retail, Professional Services"
-                    />
-                  </div>
-                  <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                    <div className="flex flex-col gap-2">
-                      <label className={labelClass} htmlFor="revenueCurrency">Currency</label>
-                      <select
-                        id="revenueCurrency"
-                        className={inputClass}
-                        value={form.revenueCurrency}
-                        onChange={(e) => setForm({ ...form, revenueCurrency: e.target.value as AssessmentRequest["revenueCurrency"] })}
-                      >
-                        <option value="">Select currency</option>
-                        {REVENUE_CURRENCIES.map((c) => (
-                          <option key={c} value={c}>{c}</option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <label className={labelClass} htmlFor="revenueRange">Revenue range</label>
-                      <select
-                        id="revenueRange"
-                        className={inputClass}
-                        value={form.revenueRange}
-                        onChange={(e) => setForm({ ...form, revenueRange: e.target.value as AssessmentRequest["revenueRange"] })}
-                      >
-                        <option value="">Select a range</option>
-                        {REVENUE_RANGES.map((r) => (
-                          <option key={r} value={r}>{r}</option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <label className={labelClass} htmlFor="employeeCount">Employee count</label>
-                      <select
-                        id="employeeCount"
-                        className={inputClass}
-                        value={form.employeeCount}
-                        onChange={(e) => setForm({ ...form, employeeCount: e.target.value as AssessmentRequest["employeeCount"] })}
-                      >
-                        <option value="">Select a range</option>
-                        {EMPLOYEE_BANDS.map((r) => (
-                          <option key={r} value={r}>{r}</option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <label className={labelClass} htmlFor="yearsInOperation">Years in operation</label>
-                      <select
-                        id="yearsInOperation"
-                        className={inputClass}
-                        value={form.yearsInOperation}
-                        onChange={(e) => setForm({ ...form, yearsInOperation: e.target.value as AssessmentRequest["yearsInOperation"] })}
-                      >
-                        <option value="">Select a range</option>
-                        {YEARS_IN_OPERATION.map((r) => (
-                          <option key={r} value={r}>{r}</option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <label className={labelClass} htmlFor="ownershipStructure">Ownership structure</label>
-                      <select
-                        id="ownershipStructure"
-                        className={inputClass}
-                        value={form.ownershipStructure}
-                        onChange={(e) => setForm({ ...form, ownershipStructure: e.target.value as AssessmentRequest["ownershipStructure"] })}
-                      >
-                        <option value="">Select one</option>
-                        {OWNERSHIP_STRUCTURES.map((r) => (
-                          <option key={r} value={r}>{r}</option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-                  <div className="flex flex-col gap-2">
-                    <label className={labelClass} htmlFor="website">Company website (optional)</label>
-                    <input
-                      id="website"
-                      className={inputClass}
-                      value={form.website}
-                      onChange={(e) => setForm({ ...form, website: e.target.value })}
-                      placeholder="e.g. www.yourcompany.com"
-                    />
-                  </div>
-                </div>
-              )}
-
-              {step === 1 && (
                 <div className="flex flex-col gap-8">
                   <div className="flex flex-col gap-2">
-                    <p className={labelClass}>Step 2 of 5 — Domain checkup</p>
+                    <p className={labelClass}>Step 1 of 5 — Domain checkup</p>
                     <p className="text-sm text-charcoal-dim">
                       Rate where the business stands today across our eight performance domains -- the same
                       framework behind our methodology. No wrong answers.
@@ -392,7 +285,7 @@ export function Assessment() {
                   <div className="flex flex-col gap-6">
                     {PERFORMANCE_DOMAINS.map((domain) => {
                       const rating = form.domainRatings.find((d) => d.domain === domain)!;
-                      const noteRequired = rating.maturityLevel > 0 && rating.maturityLevel <= 2;
+                      const noteRecommended = rating.maturityLevel > 0 && rating.maturityLevel <= 2;
                       const details = DOMAIN_DETAILS[domain];
                       return (
                         <div key={domain} className="border border-charcoal/10 p-5">
@@ -420,7 +313,7 @@ export function Assessment() {
                           </div>
                           <div className="mt-3 flex flex-col gap-1.5">
                             <label className={labelClass} htmlFor={`note-${domain}`}>
-                              What's driving that? {noteRequired ? "(required)" : "(optional)"}
+                              What's driving that? {noteRecommended ? "(recommended -- it sharpens your report)" : "(optional)"}
                             </label>
                             <input
                               id={`note-${domain}`}
@@ -436,9 +329,9 @@ export function Assessment() {
                 </div>
               )}
 
-              {step === 2 && (
+              {step === 1 && (
                 <div className="flex flex-col gap-5">
-                  <p className={labelClass}>Step 3 of 5 — Systems & tools</p>
+                  <p className={labelClass}>Step 2 of 5 — Systems & tools</p>
                   <div className="flex flex-col gap-2">
                     <label className={labelClass} htmlFor="systemCount">
                       Roughly how many core software systems does the business run on?
@@ -482,9 +375,9 @@ export function Assessment() {
                 </div>
               )}
 
-              {step === 3 && (
+              {step === 2 && (
                 <div className="flex flex-col gap-5">
-                  <p className={labelClass}>Step 4 of 5 — What matters most right now?</p>
+                  <p className={labelClass}>Step 3 of 5 — What matters most right now?</p>
                   <p className="text-sm text-charcoal-dim">Pick up to two priority outcomes.</p>
                   <div className="grid grid-cols-2 gap-3">
                     {PRIORITY_OUTCOMES.map((priority) => (
@@ -515,9 +408,127 @@ export function Assessment() {
                 </div>
               )}
 
+              {step === 3 && (
+                <div className="flex flex-col gap-5">
+                  <div className="flex flex-col gap-2">
+                    <p className={labelClass}>Step 4 of 5 — About your business</p>
+                    <p className="text-sm text-charcoal-dim">
+                      All optional -- but the more context you give, the more specific your report will be.
+                    </p>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className={labelClass} htmlFor="industry">Industry (optional)</label>
+                    <input
+                      id="industry"
+                      className={inputClass}
+                      value={form.industry}
+                      onChange={(e) => setForm({ ...form, industry: e.target.value })}
+                      placeholder="e.g. Manufacturing, Retail, Professional Services"
+                    />
+                  </div>
+                  <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                    <div className="flex flex-col gap-2">
+                      <label className={labelClass} htmlFor="revenueCurrency">Currency (optional)</label>
+                      <select
+                        id="revenueCurrency"
+                        className={inputClass}
+                        value={form.revenueCurrency}
+                        onChange={(e) => setForm({ ...form, revenueCurrency: e.target.value as AssessmentRequest["revenueCurrency"] })}
+                      >
+                        <option value="">Select currency</option>
+                        {REVENUE_CURRENCIES.map((c) => (
+                          <option key={c} value={c}>{c}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label className={labelClass} htmlFor="revenueRange">Revenue range (optional)</label>
+                      <select
+                        id="revenueRange"
+                        className={inputClass}
+                        value={form.revenueRange}
+                        onChange={(e) => setForm({ ...form, revenueRange: e.target.value as AssessmentRequest["revenueRange"] })}
+                      >
+                        <option value="">Select a range</option>
+                        {REVENUE_RANGES.map((r) => (
+                          <option key={r} value={r}>{r}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label className={labelClass} htmlFor="employeeCount">Employee count (optional)</label>
+                      <select
+                        id="employeeCount"
+                        className={inputClass}
+                        value={form.employeeCount}
+                        onChange={(e) => setForm({ ...form, employeeCount: e.target.value as AssessmentRequest["employeeCount"] })}
+                      >
+                        <option value="">Select a range</option>
+                        {EMPLOYEE_BANDS.map((r) => (
+                          <option key={r} value={r}>{r}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label className={labelClass} htmlFor="yearsInOperation">Years in operation (optional)</label>
+                      <select
+                        id="yearsInOperation"
+                        className={inputClass}
+                        value={form.yearsInOperation}
+                        onChange={(e) => setForm({ ...form, yearsInOperation: e.target.value as AssessmentRequest["yearsInOperation"] })}
+                      >
+                        <option value="">Select a range</option>
+                        {YEARS_IN_OPERATION.map((r) => (
+                          <option key={r} value={r}>{r}</option>
+                        ))}
+                      </select>
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label className={labelClass} htmlFor="ownershipStructure">Ownership structure (optional)</label>
+                      <select
+                        id="ownershipStructure"
+                        className={inputClass}
+                        value={form.ownershipStructure}
+                        onChange={(e) => setForm({ ...form, ownershipStructure: e.target.value as AssessmentRequest["ownershipStructure"] })}
+                      >
+                        <option value="">Select one</option>
+                        {OWNERSHIP_STRUCTURES.map((r) => (
+                          <option key={r} value={r}>{r}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className={labelClass} htmlFor="website">Company website (optional)</label>
+                    <input
+                      id="website"
+                      className={inputClass}
+                      value={form.website}
+                      onChange={(e) => setForm({ ...form, website: e.target.value })}
+                      placeholder="e.g. www.yourcompany.com"
+                    />
+                  </div>
+                </div>
+              )}
+
               {step === 4 && (
                 <div className="flex flex-col gap-5">
-                  <p className={labelClass}>Step 5 of 5 — Where should we send it?</p>
+                  <p className={labelClass}>Step 5 of 5 — Where should we send your report?</p>
+                  <div className="flex flex-col gap-2">
+                    <label className={labelClass} htmlFor="companyName">Company name</label>
+                    <input
+                      id="companyName"
+                      className={inputClass}
+                      value={form.companyName}
+                      onChange={(e) => {
+                        setForm({ ...form, companyName: e.target.value });
+                        if (status === "error") {
+                          setStatus("idle");
+                          setErrorMessage("");
+                        }
+                      }}
+                    />
+                  </div>
                   <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                     <div className="flex flex-col gap-2">
                       <label className={labelClass} htmlFor="contactName">Your name</label>
@@ -599,12 +610,23 @@ export function Assessment() {
               ) : (
                 <Button
                   onClick={handleSubmit}
-                  className={!form.contactEmail || status === "submitting" ? "pointer-events-none opacity-40" : ""}
+                  className={!form.contactEmail || !form.companyName.trim() || status === "submitting" ? "pointer-events-none opacity-40" : ""}
                 >
                   {status === "submitting" ? "Generating report..." : "Generate my report"}
                 </Button>
               )}
             </div>
+          </div>
+        </Container>
+      </Section>
+
+      <Section tone="surface" bordered>
+        <Container>
+          <p className="text-center font-mono text-xs uppercase tracking-[0.06em] text-charcoal-dim">
+            How your data is handled
+          </p>
+          <div className="mt-8">
+            <ProcessFlow steps={TRUST_STEPS} variant="compact" />
           </div>
         </Container>
       </Section>
