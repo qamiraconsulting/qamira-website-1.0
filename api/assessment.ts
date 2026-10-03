@@ -3,6 +3,7 @@ import { waitUntil } from "@vercel/functions";
 import Anthropic from "@anthropic-ai/sdk";
 import { Resend } from "resend";
 import { sendMetaEvent } from "./_meta-capi.js";
+import { alertOps } from "./_alert.js";
 import type { AssessmentRequest, AssessmentReport } from "../src/lib/assessmentTypes";
 
 // Server-side only -- never exposed to the browser. Set in the Vercel
@@ -563,10 +564,26 @@ Generate the AI Opportunity Report now via the submit_opportunity_report tool.`;
     // lead-tracking Google Sheet. Independent of the email notification
     // below: either can fail without affecting the other or the client's
     // already-sent report.
+    // Each alert promise is returned, not fired and forgotten, so it stays
+    // inside the chain waitUntil is holding -- otherwise Fluid Compute is
+    // free to freeze the function mid-alert, which is exactly the failure
+    // described above.
+    const leadContext = {
+      Company: input.companyName,
+      Contact: input.contactName,
+      Email: input.contactEmail,
+      Phone: input.contactPhone,
+    };
+
     waitUntil(
-      appendAssessmentRow(input, domainLines, report).catch((sheetErr) => {
-        console.error("Assessment sheet log failed:", sheetErr);
-      })
+      appendAssessmentRow(input, domainLines, report).catch((sheetErr) =>
+        alertOps({
+          key: "assessment:sheets",
+          subject: "Assessment completed but was not logged to the sheet",
+          error: sheetErr,
+          context: leadContext,
+        })
+      )
     );
 
     // Server-side copy of the conversion the browser pixel also reports.
@@ -584,9 +601,14 @@ Generate the AI Opportunity Report now via the submit_opportunity_report tool.`;
           phone: input.contactPhone,
           name: input.contactName,
           customData: { content_name: "AI Business Assessment" },
-        }).catch((capiErr) => {
-          console.error("Meta CAPI lead event failed:", capiErr);
-        })
+        }).catch((capiErr) =>
+          alertOps({
+            key: "assessment:capi",
+            subject: "Meta Conversions API rejected a Lead event",
+            error: capiErr,
+            context: leadContext,
+          })
+        )
       );
     }
 
@@ -633,13 +655,25 @@ ${deliveryLines}
 
 To stop a scheduled follow-up -- lead converted, replied, or asked to opt out -- cancel it in Resend using the id above.`,
           });
-        })().catch((notifyErr) => {
-          console.error("Assessment prospect delivery failed:", notifyErr);
-        })
+        })().catch((notifyErr) =>
+          alertOps({
+            key: "assessment:delivery",
+            subject: "Assessment report was not delivered to the prospect",
+            error: notifyErr,
+            context: leadContext,
+          })
+        )
       );
     }
   } catch (err) {
-    console.error("Assessment generation failed:", err);
+    waitUntil(
+      alertOps({
+        key: "assessment:generate",
+        subject: "Assessment generation failed -- the lead magnet is down",
+        error: err,
+        context: { Company: input.companyName, Email: input.contactEmail },
+      })
+    );
     res.status(502).json({ error: "We couldn't generate your report just now. Please try again shortly." });
   }
 }

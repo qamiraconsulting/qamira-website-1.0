@@ -3,6 +3,7 @@ import { waitUntil } from "@vercel/functions";
 import { Resend } from "resend";
 import { sendMetaEvent } from "./_meta-capi.js";
 import { checkRateLimit, clientIp, fingerprint } from "./_rate-limit.js";
+import { alertOps } from "./_alert.js";
 
 // Server-side only -- RESEND_API_KEY and CONTACT_FROM_EMAIL are set in the
 // Vercel dashboard under Project Settings -> Environment Variables.
@@ -123,7 +124,16 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
 
     if (error) {
-      console.error("Contact form send failed:", error);
+      // The visitor is told to email us directly, so the lead has a path --
+      // but only this alert says the form itself is broken.
+      waitUntil(
+        alertOps({
+          key: "contact:send",
+          subject: "Contact form could not send an enquiry",
+          error,
+          context: { Name: name, Email: email, Company: company, Message: message },
+        })
+      );
       res.status(502).json({ error: "We couldn't send that just now. Please try again shortly." });
       return;
     }
@@ -134,10 +144,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // -- Fluid Compute can otherwise freeze the function before this fetch
     // completes. See api/assessment.ts for the full story on why this
     // matters.
+    // The alert promise is returned, not fired and forgotten, so it stays
+    // inside the chain waitUntil is holding -- otherwise Fluid Compute can
+    // freeze the function mid-alert, which is the very failure described
+    // above.
     waitUntil(
-      appendContactRow({ name, email, company, message }).catch((sheetErr) => {
-        console.error("Contact sheet log failed:", sheetErr);
-      })
+      appendContactRow({ name, email, company, message }).catch((sheetErr) =>
+        alertOps({
+          key: "contact:sheets",
+          subject: "Contact enquiry was emailed but not logged to the sheet",
+          error: sheetErr,
+          context: { Name: name, Email: email, Company: company, Message: message },
+        })
+      )
     );
 
     // Server-side copy of the conversion the browser pixel also reports.
@@ -152,13 +171,25 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           email,
           name,
           customData: { content_name: "Contact form" },
-        }).catch((capiErr) => {
-          console.error("Meta CAPI contact event failed:", capiErr);
-        })
+        }).catch((capiErr) =>
+          alertOps({
+            key: "contact:capi",
+            subject: "Meta Conversions API rejected a Contact event",
+            error: capiErr,
+            context: { Email: email },
+          })
+        )
       );
     }
   } catch (err) {
-    console.error("Contact form send failed:", err);
+    waitUntil(
+      alertOps({
+        key: "contact:send",
+        subject: "Contact form threw while sending an enquiry",
+        error: err,
+        context: { Name: name, Email: email, Company: company, Message: message },
+      })
+    );
     res.status(502).json({ error: "We couldn't send that just now. Please try again shortly." });
   }
 }
