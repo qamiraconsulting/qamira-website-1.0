@@ -9,7 +9,15 @@ import { site } from "@/data/site";
 import { newEventId, track } from "@/lib/metaPixel";
 import { trackGoogleLead } from "@/lib/googleTag";
 
-type Status = "idle" | "submitting" | "success" | "error";
+// "notice" is the server throttling a repeat or rapid-fire submission --
+// the enquiry is already in hand, so it reads as reassurance rather than a
+// failure, and must not offer the "email us directly" fallback an "error"
+// does.
+type Status = "idle" | "submitting" | "success" | "notice" | "error";
+
+// Kept in sync with MIN_MESSAGE_LENGTH in api/contact.ts, so the browser
+// catches a two-word message before it costs a round trip.
+const MIN_MESSAGE_LENGTH = 30;
 
 const inputClass =
   "border border-charcoal/20 bg-white px-4 py-3 text-sm text-charcoal transition-colors focus:border-brass focus:outline-none";
@@ -18,12 +26,14 @@ const labelClass = "font-mono text-xs uppercase tracking-[0.06em] text-charcoal-
 export function Contact() {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [noticeMessage, setNoticeMessage] = useState("");
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.currentTarget;
     setStatus("submitting");
     setErrorMessage("");
+    setNoticeMessage("");
 
     try {
       // Shared with the Conversions API copy of this conversion so Meta
@@ -43,8 +53,15 @@ export function Contact() {
         form.reset();
       } else {
         const data = await res.json().catch(() => ({}));
-        setErrorMessage(data.error ?? "Something went wrong sending that.");
-        setStatus("error");
+        if (res.status === 429) {
+          // Already received -- not a failure, and retrying would only add
+          // another copy of something we have.
+          setNoticeMessage(data.error ?? "We've already got that one.");
+          setStatus("notice");
+        } else {
+          setErrorMessage(data.error ?? "Something went wrong sending that.");
+          setStatus("error");
+        }
       }
     } catch {
       setErrorMessage("Something went wrong reaching the contact service.");
@@ -70,12 +87,34 @@ export function Contact() {
         <Container>
           <div className="grid gap-16 lg:grid-cols-[1.3fr_1fr]">
             <Reveal>
+              {status === "success" || status === "notice" ? (
+                // The form is replaced rather than reset, so a sent enquiry
+                // can't be fired off again by someone who didn't notice the
+                // confirmation.
+                <div className="border border-charcoal/15 bg-parchment-2 px-6 py-8" role="status">
+                  <p className="font-mono text-xs uppercase tracking-[0.06em] text-slate-teal">
+                    {status === "success" ? "Message sent" : "Already received"}
+                  </p>
+                  <p className="mt-3 text-lg text-charcoal">
+                    {status === "success"
+                      ? "Thanks -- we'll get back to you directly, usually within one business day."
+                      : noticeMessage}
+                  </p>
+                  <p className="mt-3 text-charcoal-dim">
+                    No need to send it again. If something urgent comes up in the meantime, email us at{" "}
+                    <a href={`mailto:${site.email}`} className="underline hover:text-brass">
+                      {site.email}
+                    </a>
+                    .
+                  </p>
+                </div>
+              ) : (
               <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div className="flex flex-col gap-2">
                   <label className={labelClass} htmlFor="name">
                     Name
                   </label>
-                  <input id="name" name="name" type="text" required className={inputClass} />
+                  <input id="name" name="name" type="text" required minLength={2} className={inputClass} />
                 </div>
                 <div className="flex flex-col gap-2">
                   <label className={labelClass} htmlFor="email">
@@ -101,7 +140,19 @@ export function Contact() {
                   <label className={labelClass} htmlFor="message">
                     What's going on?
                   </label>
-                  <textarea id="message" name="message" required rows={6} className={inputClass} />
+                  <textarea
+                    id="message"
+                    name="message"
+                    required
+                    minLength={MIN_MESSAGE_LENGTH}
+                    rows={6}
+                    aria-describedby="message-hint"
+                    placeholder="A sentence or two on your business and where performance is leaking."
+                    className={inputClass}
+                  />
+                  <p id="message-hint" className="text-xs text-charcoal-dim">
+                    A sentence or two is plenty -- enough for us to come back with something useful.
+                  </p>
                 </div>
 
                 <div className="sm:col-span-2">
@@ -113,11 +164,6 @@ export function Contact() {
                     {status === "submitting" ? "Sending..." : "Send message"}
                   </button>
 
-                  {status === "success" && (
-                    <p className="mt-4 font-mono text-sm text-slate-teal" role="status">
-                      Thanks -- we'll get back to you directly, usually within one business day.
-                    </p>
-                  )}
                   {status === "error" && (
                     <p className="mt-4 font-mono text-sm text-[#b5573e]" role="alert">
                       {errorMessage || "Something went wrong sending that."} Please email us directly at{" "}
@@ -129,6 +175,7 @@ export function Contact() {
                   )}
                 </div>
               </form>
+              )}
             </Reveal>
 
             <Reveal delay={0.1} className="flex flex-col gap-8">

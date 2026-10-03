@@ -2,6 +2,7 @@ import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { waitUntil } from "@vercel/functions";
 import { Resend } from "resend";
 import { sendMetaEvent } from "./_meta-capi.js";
+import { checkRateLimit, clientIp, fingerprint } from "./_rate-limit.js";
 
 // Server-side only -- RESEND_API_KEY and CONTACT_FROM_EMAIL are set in the
 // Vercel dashboard under Project Settings -> Environment Variables.
@@ -16,6 +17,13 @@ import { sendMetaEvent } from "./_meta-capi.js";
 // production with ERR_MODULE_NOT_FOUND. Keep this in sync with site.email.
 const CONTACT_TO_EMAIL = "enquiries@qamiraconsulting.com";
 const EMAIL_PATTERN = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+// A real enquiry does not fit in two words. The floor is low enough that a
+// terse but genuine "Our ops team is drowning in manual quoting" clears it,
+// and high enough to stop the form being used as a button -- mirrored in
+// the minLength on the Contact page so the browser catches it first.
+const MIN_MESSAGE_LENGTH = 30;
+const MIN_NAME_LENGTH = 2;
 
 function truncate(value: unknown, max: number): string {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
@@ -72,6 +80,34 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   if (!EMAIL_PATTERN.test(email)) {
     res.status(400).json({ error: "Enter a valid email address." });
+    return;
+  }
+
+  if (name.length < MIN_NAME_LENGTH) {
+    res.status(400).json({ error: "Enter your full name." });
+    return;
+  }
+
+  if (message.length < MIN_MESSAGE_LENGTH) {
+    res.status(400).json({
+      error: "Tell us a little more -- a sentence or two about your business and what you're trying to fix.",
+    });
+    return;
+  }
+
+  const verdict = checkRateLimit(
+    [`contact:ip:${clientIp(req)}`, `contact:email:${email.toLowerCase()}`],
+    fingerprint(email, message)
+  );
+
+  if (!verdict.ok) {
+    res.setHeader("Retry-After", String(verdict.retryAfterSeconds));
+    res.status(429).json({
+      error:
+        verdict.reason === "duplicate"
+          ? "We've already got that one -- no need to send it twice. We'll reply shortly."
+          : "That's several enquiries in a short space of time. We have them, and we'll be in touch.",
+    });
     return;
   }
 
