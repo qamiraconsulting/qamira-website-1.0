@@ -5,10 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr",
+    "build": "npm run typecheck:api && tsc -b && vite build && vite build --ssr src/entry-server.tsx --outDir dist-ssr",
     "postbuild": "node scripts/prerender.mjs",
     "preview": "vite preview",
-    "lint": "tsc -b --noEmit",
+    "lint": "tsc -b && npm run typecheck:api",
     "typecheck:api": "tsc --noEmit -p tsconfig.api.json",
     "indexnow": "node scripts/indexnow.mjs"
   },
