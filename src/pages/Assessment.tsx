@@ -91,7 +91,7 @@ const TRUST_STEPS = [
     step: "01",
     title: "You answer",
     icon: "SlidersHorizontal",
-    body: "Eight quick domain ratings plus a few details about your business -- five minutes, no account required.",
+    body: "Eight one-tap ratings plus a few details about your business -- a few minutes, no account required.",
   },
   {
     step: "02",
@@ -147,6 +147,8 @@ const EMAIL_PATTERN = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 export function Assessment() {
   const [step, setStep] = useState(0);
+  // Step 0 shows one domain at a time; this is which one.
+  const [domainIndex, setDomainIndex] = useState(0);
   const [form, setForm] = useState<AssessmentRequest>(emptyForm);
   const [status, setStatus] = useState<"idle" | "submitting" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState("");
@@ -169,9 +171,24 @@ export function Assessment() {
   // Ordered so nothing identifying is asked until the last step: a visitor
   // arriving cold from an ad rates their business first and only names the
   // company once they want the report sent. Notes on low ratings are
-  // encouraged, not enforced -- eight required text boxes lost people on mobile.
+  // encouraged, not enforced. The eight ratings are one per screen: eight
+  // tall cards in a single scroll read as a wall on a phone.
+  const currentDomain = PERFORMANCE_DOMAINS[domainIndex];
+  const currentRating = form.domainRatings.find((d) => d.domain === currentDomain)!;
+  const lastDomain = domainIndex === PERFORMANCE_DOMAINS.length - 1;
+
+  function goNext() {
+    if (step === 0 && !lastDomain) setDomainIndex((i) => i + 1);
+    else setStep((s) => s + 1);
+  }
+
+  function goBack() {
+    if (step === 0 && domainIndex > 0) setDomainIndex((i) => i - 1);
+    else setStep((s) => Math.max(0, s - 1));
+  }
+
   const canProceed =
-    (step === 0 && form.domainRatings.every((d) => d.maturityLevel > 0)) ||
+    (step === 0 && currentRating.maturityLevel > 0) ||
     step === 1 ||
     (step === 2 && form.priorities.length > 0) ||
     step === 3 ||
@@ -251,7 +268,7 @@ export function Assessment() {
         <Container>
           <div className="mx-auto max-w-[42rem]">
             <p className="mb-6 text-center font-mono text-xs uppercase tracking-[0.06em] text-charcoal-dim">
-              About 5 minutes · No account needed · Report on screen instantly
+              A few minutes · No account needed · Report on screen instantly
             </p>
             <div className="mb-10 flex items-center gap-2" role="progressbar" aria-valuenow={step + 1} aria-valuemin={1} aria-valuemax={TOTAL_STEPS}>
               {Array.from({ length: TOTAL_STEPS }).map((_, i) => (
@@ -259,72 +276,74 @@ export function Assessment() {
               ))}
             </div>
 
-            <Reveal key={step}>
+            <Reveal key={`${step}-${domainIndex}`}>
               {step === 0 && (
-                <div className="flex flex-col gap-8">
+                <div className="flex flex-col gap-6">
                   <div className="flex flex-col gap-2">
-                    <p className={labelClass}>Step 1 of 5 — Domain checkup</p>
-                    <p className="text-sm text-charcoal-dim">
-                      Rate where the business stands today across our eight performance domains -- the same
-                      framework behind our methodology. No wrong answers.
+                    <p className={labelClass}>
+                      Step 1 of 5 — Question {domainIndex + 1} of {PERFORMANCE_DOMAINS.length}
                     </p>
+                    {domainIndex === 0 && (
+                      <p className="text-sm text-charcoal-dim">
+                        Tap the answer that fits your business today. One tap per question, no wrong answers.
+                      </p>
+                    )}
                   </div>
 
-                  <div className="border border-charcoal/10 bg-parchment-2 p-5">
-                    <p className={labelClass}>The scale, in plain terms</p>
-                    <div className="mt-3 grid grid-cols-1 gap-4 sm:grid-cols-5">
+                  <div className="border border-charcoal/10 p-5">
+                    <h4 className="text-charcoal">{currentDomain}</h4>
+                    <p className="mt-1 text-base text-charcoal">{DOMAIN_DETAILS[currentDomain].question}</p>
+                    <details className="mt-2 text-xs text-charcoal-dim">
+                      <summary className="cursor-pointer text-brass hover:text-brass-bright">What does this mean?</summary>
+                      <p className="mt-1.5">
+                        {DOMAIN_DETAILS[currentDomain].explanation} {DOMAIN_DETAILS[currentDomain].example}
+                      </p>
+                    </details>
+                    <div className="mt-4 flex flex-wrap gap-2">
                       {MATURITY_LEVELS.map((level) => (
-                        <div key={level.level}>
-                          <span className="font-mono text-xs text-brass">{level.level}. {level.title}</span>
-                          <p className="mt-1 text-xs text-charcoal-dim">{level.body}</p>
-                        </div>
+                        <button
+                          key={level.level}
+                          type="button"
+                          onClick={() => setDomainRating(currentDomain, level.level)}
+                          className={`border px-3 py-2 font-mono text-xs uppercase tracking-[0.04em] transition-colors ${
+                            currentRating.maturityLevel === level.level
+                              ? "border-brass bg-brass/10 text-charcoal"
+                              : "border-charcoal/20 text-charcoal-dim hover:border-charcoal/40"
+                          }`}
+                        >
+                          {level.level}. {level.title}
+                        </button>
                       ))}
                     </div>
-                  </div>
-
-                  <div className="flex flex-col gap-6">
-                    {PERFORMANCE_DOMAINS.map((domain) => {
-                      const rating = form.domainRatings.find((d) => d.domain === domain)!;
-                      const noteRecommended = rating.maturityLevel > 0 && rating.maturityLevel <= 2;
-                      const details = DOMAIN_DETAILS[domain];
-                      return (
-                        <div key={domain} className="border border-charcoal/10 p-5">
-                          <h4 className="text-charcoal">{domain}</h4>
-                          <p className="mt-1 text-sm text-charcoal-dim">{details.question}</p>
-                          <p className="mt-1.5 text-xs text-charcoal-dim/80">
-                            {details.explanation} {details.example}
-                          </p>
-                          <div className="mt-4 flex flex-wrap gap-2">
-                            {MATURITY_LEVELS.map((level) => (
-                              <button
-                                key={level.level}
-                                type="button"
-                                title={level.body}
-                                onClick={() => setDomainRating(domain, level.level)}
-                                className={`border px-3 py-2 font-mono text-xs uppercase tracking-[0.04em] transition-colors ${
-                                  rating.maturityLevel === level.level
-                                    ? "border-brass bg-brass/10 text-charcoal"
-                                    : "border-charcoal/20 text-charcoal-dim hover:border-charcoal/40"
-                                }`}
-                              >
-                                {level.level}. {level.title}
-                              </button>
-                            ))}
-                          </div>
-                          <div className="mt-3 flex flex-col gap-1.5">
-                            <label className={labelClass} htmlFor={`note-${domain}`}>
-                              What's driving that? {noteRecommended ? "(recommended -- it sharpens your report)" : "(optional)"}
-                            </label>
-                            <input
-                              id={`note-${domain}`}
-                              className={inputClass}
-                              value={rating.note}
-                              onChange={(e) => setDomainNote(domain, e.target.value)}
-                            />
-                          </div>
-                        </div>
-                      );
-                    })}
+                    <p className="mt-3 min-h-[2.5rem] text-xs text-charcoal-dim">
+                      {currentRating.maturityLevel > 0
+                        ? `${MATURITY_TITLES[currentRating.maturityLevel]}: ${MATURITY_LEVELS[currentRating.maturityLevel - 1].body}`
+                        : "1 is undocumented and dependent on individuals; 5 is actively improved using data."}
+                    </p>
+                    {currentRating.maturityLevel > 0 && currentRating.maturityLevel <= 2 ? (
+                      <div className="mt-3 flex flex-col gap-1.5">
+                        <label className={labelClass} htmlFor={`note-${currentDomain}`}>
+                          What's driving that? (recommended -- it sharpens your report)
+                        </label>
+                        <input
+                          id={`note-${currentDomain}`}
+                          className={inputClass}
+                          value={currentRating.note}
+                          onChange={(e) => setDomainNote(currentDomain, e.target.value)}
+                        />
+                      </div>
+                    ) : (
+                      <details className="mt-3 text-xs text-charcoal-dim" open={currentRating.note.length > 0}>
+                        <summary className="cursor-pointer text-brass hover:text-brass-bright">Add a note (optional)</summary>
+                        <input
+                          id={`note-${currentDomain}`}
+                          aria-label={`Note on ${currentDomain}`}
+                          className={`${inputClass} mt-2`}
+                          value={currentRating.note}
+                          onChange={(e) => setDomainNote(currentDomain, e.target.value)}
+                        />
+                      </details>
+                    )}
                   </div>
                 </div>
               )}
@@ -597,14 +616,14 @@ export function Assessment() {
             <div className="mt-10 flex items-center justify-between">
               <button
                 type="button"
-                onClick={() => setStep((s) => Math.max(0, s - 1))}
-                className={`font-mono text-xs uppercase tracking-[0.06em] text-charcoal-dim hover:text-charcoal ${step === 0 ? "invisible" : ""}`}
+                onClick={goBack}
+                className={`font-mono text-xs uppercase tracking-[0.06em] text-charcoal-dim hover:text-charcoal ${step === 0 && domainIndex === 0 ? "invisible" : ""}`}
               >
                 Back
               </button>
 
               {step < TOTAL_STEPS - 1 ? (
-                <Button onClick={() => canProceed && setStep((s) => s + 1)} className={!canProceed ? "pointer-events-none opacity-40" : ""}>
+                <Button onClick={() => canProceed && goNext()} className={!canProceed ? "pointer-events-none opacity-40" : ""}>
                   Next
                 </Button>
               ) : (
