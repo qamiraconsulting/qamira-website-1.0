@@ -1,4 +1,71 @@
 {
   "buildCommand": "npm run build",
-  "outputDirectory": "dist"
+  "outputDirectory": "dist",
+  "redirects": [
+    {
+      "source": "/about.html",
+      "destination": "/about",
+      "permanent": true
+    },
+    {
+      "source": "/services.html",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/technology.html",
+      "destination": "/technology",
+      "permanent": true
+    },
+    {
+      "source": "/industries.html",
+      "destination": "/industries",
+      "permanent": true
+    },
+    {
+      "source": "/methodology.html",
+      "destination": "/methodology",
+      "permanent": true
+    },
+    {
+      "source": "/growth-os.html",
+      "destination": "/growth-os",
+      "permanent": true
+    },
+    {
+      "source": "/ai-solutions.html",
+      "destination": "/ai-solutions",
+      "permanent": true
+    },
+    {
+      "source": "/case-studies.html",
+      "destination": "/case-studies",
+      "permanent": true
+    },
+    {
+      "source": "/insights.html",
+      "destination": "/insights",
+      "permanent": true
+    },
+    {
+      "source": "/careers.html",
+      "destination": "/careers",
+      "permanent": true
+    },
+    {
+      "source": "/contact.html",
+      "destination": "/contact",
+      "permanent": true
+    },
+    {
+      "source": "/assessment.html",
+      "destination": "/assessment",
+      "permanent": true
+    },
+    {
+      "source": "/privacy.html",
+      "destination": "/privacy",
+      "permanent": true
+    }
+  ]
 }
