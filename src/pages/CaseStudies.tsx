@@ -26,7 +26,7 @@ export function CaseStudies() {
           <RevealGroup className="grid gap-6 lg:grid-cols-3">
             {scenarios.map((scenario) => (
               <RevealItem key={scenario.title}>
-                <div id={scenario.slug} className="flex h-full scroll-mt-28 flex-col border border-charcoal/10 bg-white p-8">
+                <div id={scenario.slug} className="flex h-full scroll-mt-28 flex-col lg:scroll-mt-36 border border-charcoal/10 bg-white p-8">
                   <span className="font-mono text-xs uppercase tracking-[0.05em] text-brass">{scenario.tier}</span>
                   <h3 className="mt-3 text-charcoal">{scenario.title}</h3>
 

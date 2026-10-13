@@ -8,7 +8,7 @@ import { ease } from "@/lib/motion";
 
 export function Hero() {
   return (
-    <section className="relative flex min-h-[100svh] items-center overflow-hidden bg-hero-glow pt-24">
+    <section className="relative flex min-h-[100svh] items-center overflow-hidden bg-hero-glow pt-24 lg:pt-44">
       <div className="absolute inset-0">
         <NeuronField className="h-full w-full" />
       </div>

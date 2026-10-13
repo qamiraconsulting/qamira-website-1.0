@@ -47,7 +47,7 @@ export function PageHero({
   );
 
   return (
-    <section className="relative overflow-hidden bg-hero-glow pb-16 pt-36 sm:pb-20 sm:pt-44">
+    <section className="relative overflow-hidden bg-hero-glow pb-16 pt-36 sm:pb-20 sm:pt-44 lg:pt-56">
       <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
       <div className="absolute inset-0">
         <NeuronField className="h-full w-full" density={40} />

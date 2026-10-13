@@ -6,6 +6,7 @@ import { Menu, X } from "lucide-react";
 import { Logo } from "@/components/brand/Logo";
 import { Button } from "@/components/ui/Button";
 import { NavOverlay } from "@/components/layout/NavOverlay";
+import { DesktopNav } from "@/components/layout/DesktopNav";
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
@@ -34,11 +35,14 @@ export function Header() {
     <header
       className={clsx(
         "fixed inset-x-0 top-0 z-[100] transition-all duration-300 ease-signature",
-        scrolled ? "border-b border-charcoal/10 bg-white/90 py-3 backdrop-blur-md" : "border-b border-transparent py-5",
+        scrolled
+          ? "border-b border-charcoal/10 bg-white/90 py-3 backdrop-blur-md lg:pb-0"
+          : "border-b border-transparent py-5 lg:pb-0",
       )}
     >
       <div className="mx-auto flex max-w-content items-center justify-between px-5 sm:px-8 lg:px-12">
-        <Logo large />
+        {/* Shrinks once scrolled so the two-row desktop header stays compact. */}
+        <Logo large={!scrolled} />
         <div className="flex items-center gap-3 sm:gap-5">
           <Button to="/assessment" variant="ghost" arrow={false} className="hidden lg:inline-flex" title="Answer 8 quick questions, get an instant AI-generated report">
             Free AI Assessment
@@ -51,13 +55,15 @@ export function Header() {
             aria-label={menuOpen ? "Close menu" : "Open menu"}
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((v) => !v)}
-            className="flex items-center gap-2 rounded-sm border border-charcoal/15 px-3.5 py-2.5 font-mono text-xs uppercase tracking-[0.08em] text-charcoal transition-colors hover:border-brass hover:text-brass"
+            className="flex items-center gap-2 rounded-sm border lg:hidden border-charcoal/15 px-3.5 py-2.5 font-mono text-xs uppercase tracking-[0.08em] text-charcoal transition-colors hover:border-brass hover:text-brass"
           >
             {menuOpen ? <X className="h-4 w-4" aria-hidden="true" /> : <Menu className="h-4 w-4" aria-hidden="true" />}
             <span className="hidden sm:inline">{menuOpen ? "Close" : "Menu"}</span>
           </button>
         </div>
       </div>
+
+      <DesktopNav />
 
       <AnimatePresence>{menuOpen && <NavOverlay onClose={() => setMenuOpen(false)} />}</AnimatePresence>
     </header>

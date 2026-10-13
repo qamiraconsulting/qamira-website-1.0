@@ -71,7 +71,7 @@ export function IndustryDetail() {
         ]}
       />
 
-      <Section tone="parchment" className="pt-40 sm:pt-48">
+      <Section tone="parchment" className="pt-40 sm:pt-48 lg:pt-60">
         <Container>
           <Reveal className="grid gap-10 lg:grid-cols-[1.15fr_0.85fr] lg:items-center lg:gap-14">
             <div>

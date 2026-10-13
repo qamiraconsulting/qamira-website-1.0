@@ -4,7 +4,7 @@ import { Hero } from "@/components/sections/home/Hero";
 import { StatsStrip } from "@/components/sections/home/StatsStrip";
 import { WhoWeAre } from "@/components/sections/home/WhoWeAre";
 import { Philosophy } from "@/components/sections/home/Philosophy";
-import { GapFixBanner } from "@/components/sections/home/GapFixBanner";
+import { ServiceBanner } from "@/components/sections/home/ServiceBanner";
 import { MethodologyPreview } from "@/components/sections/home/MethodologyPreview";
 import { TechnologyPreview } from "@/components/sections/home/TechnologyPreview";
 import { ClientTiers } from "@/components/sections/home/ClientTiers";
@@ -21,7 +21,7 @@ export function Home() {
         jsonLd={organizationSchema}
       />
       <Hero />
-      <GapFixBanner />
+      <ServiceBanner />
       <StatsStrip />
       <WhoWeAre />
       <Philosophy />

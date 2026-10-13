@@ -8,7 +8,7 @@ export function NotFound() {
   return (
     <>
       <Seo title="Page not found" path="/404" />
-      <Section tone="parchment" className="pt-40 sm:pt-48">
+      <Section tone="parchment" className="pt-40 sm:pt-48 lg:pt-60">
         <Container>
           <Eyebrow>Page not found</Eyebrow>
           <h1 className="mt-4 text-charcoal">This page doesn't exist — error 404</h1>

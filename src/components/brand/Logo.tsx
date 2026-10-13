@@ -11,11 +11,14 @@ export function Logo({ className, large = false }: { className?: string; large?:
         aria-hidden="true"
         width={large ? 92 : 46}
         height={large ? 92 : 46}
-        className={clsx("shrink-0", large ? "h-[92px] w-[92px]" : "h-[46px] w-[46px]")}
+        className={clsx(
+          "shrink-0 transition-all duration-300 ease-signature",
+          large ? "h-[92px] w-[92px]" : "h-[46px] w-[46px]",
+        )}
       />
       <span
         className={clsx(
-          "font-display font-medium tracking-tight text-charcoal",
+          "font-display font-medium tracking-tight text-charcoal transition-all duration-300 ease-signature",
           large ? "text-3xl" : "text-2xl",
         )}
       >
