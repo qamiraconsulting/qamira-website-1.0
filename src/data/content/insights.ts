@@ -8,16 +8,82 @@ export const insightsHero = {
   lede: "Our thinking on why most transformation programs fail before the technology is even chosen -- and what we do differently.",
 };
 
+// A body block is a plain paragraph (string), a subheading, or a list.
+// Longer, search-led articles use headings and lists; short essays stay
+// as plain paragraphs.
+export type ArticleBlock = string | { heading: string } | { list: string[]; ordered?: boolean };
+
+export type ArticleSource = { label: string; url: string };
+
 export type Article = {
   slug: string;
   category: string;
   title: string;
   summary: string;
   datePublished: string;
-  body: string[];
+  body: ArticleBlock[];
+  // Third-party research the article cites, listed at the end.
+  sources?: ArticleSource[];
 };
 
 export const articles: Article[] = [
+  {
+    slug: "is-your-business-invisible-to-chatgpt",
+    category: "AI Search",
+    title: "Is your business invisible to ChatGPT? How AI search decides which local businesses to recommend.",
+    summary:
+      "ChatGPT and Google's AI answers now recommend local businesses by name. How they choose, where they get their information, and a 7-point checklist for getting on the list.",
+    datePublished: "2026-10-11",
+    body: [
+      "ChatGPT, Google's AI Mode and similar tools don't pick local businesses from a fixed ranking. They search the web at the moment someone asks, read what your Google Business Profile, review sites, directories and your own website say, and recommend the businesses those sources agree on. If that information is thin, inconsistent or missing, you don't drop a few places -- you simply don't get named.",
+      "That matters more every month. BrightLocal's 2026 Local Consumer Review Survey found 45% of US consumers had used an AI tool to find a local business in the past year, up from 6% the year before, with ChatGPT (31%) and Google's AI Mode (23%) the most used. Australians are not far behind on the habit itself: Roy Morgan estimates 13.6 million Australians aged 14 and over -- 58% of that group -- used an AI tool in an average four weeks in the March 2026 quarter, around 10.5 million of them on ChatGPT.",
+      { heading: "How is this different from ranking on Google?" },
+      "Google's map results are a fairly stable list. An AI answer is a short list written fresh every time someone asks. In an August 2026 study, Spearleaf asked ChatGPT the same \"who is the best [service] in [city]\" question across 216 US markets, 4 to 9 days apart. Only 48.2% of the businesses shown the first time appeared again, and the same business held the top spot in just 34.1% of markets. Google's local pack was far steadier over the same period.",
+      "Australian results look similar. Dossis Digital ran trade queries -- plumbers, electricians, cleaners, pest control and more -- across every Australian capital in June 2026, repeating identical questions three times. ChatGPT kept the same businesses only 8% of the time, Perplexity 38% and Claude 89%.",
+      "So \"ranking number one in ChatGPT\" isn't a position you can win and hold. What you can do is become one of the businesses the AI keeps finding. In the Spearleaf data, a business ChatGPT had already shown once was shown again 72.5% of the time; one it had considered but not shown made it into the next answer only 21.5% of the time. Getting into that pool of candidates is the real goal.",
+      { heading: "Where does each AI get its information?" },
+      "Each tool reads different sources, which is why a business can appear in one and be missing from another.",
+      {
+        list: [
+          "Google's AI Overviews and AI Mode lean heavily on Google Business Profile. In BrightLocal's August 2026 study of nearly two million citations for 1,355 business locations across the US, UK and Australia, Google's own listings made up roughly two-thirds of AI Overview citations and just over half of AI Mode citations.",
+          "ChatGPT leaned on review and directory sites instead -- in that same study, mostly Yelp. Yelp is far less used in Australia than in the US, so here the equivalent role is likely to fall to whichever review sites, directories and \"best of\" lists come up for your trade and city. Dossis Digital found ChatGPT drew on aggregators and listicles in its Australian sample.",
+          "Your own website still matters, but for different questions. A Steady Demand study of about 8,000 local searches found that for \"best [service] in [city]\" questions, around 80% of AI Mode's citations pointed to Google Maps or Business Profile and about 13% to business websites -- while AI Overviews did almost the opposite, citing business websites about 71% of the time.",
+          "Location is inferred, then written into the search. OpenAI's own help documentation says ChatGPT estimates a user's general location and may rewrite \"near me\" into a city-specific search. If your pages never mention the suburbs and city you serve, there's nothing for that search to match.",
+        ],
+      },
+      { heading: "The 7-point AI-visibility checklist" },
+      "None of this needs new technology. It needs the basics done properly, and kept consistent everywhere your business appears.",
+      {
+        ordered: true,
+        list: [
+          "Claim and complete your Google Business Profile. Correct primary category, service areas, opening hours, real photos, and a description that names the services and suburbs you actually cover. It's the most-cited source in Google's AI answers.",
+          "Make your name, address and phone number identical everywhere. Website, Business Profile, Facebook, every directory. When sources disagree, an AI has a reason to leave you out.",
+          "Get reviews steadily, and make them specific. In the Spearleaf data, each doubling of review count was associated with roughly 1.8 times the odds of being shown, and each extra 0.1 of a star with about 1.4 times. AI answers often quote what reviews say, so \"fixed our burst pipe on a Sunday in Box Hill\" teaches the AI far more than \"great service.\" Reply to every review.",
+          "Give each core service its own page. Name the service, the suburbs you cover, a price guide, what's included and how to book. Steady Demand found the business pages AI Overviews cited were more likely to contain concrete numbers and a phone number in the page text.",
+          "Add LocalBusiness structured data to your website. A short block of code (schema markup) states your name, address, hours and services in a format machines read without guessing.",
+          "Be on the lists the AI reads. Search \"best [your trade] in [your suburb]\" yourself. The directories, review sites and articles that come up are effectively the AI's reading list -- get listed on the relevant ones, starting with free listings, and correct anything out of date.",
+          "Make sure AI tools can read your website at all. Vercel's research found none of the major AI crawlers, including OpenAI's and Anthropic's, run JavaScript -- so a site that only displays its text after scripts load can look blank to them. Check that your pages show real text without scripts, and that your robots.txt isn't blocking search crawlers.",
+        ],
+      },
+      { heading: "How do you check whether you're visible right now?" },
+      "This takes about ten minutes. Open ChatGPT (in a temporary chat), Google's AI Mode and Perplexity, and ask each the questions your customers would ask: \"who's the best [trade] in [suburb]?\", \"how much does [service] cost in [city]?\", and \"[trade] near [suburb] open on weekends.\" For each answer, note whether you're named, who is, and which sources are cited.",
+      "Then ask the same questions again a few days later. Because these answers change from run to run, one miss isn't a verdict -- being absent across tools and across days is. The sources the AI cited for your competitors are your to-do list.",
+      { heading: "What this doesn't mean" },
+      "Traditional local SEO isn't dead. Google's map results still carry most local search traffic, and the two reinforce each other: in the Spearleaf study, 87.6% of businesses named in Google's AI Overviews were already in Google's local pack.",
+      "Nobody, including us, can guarantee a place in an AI answer. These systems don't sell positions, and their answers change daily, so treat any offer to \"rank you #1 in ChatGPT\" with suspicion. Most of the research in this area also comes from marketing firms with an interest in the conclusions. We've used studies that publish their methods and treat the numbers as directional, not precise.",
+      "For most small businesses, the gap isn't technology. It's the basics, done consistently across every place an AI might look. This checklist is what we look at first in a digital-presence review -- if you'd like us to run the visibility test on your business, start a conversation below.",
+    ],
+    sources: [
+      { label: "BrightLocal -- Local Consumer Review Survey 2026: AI and trust (March 2026)", url: "https://www.brightlocal.com/research/lcrs-ai-trust/" },
+      { label: "BrightLocal -- Top sources and directories for local AI search (August 2026)", url: "https://www.brightlocal.com/resources/ai-directory-sources/" },
+      { label: "Roy Morgan -- AI tools usage, March 2026 quarter", url: "https://www.roymorgan.com/findings/10248-artificial-intelligence-ai-tools-usage-march-2026" },
+      { label: "Spearleaf -- How ChatGPT picks a local business (August 2026)", url: "https://spearleaf.com/research/how-chatgpt-picks-a-local-business/" },
+      { label: "Dossis Digital -- How AI picks local businesses in Australia (June 2026)", url: "https://dossisdigital.com.au/ai-search-australia/" },
+      { label: "Steady Demand -- AI Overviews and AI Mode cite local businesses in almost opposite ways (August 2026)", url: "https://www.steadydemand.com/ai-overviews-and-ai-mode-both-cite-local-businesses-in-almost-opposite-ways-ai-optimization-is-different-for-each/" },
+      { label: "OpenAI Help Center -- Searching the web with ChatGPT", url: "https://help.openai.com/en/articles/9237897" },
+      { label: "Vercel -- The rise of the AI crawler (December 2024)", url: "https://vercel.com/blog/the-rise-of-the-ai-crawler" },
+    ],
+  },
   {
     slug: "dashboard-is-the-last-deliverable",
     category: "Strategy",

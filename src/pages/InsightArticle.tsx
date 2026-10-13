@@ -38,6 +38,9 @@ export function InsightArticle() {
             publisher: orgRef,
             mainEntityOfPage: url,
             url,
+            ...(article.sources && {
+              citation: article.sources.map((s) => ({ "@type": "CreativeWork", name: s.label, url: s.url })),
+            }),
           },
           {
             "@context": "https://schema.org",
@@ -81,11 +84,57 @@ export function InsightArticle() {
       <Section tone="white">
         <Container>
           <Reveal className="mx-auto flex max-w-[42rem] flex-col gap-6">
-            {article.body.map((paragraph, i) => (
-              <p key={i} className="text-base leading-relaxed text-charcoal-dim sm:text-lg">
-                {paragraph}
-              </p>
-            ))}
+            {article.body.map((block, i) => {
+              if (typeof block === "string") {
+                return (
+                  <p key={i} className="text-base leading-relaxed text-charcoal-dim sm:text-lg">
+                    {block}
+                  </p>
+                );
+              }
+              if ("heading" in block) {
+                return (
+                  <h2 key={i} className="mt-6 text-2xl text-charcoal sm:text-3xl">
+                    {block.heading}
+                  </h2>
+                );
+              }
+              const ListTag = block.ordered ? "ol" : "ul";
+              return (
+                <ListTag
+                  key={i}
+                  className={`flex flex-col gap-4 pl-6 text-base leading-relaxed text-charcoal-dim marker:text-brass sm:text-lg ${
+                    block.ordered ? "list-decimal" : "list-disc"
+                  }`}
+                >
+                  {block.list.map((item, j) => (
+                    <li key={j} className="pl-1">
+                      {item}
+                    </li>
+                  ))}
+                </ListTag>
+              );
+            })}
+
+            {article.sources && article.sources.length > 0 && (
+              <div className="mt-6 border-t border-charcoal/10 pt-6">
+                <p className="font-mono text-xs uppercase tracking-[0.06em] text-charcoal-dim">Sources</p>
+                <ul className="mt-3 flex flex-col gap-2 text-sm text-charcoal-dim">
+                  {article.sources.map((source) => (
+                    <li key={source.url}>
+                      <a
+                        href={source.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="underline decoration-charcoal/30 underline-offset-2 hover:text-brass"
+                      >
+                        {source.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </Reveal>
         </Container>
       </Section>
