@@ -4,6 +4,7 @@ import { Container } from "@/components/ui/Container";
 import { footerNav } from "@/data/navigation";
 import { activeSocialProfiles, site, whatsappUrl } from "@/data/site";
 import { Facebook, Instagram, Linkedin } from "lucide-react";
+import { XGlyph } from "@/components/brand/XGlyph";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -69,7 +70,7 @@ export function Footer() {
 function SocialLinks() {
   if (activeSocialProfiles.length === 0) return null;
 
-  const icons = { LinkedIn: Linkedin, Instagram, Facebook } as const;
+  const icons = { LinkedIn: Linkedin, Instagram, Facebook, X: XGlyph } as const;
 
   return (
     <ul className="mt-5 flex items-center gap-2">

@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Facebook, Instagram, Linkedin, Mail, X } from "lucide-react";
 import clsx from "clsx";
 import { activeSocialProfiles, site, whatsappUrl, type SocialProfile } from "@/data/site";
+import { XGlyph } from "@/components/brand/XGlyph";
 import { track } from "@/lib/metaPixel";
 import { trackGoogleContactChannel } from "@/lib/googleTag";
 
@@ -29,10 +30,11 @@ const TEASER_SEEN_KEY = "qamira:connect-teaser-seen";
 /** Long enough that the bubble reads as an offer of help, not an interruption. */
 const TEASER_DELAY_MS = 14000;
 
-const socialIcons: Record<SocialProfile["label"], typeof Linkedin> = {
+const socialIcons: Record<SocialProfile["label"], typeof Linkedin | typeof XGlyph> = {
   LinkedIn: Linkedin,
   Instagram: Instagram,
   Facebook: Facebook,
+  X: XGlyph,
 };
 
 /**

@@ -29,7 +29,7 @@ export const site = {
  * rather than shipping a guess.
  */
 export type SocialProfile = {
-  label: "LinkedIn" | "Instagram" | "Facebook";
+  label: "LinkedIn" | "Instagram" | "Facebook" | "X";
   url: string;
 };
 
@@ -39,6 +39,8 @@ export const socialProfiles: readonly SocialProfile[] = [
   // Same handle as Instagram, deliberately. The Page's numeric id is
   // 61594467201992 if the username ever needs to be traced back to it.
   { label: "Facebook", url: "https://www.facebook.com/qamiraconsulting" },
+  // "qamiraconsulting" was too long for an X handle (15-character limit).
+  { label: "X", url: "https://x.com/QamiraConsult" },
 ];
 
 /** The profiles that actually resolve. Everything renders from this. */
