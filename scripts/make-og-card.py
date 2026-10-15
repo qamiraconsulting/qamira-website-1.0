@@ -42,11 +42,14 @@ DIVIDER_Y = 430
 
 # --- Copy ---------------------------------------------------------------
 EYEBROW = "BUSINESS PERFORMANCE EXCELLENCE"
-HEADLINE = ["We solve the business problem.", "The technology comes after."]
+HEADLINE = ["Better processes and practical AI,", "built together."]
 SUPPORTING = [
-    "Diagnose what's constraining growth. Redesign the process beneath it.",
-    "Then deploy AI-native execution to make the fix permanent.",
+    "Find what's really holding your growth back and fix it for good:",
+    "process, operating model and AI, delivered as one system.",
 ]
+# Brass label in the footer line. Was "QBPES(TM)", which reads as jargon
+# to someone seeing the card cold in a feed.
+FOOTER_LABEL = "Free AI Business Assessment"
 
 # --- Font resolution, in fallback-stack order per platform --------------
 DISPLAY_SERIF = [
@@ -128,8 +131,8 @@ def main():
         d.text((PAD, 474 + i * 36), line, font=f_body, fill=CHARCOAL_DIM)
 
     f_meta = font(BODY_SANS_SEMIBOLD, 19)
-    d.text((PAD, 566), "QBPES\u2122", font=f_meta, fill=BRASS)
-    meta_width = d.textlength("QBPES\u2122", font=f_meta)
+    d.text((PAD, 566), FOOTER_LABEL, font=f_meta, fill=BRASS)
+    meta_width = d.textlength(FOOTER_LABEL, font=f_meta)
     d.text((PAD + meta_width + 14, 566), "\u00b7  qamiraconsulting.com", font=f_meta, fill=CHARCOAL_DIM)
 
     OUT.parent.mkdir(parents=True, exist_ok=True)
