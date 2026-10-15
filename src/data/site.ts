@@ -16,7 +16,10 @@ export const site = {
   whatsapp: "919096236852",
   url: "https://www.qamiraconsulting.com",
   /** 1200x630 social card. Used for og:image and twitter:image site-wide. */
-  ogImage: "/og/qamira-og.png",
+  // Bump ?v= whenever scripts/make-og-card.py regenerates the card:
+  // LinkedIn and others cache preview images by URL, so a same-URL
+  // replacement keeps showing the old card.
+  ogImage: "/og/qamira-og.png?v=2",
 } as const;
 
 /**
