@@ -8,8 +8,8 @@
 
 export const hero = {
   kicker: "Business Performance Excellence, AI-Native Execution",
-  heading: "We recalibrate how your business performs — then let AI execute it.",
-  lede: "Qamira diagnoses what's actually constraining growth, redesigns the process and operating model beneath it, and deploys AI-native execution to make the fix permanent — governed by QBPES™, our proprietary performance system.",
+  heading: "Better processes and practical AI, built together to make your business perform.",
+  lede: "Qamira finds what's really holding your growth back and fixes it for good: better processes, a stronger operating model and practical AI, designed and delivered as one system.",
   primaryCta: { label: "Start a conversation", to: "/contact" },
   secondaryCta: { label: "See our methodology", to: "/methodology" },
 };
