@@ -22,9 +22,9 @@ export function InsightArticle() {
   return (
     <>
       <Seo
-        title={article.title}
+        title={article.seoTitle ?? article.title}
         path={`/insights/${article.slug}`}
-        description={article.summary}
+        description={article.seoDescription ?? article.summary}
         ogTitle={article.ogTitle}
         ogImage={article.ogImage}
         ogType="article"

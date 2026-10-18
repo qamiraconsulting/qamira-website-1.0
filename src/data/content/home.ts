@@ -43,22 +43,22 @@ export const executionHierarchy = [
   {
     step: "01",
     title: "Strategy Foundation",
-    body: "Every recommendation starts with profitability, revenue growth, and cost — never a tool.",
+    body: "Every recommendation is anchored to profitability, revenue growth, and cost — never to a tool.",
   },
   {
     step: "02",
     title: "Process Structure",
-    body: "Workflows are redesigned to remove waste and friction before anything is automated.",
+    body: "Workflows are redesigned to remove waste and friction, so effort goes where it creates value.",
   },
   {
     step: "03",
     title: "People Capability",
-    body: "Skills, culture, and capacity are matched to the new process before new tools arrive.",
+    body: "Skills, culture, and capacity are matched to how the work now gets done.",
   },
   {
     step: "04",
     title: "AI Accelerant",
-    body: "AI executes the redesigned process at a speed and scale no team can match alone — governed, not improvised.",
+    body: "AI carries out the improved work at a speed and scale no team can match alone — governed, not improvised.",
   },
 ];
 

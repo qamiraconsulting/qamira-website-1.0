@@ -25,6 +25,11 @@ export type Article = {
   // them the preview uses the full title and the site-wide card.
   /** Short headline for the preview card; the full title is often too long. */
   ogTitle?: string;
+  // Search-result overrides for the <title> and meta description. Bing and
+  // Google truncate around 60 and 160 characters, so a long headline or
+  // summary supplies a shorter form here.
+  seoTitle?: string;
+  seoDescription?: string;
   /** Site-relative 1200x630 card from public/og/. Bump ?v= when it is regenerated. */
   ogImage?: string;
   body: ArticleBlock[];
@@ -41,6 +46,9 @@ export const articles: Article[] = [
       "ChatGPT and Google's AI answers now recommend local businesses by name. How they choose, where they get their information, and a 7-point checklist for getting on the list.",
     datePublished: "2026-10-11",
     ogTitle: "Is your business invisible to ChatGPT?",
+    seoTitle: "Is your business invisible to ChatGPT?",
+    seoDescription:
+      "How ChatGPT and Google's AI choose which local businesses to name, where they get their information, and a 7-point checklist to get on the list.",
     ogImage: "/og/insight-invisible-to-chatgpt.png?v=1",
     body: [
       "ChatGPT, Google's AI Mode and similar tools don't pick local businesses from a fixed ranking. They search the web at the moment someone asks, read what your Google Business Profile, review sites, directories and your own website say, and recommend the businesses those sources agree on. If that information is thin, inconsistent or missing, you don't drop a few places -- you simply don't get named.",
@@ -117,9 +125,9 @@ export const articles: Article[] = [
     body: [
       "\"AI-native\" gets used two very different ways, and the difference matters more than the branding around it suggests.",
       "The more common usage: AI-native as technology-first -- start with the model, the agent framework, the vendor stack, and go looking for a business problem it can be pointed at. This is how a lot of automation projects end up solving a real technical problem attached to the wrong business priority. The team ships something, it works, and it moves a metric nobody in the leadership room was actually losing sleep over.",
-      "Our reading inverts the order. In our execution hierarchy -- Strategy Foundation, Process Structure, People Capability, AI Accelerant -- AI sits last, deliberately. Every recommendation starts with profitability, revenue growth, or cost, never a tool. Process gets redesigned to remove waste and friction before anything is automated. People's skills and capacity get matched to the new process before new tools arrive. Only then does AI get introduced, as the layer that executes the redesigned process at a speed and scale no team could match manually.",
-      "This ordering isn't caution for its own sake. Skip a layer and AI ends up accelerating the wrong problem -- automating a broken process just makes the mess move faster. An AI agent bolted onto an undiagnosed workflow doesn't fix the workflow; it just executes the same mistake with more confidence and less friction to slow it down.",
-      "So when we say AI-native, we mean the firm is built assuming AI will eventually execute most of what a redesigned process calls for -- not that AI is the first thing on the table. It's the accelerant, not the ignition source. The distinction sounds semantic until you watch what happens to a project that gets the order backwards.",
+      "Our reading is different. In our execution hierarchy -- Strategy Foundation, Process Structure, People Capability, AI Accelerant -- AI is one of four layers designed together, and it is only as strong as the three it rests on. Every recommendation is anchored to profitability, revenue growth, or cost, never a tool. Process is redesigned to remove waste and friction. People's skills and capacity are matched to the new way of working. AI is the layer that executes that redesigned process at a speed and scale no team could match manually.",
+      "This isn't caution for its own sake. Leave a layer out and AI ends up accelerating the wrong problem -- automating a broken process just makes the mess move faster. An AI agent bolted onto an undiagnosed workflow doesn't fix the workflow; it just executes the same mistake with more confidence and less friction to slow it down.",
+      "So when we say AI-native, we mean the firm is built assuming AI will execute most of what a redesigned process calls for -- not that AI is where the conversation starts. It's the accelerant, not the ignition source. The distinction sounds semantic until you watch what happens to a project that treats AI as the starting point.",
     ],
   },
   {
