@@ -57,11 +57,13 @@ export function useShortlist() {
     () => codes,
     () => EMPTY,
   );
+  // Writes start from the module's current `codes`, not the `list` this
+  // render saw, so two clicks landing before a re-render both count.
   return {
     codes: list,
     has: (code: string) => list.includes(code),
-    toggle: (code: string) => commit(list.includes(code) ? list.filter((c) => c !== code) : [...list, code]),
-    remove: (code: string) => commit(list.filter((c) => c !== code)),
+    toggle: (code: string) => commit(codes.includes(code) ? codes.filter((c) => c !== code) : [...codes, code]),
+    remove: (code: string) => commit(codes.filter((c) => c !== code)),
     clear: () => commit(EMPTY),
   };
 }
