@@ -25,6 +25,11 @@ export function InsightArticle() {
         title={article.title}
         path={`/insights/${article.slug}`}
         description={article.summary}
+        ogTitle={article.ogTitle}
+        ogImage={article.ogImage}
+        ogType="article"
+        publishedTime={article.datePublished}
+        section={article.category}
         jsonLd={[
           {
             "@context": "https://schema.org",

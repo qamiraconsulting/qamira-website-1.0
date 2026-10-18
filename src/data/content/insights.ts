@@ -21,6 +21,12 @@ export type Article = {
   title: string;
   summary: string;
   datePublished: string;
+  // Link-preview overrides (LinkedIn, Facebook, X). Both optional: without
+  // them the preview uses the full title and the site-wide card.
+  /** Short headline for the preview card; the full title is often too long. */
+  ogTitle?: string;
+  /** Site-relative 1200x630 card from public/og/. Bump ?v= when it is regenerated. */
+  ogImage?: string;
   body: ArticleBlock[];
   // Third-party research the article cites, listed at the end.
   sources?: ArticleSource[];
@@ -34,6 +40,8 @@ export const articles: Article[] = [
     summary:
       "ChatGPT and Google's AI answers now recommend local businesses by name. How they choose, where they get their information, and a 7-point checklist for getting on the list.",
     datePublished: "2026-10-11",
+    ogTitle: "Is your business invisible to ChatGPT?",
+    ogImage: "/og/insight-invisible-to-chatgpt.png?v=1",
     body: [
       "ChatGPT, Google's AI Mode and similar tools don't pick local businesses from a fixed ranking. They search the web at the moment someone asks, read what your Google Business Profile, review sites, directories and your own website say, and recommend the businesses those sources agree on. If that information is thin, inconsistent or missing, you don't drop a few places -- you simply don't get named.",
       "That matters more every month. BrightLocal's 2026 Local Consumer Review Survey found 45% of US consumers had used an AI tool to find a local business in the past year, up from 6% the year before, with ChatGPT (31%) and Google's AI Mode (23%) the most used. Australians are not far behind on the habit itself: Roy Morgan estimates 13.6 million Australians aged 14 and over -- 58% of that group -- used an AI tool in an average four weeks in the March 2026 quarter, around 10.5 million of them on ChatGPT.",

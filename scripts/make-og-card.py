@@ -1,4 +1,9 @@
-"""Generate the 1200x630 social card at public/og/qamira-og.png.
+"""Generate the 1200x630 social cards in public/og/.
+
+Cards: the site-wide qamira-og.png, plus one per article that sets
+`ogImage` in src/data/content/insights.ts (see CARDS below). To add an
+article card, add an entry to CARDS and point the article's `ogImage` at
+the output file.
 
 This is a manual, run-once tool -- deliberately NOT part of `npm run
 build`. It needs Pillow and system fonts, and wiring an environment
@@ -41,15 +46,31 @@ PAD = 92
 DIVIDER_Y = 430
 
 # --- Copy ---------------------------------------------------------------
-EYEBROW = "BUSINESS PERFORMANCE EXCELLENCE"
-HEADLINE = ["Better processes and practical AI,", "built together."]
-SUPPORTING = [
-    "Find what's really holding your growth back and fix it for good:",
-    "process, operating model and AI, delivered as one system.",
+# Footer label is the brass line at the bottom. The site card's was
+# "QBPES(TM)", which reads as jargon to someone seeing the card cold in a
+# feed, so keep it plain on every card.
+CARDS = [
+    {
+        "out": "qamira-og.png",
+        "eyebrow": "BUSINESS PERFORMANCE EXCELLENCE",
+        "headline": ["Better processes and practical AI,", "built together."],
+        "supporting": [
+            "Find what's really holding your growth back and fix it for good:",
+            "process, operating model and AI, delivered as one system.",
+        ],
+        "footer_label": "Free AI Business Assessment",
+    },
+    {
+        "out": "insight-invisible-to-chatgpt.png",
+        "eyebrow": "AI SEARCH",
+        "headline": ["Is your business", "invisible to ChatGPT?"],
+        "supporting": [
+            "How AI search decides which local businesses to recommend,",
+            "and a 7-point checklist for getting on the list.",
+        ],
+        "footer_label": "Qamira Insights",
+    },
 ]
-# Brass label in the footer line. Was "QBPES(TM)", which reads as jargon
-# to someone seeing the card cold in a feed.
-FOOTER_LABEL = "Free AI Business Assessment"
 
 # --- Font resolution, in fallback-stack order per platform --------------
 DISPLAY_SERIF = [
@@ -71,7 +92,7 @@ BODY_SANS_SEMIBOLD = [
 ]
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "public" / "og" / "qamira-og.png"
+OUT_DIR = ROOT / "public" / "og"
 LOGO = ROOT / "public" / "logo" / "apple-touch-icon.png"
 
 
@@ -95,7 +116,8 @@ def tracked_text(draw, xy, text, face, fill, tracking):
         x += draw.textlength(char, font=face) + tracking
 
 
-def main():
+def render(card):
+    out = OUT_DIR / card["out"]
     img = Image.new("RGB", (WIDTH, HEIGHT), PARCHMENT)
     d = ImageDraw.Draw(img)
 
@@ -120,24 +142,29 @@ def main():
     # Eyebrow: short rule then spaced caps.
     eyebrow_y = 212
     d.line([(PAD, eyebrow_y + 9), (PAD + 26, eyebrow_y + 9)], fill=BRASS, width=2)
-    tracked_text(d, (PAD + 40, eyebrow_y), EYEBROW, font(BODY_SANS_SEMIBOLD, 17), BRASS, 2.6)
+    tracked_text(d, (PAD + 40, eyebrow_y), card["eyebrow"], font(BODY_SANS_SEMIBOLD, 17), BRASS, 2.6)
 
     f_head = font(DISPLAY_SERIF, 62)
-    for i, line in enumerate(HEADLINE):
+    for i, line in enumerate(card["headline"]):
         d.text((PAD, 264 + i * 76), line, font=f_head, fill=CHARCOAL)
 
     f_body = font(BODY_SANS, 25)
-    for i, line in enumerate(SUPPORTING):
+    for i, line in enumerate(card["supporting"]):
         d.text((PAD, 474 + i * 36), line, font=f_body, fill=CHARCOAL_DIM)
 
     f_meta = font(BODY_SANS_SEMIBOLD, 19)
-    d.text((PAD, 566), FOOTER_LABEL, font=f_meta, fill=BRASS)
-    meta_width = d.textlength(FOOTER_LABEL, font=f_meta)
+    d.text((PAD, 566), card["footer_label"], font=f_meta, fill=BRASS)
+    meta_width = d.textlength(card["footer_label"], font=f_meta)
     d.text((PAD + meta_width + 14, 566), "\u00b7  qamiraconsulting.com", font=f_meta, fill=CHARCOAL_DIM)
 
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    img.save(OUT, "PNG", optimize=True)
-    print(f"wrote {OUT.relative_to(ROOT)} ({OUT.stat().st_size // 1024} KB, {WIDTH}x{HEIGHT})")
+    out.parent.mkdir(parents=True, exist_ok=True)
+    img.save(out, "PNG", optimize=True)
+    print(f"wrote {out.relative_to(ROOT)} ({out.stat().st_size // 1024} KB, {WIDTH}x{HEIGHT})")
+
+
+def main():
+    for card in CARDS:
+        render(card)
 
 
 if __name__ == "__main__":
