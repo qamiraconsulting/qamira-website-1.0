@@ -1,7 +1,7 @@
 // Careers page copy, adapted from Master Knowledge Base v1.6 section 10.3
 // (Talent Management & Corporate Growth). No fabricated job listings --
-// Qamira is an early-stage boutique without a standing open-roles board
-// yet, so this page sells the culture and invites direct outreach instead.
+// real open roles live in jobs.ts and are listed above this copy; with
+// none open, the page sells the culture and invites direct outreach.
 
 export const careersHero = {
   eyebrow: "Join us",

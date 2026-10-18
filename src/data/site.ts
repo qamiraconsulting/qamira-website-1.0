@@ -6,6 +6,8 @@ export const site = {
   description:
     "Qamira Consulting is a Business Performance Excellence firm. We diagnose what's constraining growth, redesign the process and operating model beneath it, and deploy AI-native execution to make the fix permanent -- governed by QBPES™, our proprietary performance system.",
   email: "enquiries@qamiraconsulting.com",
+  /** Job applications. Duplicated as CAREERS_TO_EMAIL in api/apply.ts. */
+  careersEmail: "careers@qamiraconsulting.com",
   phone: "+91 9096236852",
   /**
    * The same line as `phone`, in the form wa.me requires: country code

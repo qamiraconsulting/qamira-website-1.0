@@ -6,7 +6,10 @@ import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 import { careersHero, whatWeLookFor, howYouGrow } from "@/data/content/careers";
+import { openJobs } from "@/data/content/jobs";
 
 export function Careers() {
   return (
@@ -23,7 +26,40 @@ export function Careers() {
         breadcrumbLabel="Careers"
       />
 
-      <Section tone="white">
+      {openJobs.length > 0 && (
+        <Section tone="white">
+          <Container>
+            <Reveal className="max-w-[46rem]">
+              <Eyebrow>Open roles</Eyebrow>
+            </Reveal>
+
+            <RevealGroup className="mt-10 flex flex-col divide-y divide-charcoal/10 border-y border-charcoal/10">
+              {openJobs.map((job) => (
+                <RevealItem key={job.slug}>
+                  <Link
+                    to={`/careers/${job.slug}`}
+                    className="group grid grid-cols-1 gap-3 py-8 sm:grid-cols-[1fr_auto] sm:items-center sm:gap-8"
+                  >
+                    <div>
+                      <h3 className="text-charcoal transition-colors group-hover:text-brass">{job.title}</h3>
+                      <p className="mt-2 text-sm text-charcoal-dim sm:text-base">{job.summary}</p>
+                      <p className="mt-3 font-mono text-xs uppercase tracking-[0.06em] text-charcoal-dim">
+                        {job.facts.map((fact) => fact.value).join("  ·  ")}
+                      </p>
+                    </div>
+                    <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.08em] text-brass">
+                      View and apply
+                      <ArrowRight aria-hidden="true" className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                    </span>
+                  </Link>
+                </RevealItem>
+              ))}
+            </RevealGroup>
+          </Container>
+        </Section>
+      )}
+
+      <Section tone={openJobs.length > 0 ? "surface" : "white"} bordered={openJobs.length > 0}>
         <Container>
           <Reveal className="max-w-[46rem]">
             <Eyebrow>What we look for</Eyebrow>
@@ -42,7 +78,7 @@ export function Careers() {
         </Container>
       </Section>
 
-      <Section tone="surface" bordered>
+      <Section tone={openJobs.length > 0 ? "white" : "surface"} bordered={openJobs.length === 0}>
         <Container>
           <Reveal className="max-w-[46rem]">
             <Eyebrow>How you grow here</Eyebrow>
@@ -62,7 +98,9 @@ export function Careers() {
       <Section tone="white" className="text-center">
         <Container>
           <Reveal className="mx-auto max-w-[42rem]">
-            <h2 className="text-charcoal">No open roles listed right now -- reach out anyway.</h2>
+            <h2 className="text-charcoal">
+              {openJobs.length > 0 ? "Not the right role? Reach out anyway." : "No open roles listed right now -- reach out anyway."}
+            </h2>
             <p className="mx-auto mt-4 max-w-[52ch] text-charcoal-dim">
               We're a small, early-stage firm. If the description above sounds like you, tell us -- we'd rather hear
               from you before we have a formal opening than miss you after.

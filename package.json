@@ -17,6 +17,7 @@
     "@fontsource/fraunces": "^5.1.0",
     "@fontsource/ibm-plex-mono": "^5.1.0",
     "@fontsource/ibm-plex-sans": "^5.1.0",
+    "@neondatabase/serverless": "^1.2.0",
     "@vercel/functions": "^3.7.5",
     "clsx": "^2.1.1",
     "framer-motion": "^11.11.17",

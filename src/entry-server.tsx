@@ -25,6 +25,7 @@ import { HelmetProvider, type HelmetServerState } from "react-helmet-async";
 import App from "@/App";
 import { articles } from "@/data/content/insights";
 import { allIndustries } from "@/data/content/industries";
+import { openJobs } from "@/data/content/jobs";
 import { customerFacingAI, contentAndGrowthSystems, internalAutomation } from "@/data/content/technology";
 
 const staticRoutes = [
@@ -54,6 +55,7 @@ export const routes: string[] = [
   ...staticRoutes,
   ...articles.map((a) => `/insights/${a.slug}`),
   ...allIndustries.map((i) => `/industries/${i.slug}`),
+  ...openJobs.map((j) => `/careers/${j.slug}`),
   ...[...customerFacingAI, ...contentAndGrowthSystems, ...internalAutomation].map((o) => `/technology/${o.slug}`),
 ];
 

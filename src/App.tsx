@@ -14,6 +14,7 @@ import { CaseStudies } from "@/pages/CaseStudies";
 import { Insights } from "@/pages/Insights";
 import { InsightArticle } from "@/pages/InsightArticle";
 import { Careers } from "@/pages/Careers";
+import { JobDetail } from "@/pages/JobDetail";
 import { Contact } from "@/pages/Contact";
 import { Assessment } from "@/pages/Assessment";
 import { Privacy } from "@/pages/Privacy";
@@ -37,6 +38,7 @@ export default function App() {
         <Route path="/insights" element={<Insights />} />
         <Route path="/insights/:slug" element={<InsightArticle />} />
         <Route path="/careers" element={<Careers />} />
+        <Route path="/careers/:slug" element={<JobDetail />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/assessment" element={<Assessment />} />
         <Route path="/privacy" element={<Privacy />} />

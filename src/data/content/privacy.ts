@@ -23,13 +23,14 @@ export const privacyHero = {
   lede: "Plain-language description of what we collect, why, and what we do with it -- no dense legal boilerplate.",
 };
 
-export const lastUpdated = "29 September 2026";
+export const lastUpdated = "18 October 2026";
 
 export const sections = [
   {
     heading: "What we collect",
     body: [
       "Contact form (/contact): your name, email, company, and message.",
+      "Job applications (/careers): your name, email, phone number, area of Pune, experience, current and expected salary, notice period, availability for the shift, optional LinkedIn profile and note, where you saw the role, and your résumé file.",
       "AI Business Assessment (/assessment): your company profile (industry, revenue range, employee count, and similar), your self-rated answers across our eight performance domains, the systems/tools questions, your stated priorities, and your contact details (name, email, role, phone).",
     ],
   },
@@ -37,6 +38,7 @@ export const sections = [
     heading: "How we use it",
     body: [
       "Contact form submissions are used solely to respond to your enquiry.",
+      "Job applications are used only to assess you for the role you applied for and similar roles at Qamira. They are stored in our own database and inbox, read only by the people hiring, and never shared with our clients without your agreement. They are not sent to any AI service, and are not shared with Meta or Google.",
       "Assessment submissions are sent to Anthropic's Claude API to generate your personalized AI Opportunity Report. Per Anthropic's commercial API terms (anthropic.com/legal/commercial-terms), data submitted through the API is not used to train Anthropic's models, and is retained only briefly for abuse and safety monitoring.",
       "We do not sell your information. We do share limited data with Meta (Facebook/Instagram) and Google to measure our own advertising -- see \"Cookies and advertising measurement\" below for exactly what. We do not share your information with any other third party for marketing.",
     ],
@@ -59,6 +61,7 @@ export const sections = [
       "Assessment submissions are retained by Qamira only if you choose to continue into a consultation with us. If you don't, we don't keep your submission on file for any other purpose.",
       "Where we do retain your information, it is used only for your own ongoing engagement with Qamira -- never repurposed for another client, and never used to train any AI model.",
       "Contact form messages are kept only as long as needed for correspondence with you.",
+      "Job applications, including your résumé, are deleted 12 months after you apply, or sooner if you ask us to.",
     ],
   },
   {
