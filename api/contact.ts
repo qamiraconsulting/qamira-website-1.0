@@ -30,6 +30,21 @@ function truncate(value: unknown, max: number): string {
   return typeof value === "string" ? value.trim().slice(0, max) : "";
 }
 
+// The /services shortlist arrives as one "QC-302 Custom AI Chatbot" line per
+// service. Lines are checked by shape only: the catalogue lives in src/,
+// which a function can't import at runtime (see CONTACT_TO_EMAIL above).
+const SERVICE_LINE_PATTERN = /^QC-\d{3} \S/;
+const MAX_SERVICES = 45;
+
+function parseServices(value: unknown): string[] {
+  if (typeof value !== "string") return [];
+  return value
+    .split("\n")
+    .map((line) => line.trim().slice(0, 120))
+    .filter((line) => SERVICE_LINE_PATTERN.test(line))
+    .slice(0, MAX_SERVICES);
+}
+
 // Structured record -- appends the submission as a row in the "Contact Form
 // Leads" tab of the same lead-tracking Google Sheet used by
 // api/assessment.ts, via the same Apps Script webhook (routed by the
@@ -73,6 +88,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   const company = truncate(body?.company, 200);
   const message = truncate(body?.message, 5000);
   const eventId = truncate(body?.eventId, 100);
+  const services = parseServices(body?.services);
+  // Carried in the email, the sheet row and any ops alert, so the shortlist
+  // is never lost even though the sheet has no column of its own for it.
+  const fullMessage = services.length
+    ? `Shortlisted services (${services.length}):\n${services.map((s) => `- ${s}`).join("\n")}\n\n${message}`
+    : message;
 
   if (!name || !email || !message) {
     res.status(400).json({ error: "Name, email, and a message are required." });
@@ -119,8 +140,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       from: `Qamira Consulting Website <${process.env.CONTACT_FROM_EMAIL}>`,
       to: [CONTACT_TO_EMAIL],
       replyTo: `${name} <${email}>`,
-      subject: `New enquiry from ${name}${company ? ` (${company})` : ""}`,
-      text: `Name: ${name}\nEmail: ${email}\nCompany: ${company || "-"}\n\n${message}`,
+      subject: `New enquiry from ${name}${company ? ` (${company})` : ""}${
+        services.length ? ` · ${services.length} ${services.length === 1 ? "service" : "services"} shortlisted` : ""
+      }`,
+      text: `Name: ${name}\nEmail: ${email}\nCompany: ${company || "-"}\n\n${fullMessage}`,
     });
 
     if (error) {
@@ -131,7 +154,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           key: "contact:send",
           subject: "Contact form could not send an enquiry",
           error,
-          context: { Name: name, Email: email, Company: company, Message: message },
+          context: { Name: name, Email: email, Company: company, Message: fullMessage },
         })
       );
       res.status(502).json({ error: "We couldn't send that just now. Please try again shortly." });
@@ -149,12 +172,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     // freeze the function mid-alert, which is the very failure described
     // above.
     waitUntil(
-      appendContactRow({ name, email, company, message }).catch((sheetErr) =>
+      appendContactRow({ name, email, company, message: fullMessage }).catch((sheetErr) =>
         alertOps({
           key: "contact:sheets",
           subject: "Contact enquiry was emailed but not logged to the sheet",
           error: sheetErr,
-          context: { Name: name, Email: email, Company: company, Message: message },
+          context: { Name: name, Email: email, Company: company, Message: fullMessage },
         })
       )
     );
@@ -187,7 +210,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         key: "contact:send",
         subject: "Contact form threw while sending an enquiry",
         error: err,
-        context: { Name: name, Email: email, Company: company, Message: message },
+        context: { Name: name, Email: email, Company: company, Message: fullMessage },
       })
     );
     res.status(502).json({ error: "We couldn't send that just now. Please try again shortly." });

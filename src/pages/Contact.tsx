@@ -1,11 +1,14 @@
 import { useState, type FormEvent } from "react";
 import { Link } from "react-router-dom";
+import { X } from "lucide-react";
 import { Seo } from "@/lib/Seo";
 import { PageHero } from "@/components/sections/PageHero";
 import { Section } from "@/components/ui/Section";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/ui/Reveal";
 import { site } from "@/data/site";
+import { catalogueByCode } from "@/data/content/serviceCatalogue";
+import { useShortlist } from "@/lib/shortlist";
 import { newEventId, track } from "@/lib/metaPixel";
 import { trackGoogleLead } from "@/lib/googleTag";
 
@@ -27,6 +30,12 @@ export function Contact() {
   const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [noticeMessage, setNoticeMessage] = useState("");
+  // Services the visitor shortlisted on /services. Sent as one
+  // "QC-302 Custom AI Chatbot" line each, so the enquiry email lists them.
+  const shortlist = useShortlist();
+  const shortlistLines = shortlist.codes
+    .filter((code) => catalogueByCode[code])
+    .map((code) => `${code} ${catalogueByCode[code].name}`);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -51,6 +60,7 @@ export function Contact() {
         track("Contact", { content_name: "Contact form" }, eventId);
         trackGoogleLead("Contact form");
         form.reset();
+        shortlist.clear();
       } else {
         const data = await res.json().catch(() => ({}));
         if (res.status === 429) {
@@ -110,6 +120,37 @@ export function Contact() {
                 </div>
               ) : (
               <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                {shortlistLines.length > 0 && (
+                  <div className="border border-brass/40 bg-parchment-2 p-5 sm:col-span-2">
+                    <input type="hidden" name="services" value={shortlistLines.join("\n")} />
+                    <div className="flex flex-wrap items-baseline justify-between gap-2">
+                      <p className={labelClass}>Your shortlist ({shortlistLines.length})</p>
+                      <Link to="/services#find-a-service" className="text-sm text-brass-dim underline underline-offset-4 hover:text-charcoal">
+                        Add more
+                      </Link>
+                    </div>
+                    <ul className="mt-3 flex flex-col gap-1.5">
+                      {shortlist.codes.map((code) => {
+                        const svc = catalogueByCode[code];
+                        if (!svc) return null;
+                        return (
+                          <li key={code} className="flex items-center gap-3 bg-white py-1 pl-3 pr-1">
+                            <span className="font-mono text-[11px] text-brass-dim">{code}</span>
+                            <span className="min-w-0 flex-1 text-sm text-charcoal">{svc.name}</span>
+                            <button
+                              type="button"
+                              onClick={() => shortlist.remove(code)}
+                              aria-label={`Remove ${svc.name} from shortlist`}
+                              className="flex h-11 w-11 flex-none items-center justify-center text-charcoal-dim hover:text-charcoal"
+                            >
+                              <X aria-hidden="true" className="h-4 w-4" />
+                            </button>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                )}
                 <div className="flex flex-col gap-2">
                   <label className={labelClass} htmlFor="name">
                     Name
@@ -147,7 +188,11 @@ export function Contact() {
                     minLength={MIN_MESSAGE_LENGTH}
                     rows={6}
                     aria-describedby="message-hint"
-                    placeholder="A sentence or two on your business and where performance is leaking."
+                    placeholder={
+                      shortlistLines.length
+                        ? "A sentence or two on your business: team size, systems you use, any deadline."
+                        : "A sentence or two on your business and where performance is leaking."
+                    }
                     className={inputClass}
                   />
                   <p id="message-hint" className="text-xs text-charcoal-dim">

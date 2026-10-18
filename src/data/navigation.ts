@@ -18,7 +18,7 @@ export const mainNav: NavEntry[] = [
   {
     label: "Services",
     items: [
-      { label: "All services", path: "/services", description: "Consulting, managed services and workshops" },
+      { label: "All services", path: "/services", description: "45 services, from free assessments to managed retainers" },
       { label: "GrowthOS™", path: "/growth-os", description: "Our AI-powered growth operating system" },
       { label: "AI Solutions", path: "/ai-solutions", description: "How we apply AI, with people in control" },
       { label: "AI Business Assessment", path: "/assessment", description: "8 quick questions, an instant report" },
