@@ -74,7 +74,12 @@ function jobPostingSchema(job: Job) {
       logo: `${site.url}/logo/apple-touch-icon.png`,
     },
     jobLocationType: "TELECOMMUTE",
-    applicantLocationRequirements: { "@type": "State", name: "Maharashtra" },
+    // Google's Rich Results Test rejects "State" here despite its docs; it
+    // expects AdministrativeArea (or Country).
+    applicantLocationRequirements: {
+      "@type": "AdministrativeArea",
+      name: `${job.schema.addressRegion}, India`,
+    },
     jobLocation: {
       "@type": "Place",
       address: {

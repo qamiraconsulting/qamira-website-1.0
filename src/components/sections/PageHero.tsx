@@ -48,7 +48,12 @@ export function PageHero({
 
   return (
     <section className="relative overflow-hidden bg-hero-glow pb-16 pt-36 sm:pb-20 sm:pt-44 lg:pt-56">
-      <script type="application/ld+json">{JSON.stringify(breadcrumbJsonLd)}</script>
+      {/* Set as raw HTML: a JSX text child is entity-escaped (&quot;) in the
+          prerendered HTML, which crawlers that don't run JS read as broken JSON. */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, "\\u003c") }}
+      />
       <div className="absolute inset-0">
         <NeuronField className="h-full w-full" density={40} />
       </div>
