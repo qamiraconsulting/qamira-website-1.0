@@ -136,7 +136,7 @@ function summaryLines(app: Application, applicantId: number | null): string {
     `Name: ${app.fullName}`,
     `Email: ${app.email}`,
     `Phone / WhatsApp: ${app.phone}`,
-    `Area in Pune: ${app.puneArea}`,
+    `Lives in: ${app.puneArea}`,
     `Total experience: ${app.totalExperience}`,
     `Voice / telesales experience: ${app.voiceExperience}`,
     `Current or last role: ${app.currentRole}`,

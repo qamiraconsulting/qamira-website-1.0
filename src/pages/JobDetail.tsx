@@ -73,13 +73,9 @@ function jobPostingSchema(job: Job) {
       sameAs: site.url,
       logo: `${site.url}/logo/apple-touch-icon.png`,
     },
-    jobLocationType: "TELECOMMUTE",
-    // Google's Rich Results Test rejects "State" here despite its docs; it
-    // expects AdministrativeArea (or Country).
-    applicantLocationRequirements: {
-      "@type": "AdministrativeArea",
-      name: `${job.schema.addressRegion}, India`,
-    },
+    // Listed as a Pune job, not TELECOMMUTE: Google only accepts a whole
+    // country as the remote applicant area, and the hire must live in Pune
+    // (or relocate). The description says it's work from home.
     jobLocation: {
       "@type": "Place",
       address: {
@@ -280,9 +276,17 @@ function JobPage({ job }: { job: Job }) {
                 </div>
                 <div className="flex flex-col gap-2">
                   <label className={labelClass} htmlFor="puneArea">
-                    Area in Pune
+                    Where do you live now?
                   </label>
-                  <input id="puneArea" name="puneArea" type="text" required placeholder="e.g. Kharadi" className={inputClass} />
+                  <input
+                    id="puneArea"
+                    name="puneArea"
+                    type="text"
+                    required
+                    placeholder="Your area in Pune, or your city"
+                    className={inputClass}
+                  />
+                  <span className="text-xs text-charcoal-dim">Outside Pune? You can apply if you'll move to Pune before you join.</span>
                 </div>
 
                 <div className="flex flex-col gap-2">

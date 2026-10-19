@@ -101,7 +101,7 @@ export const jobs: Job[] = [
           "Confidence on the phone: you build rapport fast, ask good questions and ask for the booking.",
           "Comfort with a CRM, Google Sheets, email, SMS and WhatsApp, and online marketplaces.",
           "Organised and reliable, with honest, accurate records.",
-          "Based in Pune, and able to work Melbourne business hours consistently, which means an early-morning shift in India.",
+          "Based in Pune, or willing to relocate to Pune before joining, and able to work Melbourne business hours consistently, which means an early-morning shift in India.",
         ],
       },
       {
@@ -115,7 +115,7 @@ export const jobs: Job[] = [
       {
         heading: "Shift and location",
         bullets: [
-          "Location: Pune, work from home",
+          "Location: work from home in Pune. If you live elsewhere, you need to relocate to Pune before joining.",
           "Employer: Qamira Consulting, working on an Australian client account",
           "Shift: 9:00am to 6:00pm Melbourne time",
           "Shift in India time: 3:30am to 12:30pm IST from October to early April (Melbourne daylight saving); 4:30am to 1:30pm IST for the rest of the year",
