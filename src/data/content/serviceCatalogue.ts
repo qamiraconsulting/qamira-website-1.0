@@ -67,7 +67,7 @@ export const catalogue: CatalogueService[] = [
   { code: "QC-306", stage: "build", name: "Workflow & Systems Integration", description: "Connects the tools you already use (CRM, accounts, ops systems) so data moves without re-keying.", unit: "One-time build", duration: "3–6 weeks" },
   { code: "QC-307", stage: "build", name: "CRM Build & Configuration", description: "A CRM set up around your sales process: pipeline, automations, reporting and team training.", unit: "One-time build", duration: "3–5 weeks" },
   { code: "QC-308", stage: "build", name: "Executive KPI Dashboard", description: "One live dashboard built on agreed KPIs, with clear definitions and an owner for each number.", unit: "One-time build", duration: "2–4 weeks" },
-  { code: "QC-309", stage: "build", name: "Custom Software / SaaS Application", description: "A bespoke application for a need off-the-shelf tools can't meet, such as a client portal.", unit: "Scoped project", duration: "Scoped" },
+  { code: "QC-309", stage: "build", name: "Custom Software, ERP & Portals", description: "A bespoke application for a need off-the-shelf tools can't meet, such as an ERP, inventory system or client portal.", unit: "Scoped project", duration: "Scoped" },
   { code: "QC-310", stage: "build", name: "Booking & Scheduling System", description: "Chatbot quote, a slot matched to vehicle and staff availability, online deposit and confirmed booking, plus a team dashboard.", unit: "One-time build", duration: "6–10 weeks" },
   { code: "QC-311", stage: "build", name: "Churn & Attrition Early-Warning Model", description: "Flags customers, drivers or staff likely to leave, and the main reason, so the team can act early.", unit: "One-time build", duration: "4–6 weeks" },
 

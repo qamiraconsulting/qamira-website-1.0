@@ -26,6 +26,7 @@ import App from "@/App";
 import { articles } from "@/data/content/insights";
 import { allIndustries } from "@/data/content/industries";
 import { openJobs } from "@/data/content/jobs";
+import { inServicePages } from "@/data/content/inServices";
 import { customerFacingAI, contentAndGrowthSystems, internalAutomation } from "@/data/content/technology";
 
 const staticRoutes = [
@@ -58,6 +59,7 @@ export const routes: string[] = [
   ...articles.map((a) => `/insights/${a.slug}`),
   ...allIndustries.map((i) => `/industries/${i.slug}`),
   ...openJobs.map((j) => `/careers/${j.slug}`),
+  ...inServicePages.map((p) => `/in/${p.slug}`),
   ...[...customerFacingAI, ...contentAndGrowthSystems, ...internalAutomation].map((o) => `/technology/${o.slug}`),
 ];
 
