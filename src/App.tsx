@@ -18,6 +18,7 @@ import { JobDetail } from "@/pages/JobDetail";
 import { Contact } from "@/pages/Contact";
 import { Assessment } from "@/pages/Assessment";
 import { Privacy } from "@/pages/Privacy";
+import { AuAiReceptionist } from "@/pages/AuAiReceptionist";
 import { NotFound } from "@/pages/NotFound";
 
 export default function App() {
@@ -42,6 +43,7 @@ export default function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/assessment" element={<Assessment />} />
         <Route path="/privacy" element={<Privacy />} />
+        <Route path="/au/ai-receptionist" element={<AuAiReceptionist />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

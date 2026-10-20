@@ -43,6 +43,7 @@ const staticRoutes = [
   "/careers",
   "/contact",
   "/privacy",
+  "/au/ai-receptionist",
 ];
 
 /**

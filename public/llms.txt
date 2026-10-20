@@ -14,6 +14,7 @@ Qamira serves small-to-medium businesses ($2M-$50M revenue), post-Series A/B gro
 
 - [Services](https://www.qamiraconsulting.com/services): Business Performance Transformation, Operational Excellence & Process Optimization, Analytics Strategy & BI Engineering, AI Strategy & Custom Agent Implementation, plus managed services and executive workshops.
 - [Technology](https://www.qamiraconsulting.com/technology): Productized offerings Qamira builds -- customer-facing AI (chatbots, CRM, voice automation), content & growth systems (AI video, scheduling, marketing automation), and internal automation & intelligence (workflow integration, knowledge agents, document extraction).
+- [AI Receptionist (Australia)](https://www.qamiraconsulting.com/au/ai-receptionist): A done-for-you AI receptionist for Australian tradies, clinics and service businesses -- answers calls 24/7, books jobs, quotes from the business's own rate card, hands off to staff by callback and logs every call to the CRM.
 - [Industries](https://www.qamiraconsulting.com/industries): Pre-built QBPES™ variants for specific verticals -- manufacturing, logistics, construction, retail, healthcare, financial services, professional services, startups, and public sector.
 
 ## Industry accelerators
