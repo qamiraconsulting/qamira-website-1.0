@@ -19,6 +19,7 @@ import { Contact } from "@/pages/Contact";
 import { Assessment } from "@/pages/Assessment";
 import { Privacy } from "@/pages/Privacy";
 import { AuAiReceptionist } from "@/pages/AuAiReceptionist";
+import { AuGoogleBusinessProfile } from "@/pages/AuGoogleBusinessProfile";
 import { NotFound } from "@/pages/NotFound";
 
 export default function App() {
@@ -44,6 +45,7 @@ export default function App() {
         <Route path="/assessment" element={<Assessment />} />
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/au/ai-receptionist" element={<AuAiReceptionist />} />
+        <Route path="/au/google-business-profile" element={<AuGoogleBusinessProfile />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

@@ -44,6 +44,7 @@ const staticRoutes = [
   "/contact",
   "/privacy",
   "/au/ai-receptionist",
+  "/au/google-business-profile",
 ];
 
 /**
