@@ -23,14 +23,14 @@ export const privacyHero = {
   lede: "Plain-language description of what we collect, why, and what we do with it -- no dense legal boilerplate.",
 };
 
-export const lastUpdated = "18 October 2026";
+export const lastUpdated = "21 October 2026";
 
 export const sections = [
   {
     heading: "What we collect",
     body: [
       "Contact form (/contact): your name, email, company, and message.",
-      "Job applications (/careers): your name, email, phone number, area of Pune, experience, current and expected salary, notice period, availability for the shift, optional LinkedIn profile and note, where you saw the role, and your résumé file.",
+      "Job applications (/careers): your name, email, phone number, where you live, experience, current and expected salary, notice period, any answers a role asks for (such as your availability for a shift, or written answers to questions about your work), optional LinkedIn profile and note, where you saw the role, and your résumé file.",
       "AI Business Assessment (/assessment): your company profile (industry, revenue range, employee count, and similar), your self-rated answers across our eight performance domains, the systems/tools questions, your stated priorities, and your contact details (name, email, role, phone).",
     ],
   },

@@ -44,7 +44,7 @@ export function Careers() {
                       <h3 className="text-charcoal transition-colors group-hover:text-brass">{job.title}</h3>
                       <p className="mt-2 text-sm text-charcoal-dim sm:text-base">{job.summary}</p>
                       <p className="mt-3 font-mono text-xs uppercase tracking-[0.06em] text-charcoal-dim">
-                        {job.facts.map((fact) => fact.value).join("  ·  ")}
+                        {job.listLine}
                       </p>
                     </div>
                     <span className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.08em] text-brass">

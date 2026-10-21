@@ -17,14 +17,16 @@ CREATE TABLE IF NOT EXISTS applicants (
   phone            TEXT NOT NULL,
   pune_area        TEXT NOT NULL,
   total_experience TEXT NOT NULL,
-  voice_experience TEXT NOT NULL,
+  -- Asked only by roles whose form includes it (see src/data/content/jobs.ts);
+  -- NULL means "not asked", not "no".
+  voice_experience TEXT,
   current_job      TEXT NOT NULL,
   -- Salary in lakh per year (LPA), numeric so it can be sorted and filtered.
   current_ctc_lpa  NUMERIC(5,2),
   expected_ctc_lpa NUMERIC(5,2) NOT NULL,
   notice_period    TEXT NOT NULL,
-  shift_ok         BOOLEAN NOT NULL,
-  setup_ok         BOOLEAN NOT NULL,
+  shift_ok         BOOLEAN,
+  setup_ok         BOOLEAN,
   linkedin_url     TEXT,
   note             TEXT,
   -- Where the candidate says they saw the role, plus the tracking link it
@@ -34,6 +36,9 @@ CREATE TABLE IF NOT EXISTS applicants (
   src_param        TEXT,
   utm_medium       TEXT,
   utm_campaign     TEXT,
+  -- Written answers to a role's own questions, as a JSON list of
+  -- {id, question, answer}. NULL for roles with no written questions.
+  answers          JSONB,
   -- Screening pipeline, updated by hand from the Neon console for now.
   status           TEXT NOT NULL DEFAULT 'new'
                    CHECK (status IN ('new', 'screening', 'interview', 'offer', 'hired', 'rejected', 'withdrawn')),
@@ -53,11 +58,25 @@ CREATE TABLE IF NOT EXISTS applicant_resumes (
   data         BYTEA NOT NULL
 );
 
+-- Migration for a database created before 2026-10-21 (when a second role with
+-- different questions was added). Safe to re-run, and a no-op on a fresh
+-- database that already has the definition above.
+ALTER TABLE applicants
+  ALTER COLUMN voice_experience DROP NOT NULL,
+  ALTER COLUMN shift_ok DROP NOT NULL,
+  ALTER COLUMN setup_ok DROP NOT NULL,
+  ADD COLUMN IF NOT EXISTS answers JSONB;
+
 -- The screening view: one row per applicant, best-fit first. Open it in the
 -- Neon console (Tables -> shortlist) or query it in the SQL editor, e.g.
 --   SELECT * FROM shortlist WHERE can_do_shift AND expected_ctc_lpa <= 4.5;
--- "Best fit" is a plain ordering, not a score: people who can do the shift
--- first, then more international voice experience, then newest.
+-- "Best fit" is a plain ordering, not a score: grouped by role, then people
+-- who can do the shift first (roles with no shift question count as yes),
+-- then more international voice experience, then newest.
+-- Filter by role: WHERE role_slug = 'business-development-manager'.
+-- Read a written answer: SELECT answers -> 0 ->> 'answer' FROM shortlist.
+-- New columns can only be added at the END of a view, hence role_slug and
+-- answers come last.
 CREATE OR REPLACE VIEW shortlist AS
 SELECT
   a.id,
@@ -79,11 +98,14 @@ SELECT
   a.linkedin_url,
   a.note,
   a.status_note,
-  r.filename AS resume_file
+  r.filename AS resume_file,
+  a.role_slug,
+  a.answers
 FROM applicants a
 LEFT JOIN applicant_resumes r ON r.applicant_id = a.id
 ORDER BY
-  a.shift_ok DESC,
+  a.role_slug,
+  COALESCE(a.shift_ok, true) DESC,
   CASE a.voice_experience
     WHEN '3+ years' THEN 4 WHEN '2-3 years' THEN 3 WHEN '1-2 years' THEN 2
     WHEN 'Less than 1 year' THEN 1 ELSE 0 END DESC,

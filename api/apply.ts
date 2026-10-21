@@ -23,10 +23,60 @@ import { alertOps } from "./_alert.js";
 
 // Duplicated from src/data/content/jobs.ts rather than imported -- see the
 // note in api/contact.ts on why runtime imports from src/ 404 on Vercel.
-// Keep in sync with the open roles there.
-const OPEN_ROLES: Record<string, string> = {
-  "sales-executive-australia": "Sales Executive (Australian Market)",
+// Keep in sync with the open roles there: a role missing here is refused as
+// "no longer open", and the `form` flags and question ids must match the
+// role's `form` block in jobs.ts.
+//
+// Only fields a role's form actually asks are required here. Everything a
+// role doesn't ask is stored as NULL (those columns are nullable).
+type RoleConfig = {
+  title: string;
+  /** Short label for the email subject, so two open roles can be told apart. */
+  shortTitle: string;
+  askVoiceExperience: boolean;
+  askShift: boolean;
+  askSetup: boolean;
+  /** Required written answers, stored in applicants.answers with the question text. */
+  questions: { id: string; label: string }[];
 };
+
+const ROLES: Record<string, RoleConfig> = {
+  "sales-executive-australia": {
+    title: "Sales Executive (Australian Market)",
+    shortTitle: "Sales Exec AU",
+    askVoiceExperience: true,
+    askShift: true,
+    askSetup: true,
+    questions: [],
+  },
+  "business-development-manager": {
+    title: "Business Development Manager",
+    shortTitle: "BDM",
+    askVoiceExperience: false,
+    askShift: false,
+    askSetup: false,
+    questions: [
+      {
+        id: "best-client-won",
+        label: "Tell us about the best client you won yourself. How did you find them, and how did you close them?",
+      },
+      {
+        id: "cold-opener",
+        label:
+          "Pick any Indian business with a weak website or social media. In five lines, what would you say to its owner to get a twenty-minute call?",
+      },
+      {
+        id: "selling-lesson",
+        label: "What is the most useful thing you have learned about selling in the last year?",
+      },
+    ],
+  },
+};
+
+// A real answer is more than a word or two. Mirrored in the textarea
+// minLength on the page so the browser catches it first.
+const MIN_ANSWER_LENGTH = 30;
+const MAX_ANSWER_LENGTH = 2000;
 
 const CAREERS_TO_EMAIL = "careers@qamiraconsulting.com";
 const EMAIL_PATTERN = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -86,13 +136,18 @@ type Application = {
   phone: string;
   puneArea: string;
   totalExperience: string;
-  voiceExperience: string;
+  /** null when the role's form doesn't ask it. */
+  voiceExperience: string | null;
   currentRole: string;
   currentCtcLpa: number | null;
   expectedCtcLpa: number;
   noticePeriod: string;
-  shiftOk: boolean;
-  setupOk: boolean;
+  /** null when the role's form doesn't ask it. */
+  shiftOk: boolean | null;
+  /** null when the role's form doesn't ask it. */
+  setupOk: boolean | null;
+  /** The role's written questions with the candidate's answers; empty if it has none. */
+  answers: { id: string; question: string; answer: string }[];
   linkedinUrl: string;
   note: string;
   source: string;
@@ -112,13 +167,14 @@ async function insertApplicant(app: Application, resume: Resume): Promise<number
       INSERT INTO applicants (
         role_slug, full_name, email, phone, pune_area, total_experience, voice_experience,
         current_job, current_ctc_lpa, expected_ctc_lpa, notice_period, shift_ok, setup_ok,
-        linkedin_url, note, source, src_param, utm_medium, utm_campaign
+        linkedin_url, note, source, src_param, utm_medium, utm_campaign, answers
       ) VALUES (
         ${app.roleSlug}, ${app.fullName}, ${app.email}, ${app.phone}, ${app.puneArea},
         ${app.totalExperience}, ${app.voiceExperience}, ${app.currentRole}, ${app.currentCtcLpa},
         ${app.expectedCtcLpa}, ${app.noticePeriod}, ${app.shiftOk}, ${app.setupOk},
         ${app.linkedinUrl || null}, ${app.note || null}, ${app.source}, ${app.srcParam || null},
-        ${app.utmMedium || null}, ${app.utmCampaign || null}
+        ${app.utmMedium || null}, ${app.utmCampaign || null},
+        ${app.answers.length ? JSON.stringify(app.answers) : null}::jsonb
       )
       RETURNING id
     )
@@ -131,27 +187,34 @@ async function insertApplicant(app: Application, resume: Resume): Promise<number
 }
 
 function summaryLines(app: Application, applicantId: number | null): string {
-  return [
+  const lines = [
     `Role: ${app.roleTitle}`,
     `Name: ${app.fullName}`,
     `Email: ${app.email}`,
     `Phone / WhatsApp: ${app.phone}`,
     `Lives in: ${app.puneArea}`,
     `Total experience: ${app.totalExperience}`,
-    `Voice / telesales experience: ${app.voiceExperience}`,
+  ];
+  if (app.voiceExperience !== null) lines.push(`Voice / telesales experience: ${app.voiceExperience}`);
+  lines.push(
     `Current or last role: ${app.currentRole}`,
     `Current CTC: ${app.currentCtcLpa === null ? "-" : `${app.currentCtcLpa} LPA`}`,
     `Expected CTC: ${app.expectedCtcLpa} LPA`,
-    `Notice period: ${app.noticePeriod}`,
-    `Can work the shift: ${app.shiftOk ? "Yes" : "NO"}`,
-    `Broadband + quiet workspace: ${app.setupOk ? "Yes" : "NO"}`,
+    `Notice period: ${app.noticePeriod}`
+  );
+  if (app.shiftOk !== null) lines.push(`Can work the shift: ${app.shiftOk ? "Yes" : "NO"}`);
+  if (app.setupOk !== null) lines.push(`Broadband + quiet workspace: ${app.setupOk ? "Yes" : "NO"}`);
+  lines.push(
     `LinkedIn: ${app.linkedinUrl || "-"}`,
     `Saw the role on: ${app.source}`,
     `Tracking link: ${[app.srcParam, app.utmMedium, app.utmCampaign].filter(Boolean).join(" / ") || "-"}`,
-    `Database record: ${applicantId === null ? "NOT SAVED (see the alert email)" : `applicants.id = ${applicantId}`}`,
-    "",
-    app.note ? `Note from the candidate:\n${app.note}` : "No note from the candidate.",
-  ].join("\n");
+    `Database record: ${applicantId === null ? "NOT SAVED (see the alert email)" : `applicants.id = ${applicantId}`}`
+  );
+  for (const item of app.answers) {
+    lines.push("", `Q: ${item.question}`, `A: ${item.answer}`);
+  }
+  lines.push("", app.note ? `Note from the candidate:\n${app.note}` : "No note from the candidate.");
+  return lines.join("\n");
 }
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -177,11 +240,22 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   const roleSlug = truncate(body?.roleSlug, 100);
-  const roleTitle = OPEN_ROLES[roleSlug];
-  if (!roleTitle) {
+  const role = ROLES[roleSlug];
+  if (!role) {
     res.status(400).json({ error: "This role is no longer open." });
     return;
   }
+  const roleTitle = role.title;
+
+  // Written answers arrive as { <question id>: text }. Only the role's own
+  // questions are kept, with the question text stored beside each answer so
+  // the database record stays readable if the wording changes later.
+  const rawAnswers = (body?.answers ?? {}) as Record<string, unknown>;
+  const answers = role.questions.map((q) => ({
+    id: q.id,
+    question: q.label,
+    answer: truncate(rawAnswers[q.id], MAX_ANSWER_LENGTH),
+  }));
 
   const app: Application = {
     roleSlug,
@@ -191,13 +265,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     phone: truncate(body?.phone, 40),
     puneArea: truncate(body?.puneArea, 120),
     totalExperience: truncate(body?.totalExperience, 40),
-    voiceExperience: truncate(body?.voiceExperience, 40),
+    voiceExperience: role.askVoiceExperience ? truncate(body?.voiceExperience, 40) : null,
     currentRole: truncate(body?.currentRole, 300),
     currentCtcLpa: parseLpa(body?.currentCtc),
     expectedCtcLpa: parseLpa(body?.expectedCtc) ?? NaN,
     noticePeriod: truncate(body?.noticePeriod, 40),
-    shiftOk: body?.shiftOk === "yes",
-    setupOk: body?.setupOk === "yes",
+    shiftOk: role.askShift ? body?.shiftOk === "yes" : null,
+    setupOk: role.askSetup ? body?.setupOk === "yes" : null,
+    answers,
     linkedinUrl: truncate(body?.linkedinUrl, 300),
     note: truncate(body?.note, 2000),
     source: truncate(body?.source, 60),
@@ -212,13 +287,19 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     app.phone,
     app.puneArea,
     app.totalExperience,
-    app.voiceExperience,
+    ...(role.askVoiceExperience ? [app.voiceExperience] : []),
     app.currentRole,
     app.noticePeriod,
     app.source,
   ];
-  if (required.some((value) => !value) || (body?.shiftOk !== "yes" && body?.shiftOk !== "no")) {
+  if (required.some((value) => !value) || (role.askShift && body?.shiftOk !== "yes" && body?.shiftOk !== "no")) {
     res.status(400).json({ error: "Please fill in every required field." });
+    return;
+  }
+  if (answers.some((item) => item.answer.length < MIN_ANSWER_LENGTH)) {
+    res.status(400).json({
+      error: `Please answer each of the written questions in a sentence or two (at least ${MIN_ANSWER_LENGTH} characters).`,
+    });
     return;
   }
   if (!Number.isFinite(app.expectedCtcLpa) || app.expectedCtcLpa <= 0) {
@@ -300,7 +381,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         from: `Qamira Careers <${fromAddress}>`,
         to: [CAREERS_TO_EMAIL],
         replyTo: `${app.fullName} <${app.email}>`,
-        subject: `[Applicant] ${app.fullName} | voice exp: ${app.voiceExperience} | via ${app.source}${app.shiftOk ? "" : " | CAN'T DO SHIFT"}`,
+        subject: `[Applicant: ${role.shortTitle}] ${app.fullName} | ${
+          app.voiceExperience !== null ? `voice exp: ${app.voiceExperience}` : `exp: ${app.totalExperience}`
+        } | via ${app.source}${app.shiftOk === false ? " | CAN'T DO SHIFT" : ""}`,
         text: summaryLines(app, applicantId),
         attachments: [{ filename: resume.filename, content: resume.bytes }],
       });

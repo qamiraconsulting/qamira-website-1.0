@@ -14,12 +14,17 @@ import { findOpenJob, type Job } from "@/data/content/jobs";
 // caught before a multi-megabyte upload is wasted on a 413.
 const MAX_RESUME_BYTES = 3 * 1024 * 1024;
 
+// Mirrored from MIN_ANSWER_LENGTH / MAX_ANSWER_LENGTH in api/apply.ts.
+const MIN_ANSWER_LENGTH = 30;
+const MAX_ANSWER_LENGTH = 2000;
+
 // Where the candidate saw the role. Each channel's post links to this page
 // with ?src=<key>, which preselects the matching option -- the candidate
 // can still change it, and both values are stored.
 const SOURCES: { key: string; label: string }[] = [
   { key: "linkedin", label: "LinkedIn" },
   { key: "naukri", label: "Naukri" },
+  { key: "workindia", label: "WorkIndia" },
   { key: "facebook", label: "Facebook" },
   { key: "instagram", label: "Instagram" },
   { key: "whatsapp", label: "WhatsApp group" },
@@ -28,8 +33,6 @@ const SOURCES: { key: string; label: string }[] = [
   { key: "other", label: "Somewhere else" },
 ];
 
-const EXPERIENCE = ["Less than 1 year", "1 year", "2 years", "3 years", "4+ years"];
-const VOICE_EXPERIENCE = ["None", "Less than 1 year", "1-2 years", "2-3 years", "3+ years"];
 const NOTICE = ["Immediate", "15 days", "30 days", "60 days", "90 days"];
 
 type Status = "idle" | "submitting" | "success" | "notice" | "error";
@@ -127,9 +130,14 @@ function JobPage({ job }: { job: Job }) {
 
     setStatus("submitting");
     try {
-      const fields = Object.fromEntries([...data.entries()].filter(([key]) => key !== "resume"));
+      const answers: Record<string, string> = {};
+      for (const q of job.form.questions ?? []) answers[q.id] = String(data.get(`answer-${q.id}`) ?? "");
+      const fields = Object.fromEntries(
+        [...data.entries()].filter(([key]) => key !== "resume" && !key.startsWith("answer-"))
+      );
       const payload = {
         ...fields,
+        answers,
         roleSlug: job.slug,
         srcParam,
         utmMedium: searchParams.get("utm_medium") ?? "",
@@ -164,7 +172,7 @@ function JobPage({ job }: { job: Job }) {
 
       <Section tone="white">
         <Container>
-          <dl className="grid grid-cols-2 gap-6 border-y border-charcoal/10 py-6 sm:grid-cols-4">
+          <dl className="grid grid-cols-2 gap-6 border-y border-charcoal/10 py-6 sm:grid-cols-[repeat(auto-fit,minmax(11rem,1fr))]">
             {job.facts.map((fact) => (
               <div key={fact.label}>
                 <dt className={labelClass}>{fact.label}</dt>
@@ -211,7 +219,7 @@ function JobPage({ job }: { job: Job }) {
             <Eyebrow>Apply</Eyebrow>
             <h2 className="mt-4 text-charcoal">Apply for this role</h2>
             <p className="mt-3 text-charcoal-dim">
-              Takes about three minutes. Keep your résumé handy as a PDF or Word file, up to 3 MB.
+              {job.form.applyIntro ?? "Takes about three minutes. Keep your résumé handy as a PDF or Word file, up to 3 MB."}
             </p>
 
             {status === "success" || status === "notice" ? (
@@ -291,30 +299,32 @@ function JobPage({ job }: { job: Job }) {
 
                 <div className="flex flex-col gap-2">
                   <label className={labelClass} htmlFor="totalExperience">
-                    Total work experience
+                    {job.form.experienceLabel}
                   </label>
                   <select id="totalExperience" name="totalExperience" required defaultValue="" className={inputClass}>
                     <option value="" disabled>
                       Select
                     </option>
-                    {EXPERIENCE.map((v) => (
+                    {job.form.experienceOptions.map((v) => (
                       <option key={v}>{v}</option>
                     ))}
                   </select>
                 </div>
-                <div className="flex flex-col gap-2">
-                  <label className={labelClass} htmlFor="voiceExperience">
-                    International voice / telesales
-                  </label>
-                  <select id="voiceExperience" name="voiceExperience" required defaultValue="" className={inputClass}>
-                    <option value="" disabled>
-                      Select
-                    </option>
-                    {VOICE_EXPERIENCE.map((v) => (
-                      <option key={v}>{v}</option>
-                    ))}
-                  </select>
-                </div>
+                {job.form.voiceExperience && (
+                  <div className="flex flex-col gap-2">
+                    <label className={labelClass} htmlFor="voiceExperience">
+                      {job.form.voiceExperience.label}
+                    </label>
+                    <select id="voiceExperience" name="voiceExperience" required defaultValue="" className={inputClass}>
+                      <option value="" disabled>
+                        Select
+                      </option>
+                      {job.form.voiceExperience.options.map((v) => (
+                        <option key={v}>{v}</option>
+                      ))}
+                    </select>
+                  </div>
+                )}
 
                 <div className="flex flex-col gap-2 sm:col-span-2">
                   <label className={labelClass} htmlFor="currentRole">
@@ -325,7 +335,7 @@ function JobPage({ job }: { job: Job }) {
                     name="currentRole"
                     type="text"
                     required
-                    placeholder="Company, process and market, e.g. Telesales, AU telecom process"
+                    placeholder={job.form.currentRolePlaceholder}
                     className={inputClass}
                   />
                 </div>
@@ -391,22 +401,49 @@ function JobPage({ job }: { job: Job }) {
                   </select>
                 </div>
 
-                <fieldset className="flex flex-col gap-3 sm:col-span-2">
-                  <legend className={labelClass}>{job.shiftQuestion}</legend>
-                  <div className="mt-2 flex gap-6 text-sm text-charcoal">
-                    <label className="flex items-center gap-2">
-                      <input type="radio" name="shiftOk" value="yes" required className="accent-brass" /> Yes
-                    </label>
-                    <label className="flex items-center gap-2">
-                      <input type="radio" name="shiftOk" value="no" className="accent-brass" /> No
-                    </label>
-                  </div>
-                </fieldset>
+                {job.form.shiftQuestion && (
+                  <fieldset className="flex flex-col gap-3 sm:col-span-2">
+                    <legend className={labelClass}>{job.form.shiftQuestion}</legend>
+                    <div className="mt-2 flex gap-6 text-sm text-charcoal">
+                      <label className="flex items-center gap-2">
+                        <input type="radio" name="shiftOk" value="yes" required className="accent-brass" /> Yes
+                      </label>
+                      <label className="flex items-center gap-2">
+                        <input type="radio" name="shiftOk" value="no" className="accent-brass" /> No
+                      </label>
+                    </div>
+                  </fieldset>
+                )}
 
-                <label className="flex items-start gap-3 text-sm text-charcoal sm:col-span-2">
-                  <input type="checkbox" name="setupOk" value="yes" required className="mt-1 accent-brass" />
-                  I have reliable broadband and a quiet place to work from home.
-                </label>
+                {job.form.askSetup && (
+                  <label className="flex items-start gap-3 text-sm text-charcoal sm:col-span-2">
+                    <input type="checkbox" name="setupOk" value="yes" required className="mt-1 accent-brass" />
+                    I have reliable broadband and a quiet place to work from home.
+                  </label>
+                )}
+
+                {(job.form.questions ?? []).map((q, i) => (
+                  <div key={q.id} className="flex flex-col gap-2 sm:col-span-2">
+                    <label className={labelClass} htmlFor={`answer-${q.id}`}>
+                      {i + 1}. {q.label}
+                    </label>
+                    <textarea
+                      id={`answer-${q.id}`}
+                      name={`answer-${q.id}`}
+                      rows={5}
+                      required
+                      minLength={MIN_ANSWER_LENGTH}
+                      maxLength={MAX_ANSWER_LENGTH}
+                      aria-describedby={q.hint ? `answer-${q.id}-hint` : undefined}
+                      className={inputClass}
+                    />
+                    {q.hint && (
+                      <span id={`answer-${q.id}-hint`} className="text-xs text-charcoal-dim">
+                        {q.hint}
+                      </span>
+                    )}
+                  </div>
+                ))}
 
                 <div className="flex flex-col gap-2 sm:col-span-2">
                   <label className={labelClass} htmlFor="linkedinUrl">
@@ -438,7 +475,7 @@ function JobPage({ job }: { job: Job }) {
                     name="note"
                     rows={4}
                     maxLength={2000}
-                    placeholder="A best month you've had on targets, a market you've sold into, a question for us."
+                    placeholder={job.form.notePlaceholder}
                     className={inputClass}
                   />
                 </div>
