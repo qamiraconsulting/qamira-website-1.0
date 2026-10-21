@@ -43,6 +43,10 @@ export type TechnologyOffering = {
   howItWorks: string;
   benefits: string[];
   goodFitIf: string[];
+  /** Other names people search for; added to the Service schema. */
+  alternateNames?: string[];
+  /** A market-specific landing page for the same offering, linked from the hero. */
+  localVersion?: { lead: string; label: string; path: string };
 };
 
 export const customerFacingAI: TechnologyOffering[] = [
@@ -89,22 +93,32 @@ export const customerFacingAI: TechnologyOffering[] = [
   {
     slug: "ai-voice-call-automation",
     group: "Customer-facing AI",
-    title: "AI Voice & Call Automation",
-    body: "Inbound call handling that triages, books, and routes without a human answering every ring -- especially valuable where the phone is the primary channel. Escalates anything outside its script instantly, and logs every call into your CRM automatically.",
+    title: "AI Receptionist & Call Automation",
+    // "AI receptionist" is what people actually search for; the old title,
+    // "AI Voice & Call Automation", stays as an alternate name in the schema.
+    alternateNames: ["AI receptionist", "AI Voice & Call Automation", "AI answering service", "AI phone answering"],
+    body: "An AI receptionist that answers every call, day or night. It books appointments, answers common questions, takes details and hands anything tricky to your team, so missed calls stop turning into lost business. Every call is logged in your CRM automatically.",
     icon: "voice-automation",
     howItWorks:
-      "Every call gets answered immediately, day or night, and routine requests -- bookings, order status, common questions -- get resolved on the spot. Anything outside that gets handed to a person instantly, with the call already logged in your CRM.",
+      "Calls you don't pick up, or every call after hours, go to your AI receptionist on your existing number. It answers straight away, tells callers it's an AI assistant, and handles the routine: bookings, common questions and details for a quote. Anything outside that is handed to a person with a summary, and every call is logged in your CRM.",
     benefits: [
-      "No missed calls, no missed business -- every call gets answered, even outside business hours.",
+      "No missed calls, no missed business. Every call gets answered, even after hours and at weekends.",
+      "Bookings made on the call, straight into your calendar or booking system.",
       "Staff stop losing hours to routine calls that don't need a human.",
+      "Anything urgent or unusual reaches a person with a summary, instead of getting stuck with a bot.",
       "A searchable record of every call, not a gap in your CRM where phone conversations used to disappear.",
-      "Callers get an instant answer instead of a hold queue.",
     ],
     goodFitIf: [
       "The phone is still a primary channel for your customers.",
-      "Missed calls are a real, quantifiable cost -- bookings lost, leads gone cold.",
+      "Calls go unanswered while you're with a customer, on a job or closed for the day.",
+      "Missed calls are costing you bookings and letting leads go cold.",
       "Your team spends meaningful time on calls that don't require judgment.",
     ],
+    localVersion: {
+      lead: "In Australia?",
+      label: "See our AI receptionist for tradies and clinics",
+      path: "/au/ai-receptionist",
+    },
   },
 ];
 

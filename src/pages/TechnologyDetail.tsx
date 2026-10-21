@@ -28,6 +28,14 @@ const photoDescriptions: Record<string, string> = {
   "document-data-extraction": "A printed document beside a laptop showing a generic data-extraction interface, bright and sunlit.",
 };
 
+// Lowercases title-case words for use mid-sentence, but keeps acronyms and
+// mixed-case names ("AI", "CRM", "SaaS", "Q&A") as written.
+const sentenceCase = (title: string) =>
+  title
+    .split(" ")
+    .map((word) => (/^[A-Z][a-z]*(?:-[A-Z][a-z]*)*$/.test(word) ? word.toLowerCase() : word))
+    .join(" ");
+
 export function TechnologyDetail() {
   const { slug } = useParams<{ slug: string }>();
   const offering = allOfferings.find((o) => o.slug === slug);
@@ -49,6 +57,7 @@ export function TechnologyDetail() {
             "@context": "https://schema.org",
             "@type": "Service",
             name: offering.title,
+            ...(offering.alternateNames && { alternateName: offering.alternateNames }),
             description: offering.body,
             provider: orgRef,
             url,
@@ -83,6 +92,14 @@ export function TechnologyDetail() {
               </div>
               <h1 className="mt-4 max-w-[22ch] text-charcoal">{offering.title}</h1>
               <p className="mt-5 max-w-[56ch] text-base text-charcoal-dim sm:text-lg">{offering.body}</p>
+              {offering.localVersion && (
+                <p className="mt-6 border-l-2 border-brass pl-4 text-sm text-charcoal sm:text-base">
+                  {offering.localVersion.lead}{" "}
+                  <Link to={offering.localVersion.path} className="text-brass underline-offset-4 hover:underline">
+                    {offering.localVersion.label} →
+                  </Link>
+                </p>
+              )}
             </div>
             <PhotoSlot
               src={`/photos/technology/${offering.slug}.jpg`}
@@ -146,7 +163,7 @@ export function TechnologyDetail() {
       <Section tone="surface" bordered className="text-center">
         <Container>
           <Reveal className="mx-auto max-w-[42rem]">
-            <h2 className="text-charcoal">Ready to talk about {offering.title.toLowerCase()}?</h2>
+            <h2 className="text-charcoal">Ready to talk about {sentenceCase(offering.title)}?</h2>
             <p className="mx-auto mt-4 max-w-[52ch] text-charcoal-dim">
               A first conversation is a diagnostic, not a pitch -- we'll tell you plainly whether this is the
               highest-leverage place to start.

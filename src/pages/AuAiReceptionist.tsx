@@ -256,7 +256,7 @@ export function AuAiReceptionist() {
             <div className="mt-9 flex flex-wrap justify-center gap-4">
               {cta}
               <Button to="/technology/ai-voice-call-automation" variant="ghost" arrow={false}>
-                More on AI voice automation
+                More on AI receptionists
               </Button>
             </div>
           </Reveal>
