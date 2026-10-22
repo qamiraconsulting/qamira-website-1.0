@@ -1,12 +1,13 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import clsx from "clsx";
-import { ArrowRight, Check, Plus } from "lucide-react";
+import { ArrowRight, Check, ChevronDown, ListTree, Plus } from "lucide-react";
 import { Section } from "@/components/ui/Section";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/ui/Reveal";
 import { ShortlistBar } from "@/components/sections/ShortlistBar";
+import { ServiceIndex } from "@/components/sections/ServiceIndex";
 import { serviceIcons } from "@/components/brand/serviceIcons";
 import { useShortlist } from "@/lib/shortlist";
 import {
@@ -39,11 +40,91 @@ export function ServiceNavigator() {
   const [problemId, setProblemId] = useState<string | null>(null);
   const [stageId, setStageId] = useState<StageId | null>(null);
   const [expanded, setExpanded] = useState<string[]>([]);
+  // Where an index click should land once the view has re-rendered; `n`
+  // makes a second click on the same entry scroll again.
+  const [jump, setJump] = useState<{ targetId: string; highlight: string | null; n: number } | null>(null);
+  const [highlighted, setHighlighted] = useState<string | null>(null);
+  const [activeFamily, setActiveFamily] = useState<FamilyKey | null>(null);
+  const [indexOpen, setIndexOpen] = useState(false);
   const shortlist = useShortlist();
   const resultsRef = useRef<HTMLDivElement>(null);
 
   const problem = problems.find((p) => p.id === problemId) ?? null;
   const browsingAll = !problem && !stageId;
+  const inView = problem
+    ? new Set(problem.codes)
+    : stageId
+      ? new Set(catalogue.filter((s) => s.stage === stageId).map((s) => s.code))
+      : null;
+
+  // Picking a service in the index scrolls to its card. The current view is
+  // left alone if the card is already in it; otherwise it switches to the
+  // full catalogue with that service's family opened up.
+  function jumpToService(code: string) {
+    const card = document.getElementById(`service-${code}`);
+    if (!card || card.offsetParent === null) {
+      const fam = familyOf(code);
+      setProblemId(null);
+      setStageId(null);
+      setExpanded((cur) => (cur.includes(fam) ? cur : [...cur, fam]));
+    }
+    setIndexOpen(false);
+    setJump((j) => ({ targetId: `service-${code}`, highlight: code, n: (j?.n ?? 0) + 1 }));
+  }
+
+  function jumpToFamily(key: FamilyKey) {
+    const familyShowing = !problem && (!stageId || catalogue.some((s) => s.stage === stageId && familyOf(s.code) === key));
+    if (!familyShowing) {
+      setProblemId(null);
+      setStageId(null);
+    }
+    setIndexOpen(false);
+    setJump((j) => ({ targetId: `family-${key}`, highlight: null, n: (j?.n ?? 0) + 1 }));
+  }
+
+  useEffect(() => {
+    if (!jump) return;
+    const frame = requestAnimationFrame(() => {
+      const el = document.getElementById(jump.targetId);
+      if (!el) return;
+      el.scrollIntoView({ block: jump.highlight ? "center" : "start" });
+      el.focus({ preventScroll: true });
+      setHighlighted(jump.highlight);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [jump]);
+
+  useEffect(() => {
+    if (!highlighted) return;
+    const timer = window.setTimeout(() => setHighlighted(null), 2200);
+    return () => window.clearTimeout(timer);
+  }, [highlighted]);
+
+  // Marks the family being read in the index while the visitor scrolls the
+  // family-grouped views. A problem view is grouped by stage, so it has none.
+  useEffect(() => {
+    if (problem) {
+      setActiveFamily(null);
+      return;
+    }
+    const onScroll = () => {
+      const results = resultsRef.current;
+      if (!results || results.getBoundingClientRect().bottom < 0) {
+        setActiveFamily(null);
+        return;
+      }
+      let current: FamilyKey | null = null;
+      for (const head of document.querySelectorAll<HTMLElement>("[data-family-group]")) {
+        if (head.getBoundingClientRect().top < window.innerHeight * 0.35) {
+          current = head.dataset.familyGroup as FamilyKey;
+        }
+      }
+      setActiveFamily(current);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [problem, stageId, expanded]);
 
   function toggleFamily(key: string) {
     setExpanded((cur) => (cur.includes(key) ? cur.filter((k) => k !== key) : [...cur, key]));
@@ -127,144 +208,199 @@ export function ServiceNavigator() {
           </p>
         </Reveal>
 
-        <div className="mt-12">
-          <p className={stepLabelClass}>01 · What's slowing you down?</p>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {problems.map((p, i) => {
-              const on = p.id === problemId;
-              return (
-                <button
-                  key={p.id}
-                  type="button"
-                  aria-pressed={on}
-                  onClick={() => pickProblem(p.id)}
-                  className={clsx(
-                    "flex min-h-[76px] items-start gap-3.5 rounded-sm border px-5 py-4 text-left transition-colors duration-200 ease-signature",
-                    on
-                      ? "border-navy bg-navy text-parchment"
-                      : "border-charcoal/10 bg-white text-charcoal hover:border-brass",
-                  )}
-                >
-                  <span className={clsx("pt-0.5 font-mono text-xs", on ? "text-brass-bright" : "text-brass-dim")}>
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <span className="font-medium leading-snug">{p.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
+        <div className="mt-12 lg:flex lg:items-start lg:gap-10 xl:gap-12">
+          <aside
+            aria-label="Service index"
+            className="hidden border-r border-charcoal/10 pr-4 [scrollbar-width:thin] lg:sticky lg:top-32 lg:block lg:max-h-[calc(100vh-10rem)] lg:w-64 lg:flex-none lg:overflow-y-auto xl:w-72"
+          >
+            <p className={clsx(stepLabelClass, "mb-3")}>All {catalogue.length} services</p>
+            <ServiceIndex
+              inView={inView}
+              activeFamily={activeFamily}
+              shortlisted={shortlist.codes}
+              onJumpToService={jumpToService}
+              onJumpToFamily={jumpToFamily}
+            />
+          </aside>
 
-        <div className="mt-12">
-          <p className={stepLabelClass}>02 · The path we take with you</p>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            {stages.map((s) => {
-              const on = s.id === stageId;
-              const total = catalogue.filter((svc) => svc.stage === s.id).length;
-              const matched = problem
-                ? problem.codes.filter((c) => catalogueByCode[c].stage === s.id).length
-                : 0;
-              const lit = on || matched > 0;
-              return (
-                <button
-                  key={s.id}
-                  type="button"
-                  aria-pressed={on}
-                  onClick={() => pickStage(s.id)}
-                  className={clsx(
-                    "flex min-h-[132px] flex-col gap-1.5 rounded-sm border border-t-[3px] border-charcoal/10 px-5 pb-5 pt-4 text-left transition-colors duration-200 ease-signature hover:bg-parchment-2",
-                    lit ? "border-t-brass" : "border-t-charcoal/10",
-                    on ? "bg-parchment-2" : "bg-white",
-                  )}
-                >
-                  <span className={stepLabelClass}>{s.step}</span>
-                  <span className="font-display text-[22px] font-medium text-charcoal">{s.name}</span>
-                  <span className="text-sm leading-relaxed text-charcoal-dim">{s.blurb}</span>
-                  <span
-                    className={clsx(
-                      "mt-auto pt-1 font-mono text-xs",
-                      problem && !matched ? "text-charcoal-dim" : "text-slate-teal",
-                    )}
-                  >
-                    {problem ? (matched ? `${matched} for this problem` : "Not needed here") : `${total} services`}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div ref={resultsRef} className="mt-16 scroll-mt-28">
-          <p className={stepLabelClass}>03 · {eyebrow}</p>
-          <h3 className="mt-3 text-charcoal">{title}</h3>
-          <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1">
-            <p className="text-charcoal-dim" aria-live="polite">
-              {summary}
-            </p>
-            {(problem || stageId) && (
+          <div className="min-w-0 flex-1">
+            <div className="mb-10 border border-charcoal/10 lg:hidden">
               <button
                 type="button"
-                onClick={showAll}
-                className="py-2 font-medium text-brass-dim underline underline-offset-4 hover:text-charcoal"
+                aria-expanded={indexOpen}
+                aria-controls="service-index-mobile"
+                onClick={() => setIndexOpen((o) => !o)}
+                className="flex min-h-[52px] w-full items-center justify-between gap-3 px-5 text-left font-medium text-charcoal"
               >
-                Browse all {catalogue.length} services
+                <span className="flex items-center gap-3">
+                  <ListTree aria-hidden="true" className="h-4 w-4 text-brass-dim" />
+                  Browse all {catalogue.length} services by category
+                </span>
+                <ChevronDown
+                  aria-hidden="true"
+                  className={clsx("h-4 w-4 flex-none transition-transform", indexOpen && "rotate-180")}
+                />
               </button>
-            )}
-          </div>
+              {indexOpen && (
+                <div id="service-index-mobile" className="border-t border-charcoal/10 px-4 py-3">
+                  <ServiceIndex
+                    inView={inView}
+                    activeFamily={activeFamily}
+                    shortlisted={shortlist.codes}
+                    onJumpToService={jumpToService}
+                    onJumpToFamily={jumpToFamily}
+                  />
+                </div>
+              )}
+            </div>
 
-          <div className="mt-10 flex flex-col gap-12">
-            {groups.map((g) => (
-              <div key={g.key}>
-                <div className="flex items-baseline gap-3 border-b border-charcoal/10 pb-2.5">
-                  <span className={stepLabelClass}>{g.tag}</span>
-                  <h4 className="text-charcoal">{g.title}</h4>
-                </div>
-                <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-                  {g.services.map((svc, i) => (
-                    <ServiceCard
-                      key={svc.code}
-                      service={svc}
-                      hidden={browsingAll && !expanded.includes(g.key) && i >= PREVIEW_PER_FAMILY}
-                      shortlisted={shortlist.has(svc.code)}
-                      onToggle={() => shortlist.toggle(svc.code)}
-                    />
-                  ))}
-                </div>
-                {browsingAll && g.services.length > PREVIEW_PER_FAMILY && (
+            <div>
+              <p className={stepLabelClass}>01 · What's slowing you down?</p>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                {problems.map((p, i) => {
+                  const on = p.id === problemId;
+                  return (
+                    <button
+                      key={p.id}
+                      type="button"
+                      aria-pressed={on}
+                      onClick={() => pickProblem(p.id)}
+                      className={clsx(
+                        "flex min-h-[76px] items-start gap-3.5 rounded-sm border px-5 py-4 text-left transition-colors duration-200 ease-signature",
+                        on
+                          ? "border-navy bg-navy text-parchment"
+                          : "border-charcoal/10 bg-white text-charcoal hover:border-brass",
+                      )}
+                    >
+                      <span className={clsx("pt-0.5 font-mono text-xs", on ? "text-brass-bright" : "text-brass-dim")}>
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="font-medium leading-snug">{p.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="mt-12">
+              <p className={stepLabelClass}>02 · The path we take with you</p>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                {stages.map((s) => {
+                  const on = s.id === stageId;
+                  const total = catalogue.filter((svc) => svc.stage === s.id).length;
+                  const matched = problem
+                    ? problem.codes.filter((c) => catalogueByCode[c].stage === s.id).length
+                    : 0;
+                  const lit = on || matched > 0;
+                  return (
+                    <button
+                      key={s.id}
+                      type="button"
+                      aria-pressed={on}
+                      onClick={() => pickStage(s.id)}
+                      className={clsx(
+                        "flex min-h-[132px] flex-col gap-1.5 rounded-sm border border-t-[3px] border-charcoal/10 px-5 pb-5 pt-4 text-left transition-colors duration-200 ease-signature hover:bg-parchment-2",
+                        lit ? "border-t-brass" : "border-t-charcoal/10",
+                        on ? "bg-parchment-2" : "bg-white",
+                      )}
+                    >
+                      <span className={stepLabelClass}>{s.step}</span>
+                      <span className="font-display text-[22px] font-medium text-charcoal">{s.name}</span>
+                      <span className="text-sm leading-relaxed text-charcoal-dim">{s.blurb}</span>
+                      <span
+                        className={clsx(
+                          "mt-auto pt-1 font-mono text-xs",
+                          problem && !matched ? "text-charcoal-dim" : "text-slate-teal",
+                        )}
+                      >
+                        {problem ? (matched ? `${matched} for this problem` : "Not needed here") : `${total} services`}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div ref={resultsRef} className="mt-16 scroll-mt-28">
+              <p className={stepLabelClass}>03 · {eyebrow}</p>
+              <h3 className="mt-3 text-charcoal">{title}</h3>
+              <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-1">
+                <p className="text-charcoal-dim" aria-live="polite">
+                  {summary}
+                </p>
+                {(problem || stageId) && (
                   <button
                     type="button"
-                    aria-expanded={expanded.includes(g.key)}
-                    onClick={() => toggleFamily(g.key)}
-                    className="mt-4 py-2 text-sm font-medium text-brass-dim underline underline-offset-4 hover:text-charcoal"
+                    onClick={showAll}
+                    className="py-2 font-medium text-brass-dim underline underline-offset-4 hover:text-charcoal"
                   >
-                    {expanded.includes(g.key) ? "Show fewer" : `Show all ${g.services.length} services`}
+                    Browse all {catalogue.length} services
                   </button>
                 )}
               </div>
-            ))}
-          </div>
 
-          <p className="mt-10 max-w-[70ch] text-sm text-charcoal-dim">
-            We don't list prices because they depend on scope and market. Every fee is agreed on a short scoping
-            call before anything is committed, and workshop fees are credited in full against any project started
-            within 60 days.
-          </p>
+              <div className="mt-10 flex flex-col gap-12">
+                {groups.map((g) => (
+                  <div
+                    key={g.key}
+                    id={problem ? undefined : `family-${g.key}`}
+                    data-family-group={problem ? undefined : g.key}
+                    tabIndex={-1}
+                    className="scroll-mt-32 focus:outline-none"
+                  >
+                    <div className="flex items-baseline gap-3 border-b border-charcoal/10 pb-2.5">
+                      <span className={stepLabelClass}>{g.tag}</span>
+                      <h4 className="text-charcoal">{g.title}</h4>
+                    </div>
+                    <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                      {g.services.map((svc, i) => (
+                        <ServiceCard
+                          key={svc.code}
+                          service={svc}
+                          hidden={browsingAll && !expanded.includes(g.key) && i >= PREVIEW_PER_FAMILY}
+                          shortlisted={shortlist.has(svc.code)}
+                          highlighted={highlighted === svc.code}
+                          onToggle={() => shortlist.toggle(svc.code)}
+                        />
+                      ))}
+                    </div>
+                    {browsingAll && g.services.length > PREVIEW_PER_FAMILY && (
+                      <button
+                        type="button"
+                        aria-expanded={expanded.includes(g.key)}
+                        onClick={() => toggleFamily(g.key)}
+                        className="mt-4 py-2 text-sm font-medium text-brass-dim underline underline-offset-4 hover:text-charcoal"
+                      >
+                        {expanded.includes(g.key) ? "Show fewer" : `Show all ${g.services.length} services`}
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
 
-          <div className="mt-8 flex flex-wrap items-center justify-between gap-5 border border-charcoal/10 bg-parchment-2 px-6 py-6">
-            <div className="max-w-[36rem]">
-              <p className="font-display text-xl font-medium text-charcoal">None of these sound quite right?</p>
-              <p className="mt-1.5 text-charcoal-dim">
-                Take the free AI Business Assessment. It takes about 15 minutes and returns an opportunity report
-                that points to the services worth looking at.
+              <p className="mt-10 max-w-[70ch] text-sm text-charcoal-dim">
+                We don't list prices because they depend on scope and market. Every fee is agreed on a short scoping
+                call before anything is committed, and workshop fees are credited in full against any project started
+                within 60 days.
               </p>
+
+              <div className="mt-8 flex flex-wrap items-center justify-between gap-5 border border-charcoal/10 bg-parchment-2 px-6 py-6">
+                <div className="max-w-[36rem]">
+                  <p className="font-display text-xl font-medium text-charcoal">None of these sound quite right?</p>
+                  <p className="mt-1.5 text-charcoal-dim">
+                    Take the free AI Business Assessment. It takes about 15 minutes and returns an opportunity report
+                    that points to the services worth looking at.
+                  </p>
+                </div>
+                <Link
+                  to="/assessment"
+                  className="inline-flex min-h-[44px] items-center gap-2 rounded-sm border border-navy px-5 font-mono text-xs uppercase tracking-[0.08em] text-navy transition-colors hover:border-brass hover:text-brass-dim"
+                >
+                  Take the assessment
+                  <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
+                </Link>
+              </div>
             </div>
-            <Link
-              to="/assessment"
-              className="inline-flex min-h-[44px] items-center gap-2 rounded-sm border border-navy px-5 font-mono text-xs uppercase tracking-[0.08em] text-navy transition-colors hover:border-brass hover:text-brass-dim"
-            >
-              Take the assessment
-              <ArrowRight aria-hidden="true" className="h-3.5 w-3.5" />
-            </Link>
           </div>
         </div>
       </Container>
@@ -277,11 +413,14 @@ function ServiceCard({
   service,
   hidden = false,
   shortlisted,
+  highlighted = false,
   onToggle,
 }: {
   service: CatalogueService;
   hidden?: boolean;
   shortlisted: boolean;
+  // Briefly true after the visitor jumps here from the service index.
+  highlighted?: boolean;
   onToggle: () => void;
 }) {
   const Icon = serviceIcons[service.code];
@@ -292,10 +431,13 @@ function ServiceCard({
 
   return (
     <article
+      id={`service-${service.code}`}
+      tabIndex={-1}
       className={clsx(
         hidden ? "hidden" : "flex",
-        "group h-full flex-col gap-3 border bg-white p-6 transition-all duration-200 ease-signature hover:-translate-y-1 hover:shadow-card",
+        "group h-full scroll-mt-32 flex-col gap-3 border bg-white p-6 transition-all duration-200 ease-signature hover:-translate-y-1 hover:shadow-card focus:outline-none",
         shortlisted ? "border-brass" : "border-charcoal/10 hover:border-charcoal/20",
+        highlighted && "shadow-card ring-2 ring-brass ring-offset-4 ring-offset-white",
       )}
     >
       <div className="flex items-start justify-between gap-3">
