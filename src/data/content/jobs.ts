@@ -147,7 +147,7 @@ export const jobs: Job[] = [
           "Employer: Qamira Consulting, working on an Australian client account",
           "Shift: 9:00am to 6:00pm Melbourne time",
           "Shift in India time: 3:30am to 12:30pm IST from October to early April (Melbourne daylight saving); 4:30am to 1:30pm IST for the rest of the year",
-          "Working days: 5 days a week; weekly offs rotate and can fall on any day",
+          "Working days: 6 days a week, with one weekly off that rotates and can fall on any day",
           "Equipment: we provide a laptop, headset, CRM and platform access. You need reliable broadband and a quiet place to work.",
         ],
         note: "We will train you on our client's services and pricing, Melbourne geography and the platforms you will use.",
@@ -162,7 +162,7 @@ export const jobs: Job[] = [
       },
       currentRolePlaceholder: "Company, process and market, e.g. Telesales, AU telecom process",
       shiftQuestion:
-        "Can you work 3:30am to 12:30pm IST (October to early April) and 4:30am to 1:30pm IST (rest of the year), 5 days a week with rotating weekly offs?",
+        "Can you work 3:30am to 12:30pm IST (October to early April) and 4:30am to 1:30pm IST (rest of the year), 6 days a week with one rotating weekly off?",
       askSetup: true,
       notePlaceholder: "A best month you've had on targets, a market you've sold into, a question for us.",
     },
