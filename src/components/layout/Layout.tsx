@@ -7,6 +7,7 @@ import { ConnectDock } from "@/components/layout/ConnectDock";
 import { ScrollToTop } from "@/components/layout/ScrollToTop";
 import { MetaPixel } from "@/components/MetaPixel";
 import { GoogleTag } from "@/components/GoogleTag";
+import { ApolloTracker } from "@/components/ApolloTracker";
 
 export function Layout() {
   return (
@@ -14,6 +15,7 @@ export function Layout() {
       <ScrollToTop />
       <MetaPixel />
       <GoogleTag />
+      <ApolloTracker />
       <SkipLink />
       <Header />
       <main id="main">

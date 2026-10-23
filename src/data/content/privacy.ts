@@ -1,7 +1,8 @@
 // Privacy Policy copy. Describes actual data handling as implemented in
 // api/contact.ts (Resend), api/assessment.ts (Anthropic Claude API), and
-// the Meta tracking in src/lib/metaPixel.ts + api/_meta-capi.ts, and the
-// Google tag (GA4, feeding Google Ads) in src/lib/googleTag.ts.
+// the Meta tracking in src/lib/metaPixel.ts + api/_meta-capi.ts, the
+// Google tag (GA4, feeding Google Ads) in src/lib/googleTag.ts, and the
+// Apollo.io website visitor tracker in src/lib/apolloTracker.ts.
 // Resend and Vercel are deliberately not named in the "Who else touches
 // it" section below (2026-08-24, user decision) -- they're infrastructure
 // (email delivery, hosting), not methodology, so omitting them doesn't
@@ -15,7 +16,8 @@
 // disclosure a privacy policy exists to make, so it is named explicitly
 // and the advertising section below spells out what it receives. Google
 // is named for the same reason, since it receives browsing data for
-// advertising measurement too.
+// advertising measurement too, and so is Apollo.io, which receives IP
+// addresses and page views to identify visiting companies for sales.
 
 export const privacyHero = {
   eyebrow: "Privacy Policy",
@@ -23,7 +25,7 @@ export const privacyHero = {
   lede: "Plain-language description of what we collect, why, and what we do with it -- no dense legal boilerplate.",
 };
 
-export const lastUpdated = "21 October 2026";
+export const lastUpdated = "23 October 2026";
 
 export const sections = [
   {
@@ -40,7 +42,7 @@ export const sections = [
       "Contact form submissions are used solely to respond to your enquiry.",
       "Job applications are used only to assess you for the role you applied for and similar roles at Qamira. They are stored in our own database and inbox, read only by the people hiring, and never shared with our clients without your agreement. They are not sent to any AI service, and are not shared with Meta or Google.",
       "Assessment submissions are sent to Anthropic's Claude API to generate your personalized AI Opportunity Report. Per Anthropic's commercial API terms (anthropic.com/legal/commercial-terms), data submitted through the API is not used to train Anthropic's models, and is retained only briefly for abuse and safety monitoring.",
-      "We do not sell your information. We do share limited data with Meta (Facebook/Instagram) and Google to measure our own advertising -- see \"Cookies and advertising measurement\" below for exactly what. We do not share your information with any other third party for marketing.",
+      "We do not sell your information. We do share limited data with Meta (Facebook/Instagram) and Google to measure our own advertising, and with Apollo.io to see which companies visit our site -- see \"Cookies and advertising measurement\" below for exactly what. We do not share your information with any other third party for marketing.",
     ],
   },
   {
@@ -50,9 +52,10 @@ export const sections = [
       "What Meta receives on every page: the page you viewed, your IP address, your browser and device type, and two first-party cookies the pixel sets (_fbp, and _fbc if you arrived by clicking one of our ads).",
       "What Meta receives when you submit a form: your email address, name, and (on the assessment) phone number -- one-way hashed with SHA-256 before they are sent, so we never transmit them in readable form. Hashing is a real protection, but it is not anonymisation: Meta can match a hash to one of its own users. That is what makes the measurement work, and you should assume it does.",
       "We also use the Google tag (Google Analytics, linked to Google Ads) on every page. It records the pages you view, your browser and device type, your approximate location, and whether you arrived from one of our Google ads, using first-party cookies such as _ga. When you submit a form, it records only that a form was submitted and which one -- never your name, email, phone number, or anything you typed.",
-      "We never send Meta or Google your assessment answers, your maturity ratings, your stated priorities, your revenue figures, or the content of your message. Those stay between you, us, and the report generation described above.",
+      "We also use Apollo.io's website visitor tracker on every page. It records the pages you view and your IP address, which Apollo matches to the company that network belongs to, so we can see which businesses have been reading about our services. Outside the United States it identifies the company, not you as a person. It never receives anything you type into our forms.",
+      "We never send Meta, Google or Apollo your assessment answers, your maturity ratings, your stated priorities, your revenue figures, or the content of your message. Those stay between you, us, and the report generation described above.",
       "Why: to see whether our advertising works, and to reach people who have shown interest. It plays no part in the report you receive or in how we respond to you.",
-      "To opt out: block third-party trackers in your browser or use a content blocker -- the pixel, the Google tag and our server-side events all stop having anything to match you with. You can also adjust what Meta shows you at facebook.com/adpreferences, opt out of Google Analytics with Google's browser add-on at tools.google.com/dlpage/gaoptout, and adjust Google's ads at myadcenter.google.com. The contact form and the assessment work exactly the same either way.",
+      "To opt out: block third-party trackers in your browser or use a content blocker -- the pixel, the Google tag, the Apollo tracker and our server-side events all stop having anything to match you with. You can also adjust what Meta shows you at facebook.com/adpreferences, opt out of Google Analytics with Google's browser add-on at tools.google.com/dlpage/gaoptout, and adjust Google's ads at myadcenter.google.com. The contact form and the assessment work exactly the same either way.",
     ],
   },
   {
@@ -70,6 +73,7 @@ export const sections = [
       "Anthropic -- processes assessment answers via the Claude API to generate your report.",
       "Meta Platforms -- receives the advertising measurement data described above. Meta acts under its own terms and privacy policy, not ours.",
       "Google -- receives the analytics and advertising measurement data described above, under its own terms and privacy policy.",
+      "Apollo.io -- receives the website visit data described above, to identify visiting companies, under its own terms and privacy policy.",
       "Each processes data only as needed to provide its service to us, and is bound by its own privacy and security terms.",
     ],
   },
