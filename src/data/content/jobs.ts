@@ -182,21 +182,21 @@ export const jobs: Job[] = [
     title: "Business Development Manager",
     summary:
       "Our first business development hire. Win new clients for our digital marketing and consulting services: you decide who to approach, start the conversation and find the real problem we can solve. Pune, work from home.",
-    listLine: "Pune, work from home  ·  Full-time  ·  2-4 years  ·  Fixed INR 4,00,000 a year, up to INR 7,00,000 with incentives",
+    listLine: "Pune, work from home  ·  Full-time  ·  2-4 years  ·  Fixed INR 6,00,000 a year, up to INR 7,50,000 with incentives",
     facts: [
       { label: "Location", value: "Pune, work from home" },
       { label: "Employment", value: "Full-time" },
       { label: "Experience", value: "2-4 years" },
       { label: "Reports to", value: "Founder" },
       { label: "Notice period", value: "Up to 30 days. Immediate joiners are welcome." },
-      { label: "Pay", value: "Fixed INR 4,00,000 a year, up to INR 7,00,000 with incentives" },
+      { label: "Pay", value: "Fixed INR 6,00,000 a year, up to INR 7,50,000 with incentives" },
     ],
     sections: [
       {
         heading: "Pay",
         paragraphs: [
-          "Fixed pay: INR 4,00,000 a year.",
-          "With variable incentives (bonuses and commission), total earnings can go up to INR 7,00,000 a year. The incentives depend on your results.",
+          "Fixed pay: INR 6,00,000 a year.",
+          "With variable incentives (bonuses and commission), total earnings can go up to INR 7,50,000 a year. The incentives depend on your results.",
         ],
       },
       {
