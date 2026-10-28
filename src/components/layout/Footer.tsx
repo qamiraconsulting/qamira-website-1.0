@@ -16,7 +16,7 @@ export function Footer() {
           <div className="lg:col-span-1">
             <Logo />
             <p className="mt-4 max-w-[32ch] text-sm">
-              Redesigning how businesses run, then using AI to make it stick.
+              Better processes and practical AI, built together.
             </p>
           </div>
           <FooterColumn title="Firm" items={footerNav.firm} />

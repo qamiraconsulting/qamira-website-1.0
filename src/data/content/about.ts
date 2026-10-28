@@ -30,7 +30,7 @@ export const pillarsDetail = [
   {
     index: "03",
     title: "AI-Native Execution",
-    body: "Deploying custom agentic frameworks to accelerate delivery and automate repetitive cognitive work -- once the architecture and process are right, not before.",
+    body: "Deploying custom agentic frameworks to accelerate delivery and automate repetitive cognitive work -- designed alongside the architecture and process as one system, so each makes the others work better.",
   },
 ];
 
