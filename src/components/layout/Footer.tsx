@@ -44,6 +44,11 @@ export function Footer() {
                   Our offices
                 </Link>
               </li>
+              <li>
+                <Link to="/in/business-consultant-pune" className="text-sm transition-colors hover:text-brass">
+                  Business consultant in Pune
+                </Link>
+              </li>
             </ul>
             <SocialLinks />
           </div>

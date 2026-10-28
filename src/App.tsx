@@ -21,6 +21,7 @@ import { Privacy } from "@/pages/Privacy";
 import { AuAiReceptionist } from "@/pages/AuAiReceptionist";
 import { AuGoogleBusinessProfile } from "@/pages/AuGoogleBusinessProfile";
 import { InServicePage } from "@/pages/InServicePage";
+import { PuneBusinessConsulting } from "@/pages/PuneBusinessConsulting";
 import { NotFound } from "@/pages/NotFound";
 
 export default function App() {
@@ -47,6 +48,7 @@ export default function App() {
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/au/ai-receptionist" element={<AuAiReceptionist />} />
         <Route path="/au/google-business-profile" element={<AuGoogleBusinessProfile />} />
+        <Route path="/in/business-consultant-pune" element={<PuneBusinessConsulting />} />
         <Route path="/in/:slug" element={<InServicePage />} />
         <Route path="*" element={<NotFound />} />
       </Route>

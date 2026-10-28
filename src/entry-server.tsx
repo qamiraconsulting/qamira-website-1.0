@@ -46,6 +46,7 @@ const staticRoutes = [
   "/privacy",
   "/au/ai-receptionist",
   "/au/google-business-profile",
+  "/in/business-consultant-pune",
 ];
 
 /**
