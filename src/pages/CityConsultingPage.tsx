@@ -11,33 +11,19 @@ import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
 import { PhotoSlot } from "@/components/brand/PhotoSlot";
 import { FaqSection } from "@/components/sections/FaqSection";
 import { useShortlist } from "@/lib/shortlist";
-import {
-  puneHero,
-  punePain,
-  puneServices,
-  puneIndustries,
-  puneAreas,
-  puneHowItWorks,
-  puneProof,
-  puneFaq,
-  puneCta,
-} from "@/data/content/puneConsulting";
+import type { CityConsultingPage as CityPage } from "@/data/content/cityConsulting";
 
-const path = "/in/business-consultant-pune";
-const url = `${site.url}${path}`;
-// The Operations Diagnostic Workshop is the paid entry point this page sells.
-const SERVICE_CODE = "QC-101";
+// One template for the city landing pages. Content lives in
+// src/data/content/cityConsulting.ts and the per-city files it lists.
+export function CityConsultingPage({ page }: { page: CityPage }) {
+  const url = `${site.url}${page.path}`;
 
-const description =
-  "Business consultant in Pune for growing SMEs: process improvement, AI automation and KPIs for manufacturers, logistics and services firms. Free 20-minute call.";
-
-export function PuneBusinessConsulting() {
   // Same pattern as the other landing pages: the CTA puts the service on
   // the visitor's shortlist before it opens /contact, so the enquiry
   // arrives already tagged.
   const shortlist = useShortlist();
   const addToShortlist = () => {
-    if (!shortlist.has(SERVICE_CODE)) shortlist.toggle(SERVICE_CODE);
+    if (!shortlist.has(page.serviceCode)) shortlist.toggle(page.serviceCode);
   };
 
   const cta = (
@@ -46,22 +32,28 @@ export function PuneBusinessConsulting() {
     </Button>
   );
 
+  const secondaryCta = (
+    <Button to={page.secondaryCta.to} variant="ghost" arrow={false}>
+      {page.secondaryCta.label}
+    </Button>
+  );
+
   return (
     <>
       <Seo
-        title="Business Consultant in Pune for SMEs"
-        path={path}
-        description={description}
+        title={page.seoTitle}
+        path={page.path}
+        description={page.description}
         jsonLd={[
           {
             "@context": "https://schema.org",
             "@type": "Service",
-            name: "Business Consulting in Pune",
-            alternateName: ["Business consultant in Pune", "Process improvement consultant in Pune", "Operations consultant in Pune"],
-            serviceType: "Business consulting, process improvement and AI automation",
-            description: puneHero.lede,
+            name: page.schema.name,
+            alternateName: page.schema.alternateName,
+            serviceType: page.schema.serviceType,
+            description: page.hero.lede,
             provider: orgRef,
-            areaServed: puneAreas.areas.map((name) => ({ "@type": "City", name })),
+            areaServed: page.schema.areaServed,
             audience: { "@type": "BusinessAudience", audienceType: "Small and medium-sized businesses" },
             url,
           },
@@ -70,13 +62,13 @@ export function PuneBusinessConsulting() {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Home", item: site.url },
-              { "@type": "ListItem", position: 2, name: puneHero.breadcrumbLabel, item: url },
+              { "@type": "ListItem", position: 2, name: page.hero.breadcrumbLabel, item: url },
             ],
           },
           {
             "@context": "https://schema.org",
             "@type": "FAQPage",
-            mainEntity: puneFaq.map((f) => ({
+            mainEntity: page.faq.map((f) => ({
               "@type": "Question",
               name: f.question,
               acceptedAnswer: { "@type": "Answer", text: f.answer },
@@ -94,25 +86,23 @@ export function PuneBusinessConsulting() {
                 <Link to="/" className="hover:text-brass">
                   Home
                 </Link>{" "}
-                / {puneHero.breadcrumbLabel}
+                / {page.hero.breadcrumbLabel}
               </p>
               <div className="mt-5">
-                <Eyebrow>{puneHero.eyebrow}</Eyebrow>
+                <Eyebrow>{page.hero.eyebrow}</Eyebrow>
               </div>
-              <h1 className="mt-4 max-w-[22ch] text-charcoal">{puneHero.title}</h1>
-              <p className="mt-5 max-w-[56ch] text-base text-charcoal-dim sm:text-lg">{puneHero.lede}</p>
-              <p className="mt-6 border-l-2 border-brass pl-4 font-mono text-sm text-charcoal">{puneHero.promiseLine}</p>
+              <h1 className="mt-4 max-w-[22ch] text-charcoal">{page.hero.title}</h1>
+              <p className="mt-5 max-w-[56ch] text-base text-charcoal-dim sm:text-lg">{page.hero.lede}</p>
+              <p className="mt-6 border-l-2 border-brass pl-4 font-mono text-sm text-charcoal">{page.hero.promiseLine}</p>
               <div className="mt-8 flex flex-wrap gap-4">
                 {cta}
-                <Button to="/assessment" variant="ghost" arrow={false}>
-                  Take the free assessment
-                </Button>
+                {secondaryCta}
               </div>
             </div>
             <PhotoSlot
-              src="/photos/services/process-performance.webp"
-              label="A team reviewing an operations process together."
-              alt="A team reviewing an operations process together"
+              src={page.hero.photo.src}
+              label={page.hero.photo.label}
+              alt={page.hero.photo.label}
               className="hidden lg:block"
             />
           </Reveal>
@@ -124,12 +114,12 @@ export function PuneBusinessConsulting() {
         <Container>
           <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-start">
             <Reveal>
-              <Eyebrow>{punePain.eyebrow}</Eyebrow>
-              <h2 className="mt-4 text-charcoal">{punePain.heading}</h2>
-              <p className="mt-4 max-w-[52ch] text-base text-charcoal-dim sm:text-lg">{punePain.lede}</p>
+              <Eyebrow>{page.pain.eyebrow}</Eyebrow>
+              <h2 className="mt-4 text-charcoal">{page.pain.heading}</h2>
+              <p className="mt-4 max-w-[52ch] text-base text-charcoal-dim sm:text-lg">{page.pain.lede}</p>
             </Reveal>
             <RevealGroup className="flex flex-col gap-4">
-              {punePain.points.map((point) => (
+              {page.pain.points.map((point) => (
                 <RevealItem key={point}>
                   <div className="flex items-start gap-3 border border-charcoal/10 bg-white p-5">
                     <span aria-hidden="true" className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-brass" />
@@ -146,12 +136,12 @@ export function PuneBusinessConsulting() {
       <Section tone="surface" bordered>
         <Container>
           <Reveal className="max-w-[46rem]">
-            <Eyebrow>{puneServices.eyebrow}</Eyebrow>
-            <h2 className="mt-4 text-charcoal">{puneServices.heading}</h2>
-            <p className="mt-4 text-base text-charcoal-dim sm:text-lg">{puneServices.lede}</p>
+            <Eyebrow>{page.services.eyebrow}</Eyebrow>
+            <h2 className="mt-4 text-charcoal">{page.services.heading}</h2>
+            <p className="mt-4 text-base text-charcoal-dim sm:text-lg">{page.services.lede}</p>
           </Reveal>
           <RevealGroup className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {puneServices.items.map((item) => (
+            {page.services.items.map((item) => (
               <RevealItem key={item.title}>
                 <Link to={item.to} className="group block h-full">
                   <Card className="flex h-full flex-col">
@@ -169,11 +159,11 @@ export function PuneBusinessConsulting() {
       <Section tone="white">
         <Container>
           <Reveal className="max-w-[46rem]">
-            <Eyebrow>{puneIndustries.eyebrow}</Eyebrow>
-            <h2 className="mt-4 text-charcoal">{puneIndustries.heading}</h2>
+            <Eyebrow>{page.industries.eyebrow}</Eyebrow>
+            <h2 className="mt-4 text-charcoal">{page.industries.heading}</h2>
           </Reveal>
           <RevealGroup className="mt-12 grid gap-6 md:grid-cols-3">
-            {puneIndustries.items.map((item) => (
+            {page.industries.items.map((item) => (
               <RevealItem key={item.title}>
                 <Link to={item.to} className="group block h-full">
                   <Card className="flex h-full flex-col">
@@ -191,11 +181,11 @@ export function PuneBusinessConsulting() {
       <Section tone="surface" bordered>
         <Container>
           <Reveal className="max-w-[46rem]">
-            <Eyebrow>{puneHowItWorks.eyebrow}</Eyebrow>
-            <h2 className="mt-4 text-charcoal">{puneHowItWorks.heading}</h2>
+            <Eyebrow>{page.howItWorks.eyebrow}</Eyebrow>
+            <h2 className="mt-4 text-charcoal">{page.howItWorks.heading}</h2>
           </Reveal>
           <RevealGroup className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {puneHowItWorks.steps.map((step, i) => (
+            {page.howItWorks.steps.map((step, i) => (
               <RevealItem key={step.title}>
                 <Card className="flex h-full flex-col p-6">
                   <div className="flex items-center justify-between">
@@ -216,14 +206,14 @@ export function PuneBusinessConsulting() {
         <Container>
           <div className="grid gap-12 lg:grid-cols-[1fr_1.1fr] lg:items-start">
             <Reveal>
-              <Eyebrow>{puneAreas.eyebrow}</Eyebrow>
-              <h2 className="mt-4 text-charcoal">{puneAreas.heading}</h2>
-              <p className="mt-4 max-w-[52ch] text-base text-charcoal-dim sm:text-lg">{puneAreas.lede}</p>
+              <Eyebrow>{page.areas.eyebrow}</Eyebrow>
+              <h2 className="mt-4 text-charcoal">{page.areas.heading}</h2>
+              <p className="mt-4 max-w-[52ch] text-base text-charcoal-dim sm:text-lg">{page.areas.lede}</p>
               <div className="mt-8">{cta}</div>
             </Reveal>
             <Reveal>
               <ul className="flex flex-wrap gap-3">
-                {puneAreas.areas.map((area) => (
+                {page.areas.areas.map((area) => (
                   <li
                     key={area}
                     className="flex items-center gap-2 border border-charcoal/10 bg-white px-4 py-2.5 text-sm text-charcoal"
@@ -242,31 +232,29 @@ export function PuneBusinessConsulting() {
       <Section tone="navy">
         <Container>
           <Reveal className="max-w-[46rem]">
-            <Eyebrow>{puneProof.eyebrow}</Eyebrow>
-            <h2 className="mt-4 text-cream">{puneProof.heading}</h2>
-            {puneProof.body.map((para) => (
+            <Eyebrow>{page.proof.eyebrow}</Eyebrow>
+            <h2 className="mt-4 text-cream">{page.proof.heading}</h2>
+            {page.proof.body.map((para) => (
               <p key={para} className="mt-4 text-base text-cream-dim sm:text-lg">
                 {para}
               </p>
             ))}
-            <p className="mt-6 font-mono text-xs uppercase tracking-[0.06em] text-cream-dim/70">{puneProof.note}</p>
+            <p className="mt-6 font-mono text-xs uppercase tracking-[0.06em] text-cream-dim/70">{page.proof.note}</p>
           </Reveal>
         </Container>
       </Section>
 
-      <FaqSection eyebrow="Frequently asked" heading="Questions, answered plainly." items={puneFaq} />
+      <FaqSection eyebrow="Frequently asked" heading="Questions, answered plainly." items={page.faq} />
 
       {/* CTA */}
       <Section tone="surface" bordered className="text-center">
         <Container>
           <Reveal className="mx-auto max-w-[42rem]">
-            <h2 className="text-charcoal">{puneCta.heading}</h2>
-            <p className="mx-auto mt-4 max-w-[52ch] text-charcoal-dim">{puneCta.body}</p>
+            <h2 className="text-charcoal">{page.cta.heading}</h2>
+            <p className="mx-auto mt-4 max-w-[52ch] text-charcoal-dim">{page.cta.body}</p>
             <div className="mt-9 flex flex-wrap justify-center gap-4">
               {cta}
-              <Button to="/assessment" variant="ghost" arrow={false}>
-                Take the free assessment
-              </Button>
+              {secondaryCta}
             </div>
           </Reveal>
         </Container>

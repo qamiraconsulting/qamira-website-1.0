@@ -49,6 +49,11 @@ export function Footer() {
                   Business consultant in Pune
                 </Link>
               </li>
+              <li>
+                <Link to="/au/ai-process-consulting-melbourne" className="text-sm transition-colors hover:text-brass">
+                  AI consulting in Melbourne
+                </Link>
+              </li>
             </ul>
             <SocialLinks />
           </div>

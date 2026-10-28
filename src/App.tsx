@@ -21,7 +21,8 @@ import { Privacy } from "@/pages/Privacy";
 import { AuAiReceptionist } from "@/pages/AuAiReceptionist";
 import { AuGoogleBusinessProfile } from "@/pages/AuGoogleBusinessProfile";
 import { InServicePage } from "@/pages/InServicePage";
-import { PuneBusinessConsulting } from "@/pages/PuneBusinessConsulting";
+import { CityConsultingPage } from "@/pages/CityConsultingPage";
+import { cityConsultingPages } from "@/data/content/cityConsulting";
 import { NotFound } from "@/pages/NotFound";
 
 export default function App() {
@@ -48,7 +49,10 @@ export default function App() {
         <Route path="/privacy" element={<Privacy />} />
         <Route path="/au/ai-receptionist" element={<AuAiReceptionist />} />
         <Route path="/au/google-business-profile" element={<AuGoogleBusinessProfile />} />
-        <Route path="/in/business-consultant-pune" element={<PuneBusinessConsulting />} />
+        {/* Static city paths, listed ahead of /in/:slug so they win the match. */}
+        {cityConsultingPages.map((page) => (
+          <Route key={page.path} path={page.path} element={<CityConsultingPage page={page} />} />
+        ))}
         <Route path="/in/:slug" element={<InServicePage />} />
         <Route path="*" element={<NotFound />} />
       </Route>

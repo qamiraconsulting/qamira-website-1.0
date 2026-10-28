@@ -27,6 +27,7 @@ import { articles } from "@/data/content/insights";
 import { allIndustries } from "@/data/content/industries";
 import { openJobs } from "@/data/content/jobs";
 import { inServicePages } from "@/data/content/inServices";
+import { cityConsultingPages } from "@/data/content/cityConsulting";
 import { customerFacingAI, contentAndGrowthSystems, internalAutomation } from "@/data/content/technology";
 
 const staticRoutes = [
@@ -46,7 +47,6 @@ const staticRoutes = [
   "/privacy",
   "/au/ai-receptionist",
   "/au/google-business-profile",
-  "/in/business-consultant-pune",
 ];
 
 /**
@@ -61,6 +61,7 @@ export const routes: string[] = [
   ...allIndustries.map((i) => `/industries/${i.slug}`),
   ...openJobs.map((j) => `/careers/${j.slug}`),
   ...inServicePages.map((p) => `/in/${p.slug}`),
+  ...cityConsultingPages.map((p) => p.path),
   ...[...customerFacingAI, ...contentAndGrowthSystems, ...internalAutomation].map((o) => `/technology/${o.slug}`),
 ];
 
