@@ -21,6 +21,14 @@ Qamira serves small-to-medium businesses ($2M-$50M revenue), post-Series A/B gro
 - [Custom Software (India)](https://www.qamiraconsulting.com/in/custom-software): Custom software, ERP and client portals for growing Indian businesses, with a written scope and fixed quote before work starts.
 - [ERP & CRM Builds (India)](https://www.qamiraconsulting.com/in/erp-crm-development): CRM and custom ERP builds set up around how an Indian business sells and operates.
 - [Business Automation (India)](https://www.qamiraconsulting.com/in/business-automation): Connects Tally, Excel, CRM and other tools so data is typed once, without a forced switch to new software.
+- [Custom Software (Australia)](https://www.qamiraconsulting.com/au/custom-software): Custom software, business systems and client portals for growing Australian businesses, with a written scope and fixed quote before work starts.
+- [CRM Development (Australia)](https://www.qamiraconsulting.com/au/crm-development): CRM setup or custom CRM builds around how an Australian business sells, connected to its accounting system.
+- [Business Automation (Australia)](https://www.qamiraconsulting.com/au/business-automation): Connects Xero or MYOB, spreadsheets, CRM and email so data is typed once, without a forced switch to new software.
+- [Website Development (Australia)](https://www.qamiraconsulting.com/au/website-development): Mobile-first websites for Australian small businesses, built to turn visitors into enquiries and bookings.
+- [Custom Software (UK)](https://www.qamiraconsulting.com/uk/custom-software): Custom software, business systems and client portals for growing UK businesses, with a written scope and fixed quote before work starts.
+- [CRM Development (UK)](https://www.qamiraconsulting.com/uk/crm-development): CRM setup or custom CRM builds around how a UK business sells, connected to its accounting system.
+- [Business Automation (UK)](https://www.qamiraconsulting.com/uk/business-automation): Connects Xero, Sage or QuickBooks, spreadsheets, CRM and email so data is typed once, without a forced switch to new software.
+- [Website Development (UK)](https://www.qamiraconsulting.com/uk/website-development): Mobile-first websites for UK small businesses, built to turn visitors into enquiries and bookings.
 - [Industries](https://www.qamiraconsulting.com/industries): Pre-built QBPES™ variants for specific verticals -- manufacturing, logistics, construction, retail, healthcare, financial services, professional services, startups, and public sector.
 
 ## Industry accelerators

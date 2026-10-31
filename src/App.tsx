@@ -54,6 +54,9 @@ export default function App() {
           <Route key={page.path} path={page.path} element={<CityConsultingPage page={page} />} />
         ))}
         <Route path="/in/:slug" element={<InServicePage />} />
+        {/* /au/ai-receptionist and /au/google-business-profile above are static, so they win. */}
+        <Route path="/au/:slug" element={<InServicePage region="au" />} />
+        <Route path="/uk/:slug" element={<InServicePage region="uk" />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

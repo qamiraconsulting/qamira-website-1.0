@@ -11,27 +11,45 @@ import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
 import { PhotoSlot } from "@/components/brand/PhotoSlot";
 import { FaqSection } from "@/components/sections/FaqSection";
 import { useShortlist } from "@/lib/shortlist";
-import { inServicePageBySlug, inPromiseLine, inPricing, inProcess, inProof } from "@/data/content/inServices";
+import {
+  inServicePages,
+  inPromiseLine,
+  inPricing,
+  inProcess,
+  inProof,
+  type InServicePage as ServicePage,
+} from "@/data/content/inServices";
+import { auServicePages, ukServicePages } from "@/data/content/intlServices";
 import { NotFound } from "@/pages/NotFound";
 
-// One template for the three Indian build-service landing pages (/in/:slug).
-// Content and prices live in src/data/content/inServices.ts.
-export function InServicePage() {
+export type ServiceRegion = "in" | "au" | "uk";
+
+const regions: Record<ServiceRegion, { country: string; pages: ServicePage[] }> = {
+  in: { country: "India", pages: inServicePages },
+  au: { country: "Australia", pages: auServicePages },
+  uk: { country: "United Kingdom", pages: ukServicePages },
+};
+
+// One template for the build-service landing pages in India (/in/:slug),
+// Australia (/au/:slug) and the UK (/uk/:slug). Content lives in
+// src/data/content/inServices.ts and intlServices.ts.
+export function InServicePage({ region = "in" }: { region?: ServiceRegion }) {
   const { slug } = useParams<{ slug: string }>();
-  const page = slug ? inServicePageBySlug[slug] : undefined;
+  const { country, pages } = regions[region];
+  const page = pages.find((p) => p.slug === slug);
   const shortlist = useShortlist();
 
   if (!page) {
     return <NotFound />;
   }
 
-  const path = `/in/${page.slug}`;
+  const path = `/${region}/${page.slug}`;
   const url = `${site.url}${path}`;
 
   // The CTA puts the page's services on the visitor's shortlist before it
   // opens /contact, so the enquiry arrives tagged. The lead itself
   // (GA4 generate_lead) fires on /contact's form submit, the conversion the
-  // India campaign optimises for.
+  // campaigns optimise for.
   const addToShortlist = () => {
     page.serviceCodes.forEach((code) => {
       if (!shortlist.has(code)) shortlist.toggle(code);
@@ -54,10 +72,10 @@ export function InServicePage() {
           {
             "@context": "https://schema.org",
             "@type": "Service",
-            name: page.breadcrumbLabel.replace(" (India)", ""),
+            name: page.breadcrumbLabel.replace(/ \(.*\)$/, ""),
             description: page.lede,
             provider: orgRef,
-            areaServed: { "@type": "Country", name: "India" },
+            areaServed: { "@type": "Country", name: country },
             audience: { "@type": "BusinessAudience", audienceType: "Small and medium-sized businesses" },
             url,
           },
