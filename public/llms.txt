@@ -29,6 +29,13 @@ Qamira serves small-to-medium businesses ($2M-$50M revenue), post-Series A/B gro
 - [CRM Development (UK)](https://www.qamiraconsulting.com/uk/crm-development): CRM setup or custom CRM builds around how a UK business sells, connected to its accounting system.
 - [Business Automation (UK)](https://www.qamiraconsulting.com/uk/business-automation): Connects Xero, Sage or QuickBooks, spreadsheets, CRM and email so data is typed once, without a forced switch to new software.
 - [Website Development (UK)](https://www.qamiraconsulting.com/uk/website-development): Mobile-first websites for UK small businesses, built to turn visitors into enquiries and bookings.
+- [AI Chatbot (Australia)](https://www.qamiraconsulting.com/au/ai-chatbot): A custom AI chatbot for Australian businesses, trained on their own services and prices -- answers questions, quotes, books and captures leads, then hands over to staff.
+- [AI Chatbot (UK)](https://www.qamiraconsulting.com/uk/ai-chatbot): A custom AI chatbot for UK businesses, trained on their own services and prices -- answers questions, quotes, books and captures leads, then hands over to staff.
+- [Custom Software (US)](https://www.qamiraconsulting.com/us/custom-software): Custom software, business systems and client portals for growing US businesses, with a written scope and fixed quote before work starts.
+- [CRM Development (US)](https://www.qamiraconsulting.com/us/crm-development): CRM setup or custom CRM builds around how a US business sells, connected to its accounting system.
+- [Business Automation (US)](https://www.qamiraconsulting.com/us/business-automation): Connects QuickBooks or Xero, spreadsheets, CRM and email so data is typed once, without a forced switch to new software.
+- [Website Development (US)](https://www.qamiraconsulting.com/us/website-development): Mobile-first websites for US small businesses, built to turn visitors into enquiries and bookings.
+- [AI Chatbot (US)](https://www.qamiraconsulting.com/us/ai-chatbot): A custom AI chatbot for US businesses, trained on their own services and prices -- answers questions, quotes, books and captures leads, then hands over to staff.
 - [Industries](https://www.qamiraconsulting.com/industries): Pre-built QBPES™ variants for specific verticals -- manufacturing, logistics, construction, retail, healthcare, financial services, professional services, startups, and public sector.
 
 ## Industry accelerators

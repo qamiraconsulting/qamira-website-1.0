@@ -19,19 +19,20 @@ import {
   inProof,
   type InServicePage as ServicePage,
 } from "@/data/content/inServices";
-import { auServicePages, ukServicePages } from "@/data/content/intlServices";
+import { auServicePages, ukServicePages, usServicePages } from "@/data/content/intlServices";
 import { NotFound } from "@/pages/NotFound";
 
-export type ServiceRegion = "in" | "au" | "uk";
+export type ServiceRegion = "in" | "au" | "uk" | "us";
 
 const regions: Record<ServiceRegion, { country: string; pages: ServicePage[] }> = {
   in: { country: "India", pages: inServicePages },
   au: { country: "Australia", pages: auServicePages },
   uk: { country: "United Kingdom", pages: ukServicePages },
+  us: { country: "United States", pages: usServicePages },
 };
 
 // One template for the build-service landing pages in India (/in/:slug),
-// Australia (/au/:slug) and the UK (/uk/:slug). Content lives in
+// Australia (/au/:slug), the UK (/uk/:slug) and the US (/us/:slug). Content lives in
 // src/data/content/inServices.ts and intlServices.ts.
 export function InServicePage({ region = "in" }: { region?: ServiceRegion }) {
   const { slug } = useParams<{ slug: string }>();

@@ -75,6 +75,7 @@ export const inProof = {
   heading: "We build software that real businesses run on every day.",
   body: [
     "For a Melbourne removals company we built an instant-quote engine and booking system: a job goes in, and the customer gets a branded quote in about 20 seconds, worked out from the company's own rate card.",
+    "Its website chat assistant now quotes and books on that same engine, with a dashboard where the team manages every booking.",
     "The same thinking goes into every build: start from how the work actually happens, connect what's already there, and only build what pays back.",
   ],
   note: "Client named on request in a private conversation.",

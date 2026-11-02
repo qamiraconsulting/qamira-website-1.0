@@ -27,7 +27,7 @@ import { articles } from "@/data/content/insights";
 import { allIndustries } from "@/data/content/industries";
 import { openJobs } from "@/data/content/jobs";
 import { inServicePages } from "@/data/content/inServices";
-import { auServicePages, ukServicePages } from "@/data/content/intlServices";
+import { auServicePages, ukServicePages, usServicePages } from "@/data/content/intlServices";
 import { cityConsultingPages } from "@/data/content/cityConsulting";
 import { customerFacingAI, contentAndGrowthSystems, internalAutomation } from "@/data/content/technology";
 
@@ -64,6 +64,7 @@ export const routes: string[] = [
   ...inServicePages.map((p) => `/in/${p.slug}`),
   ...auServicePages.map((p) => `/au/${p.slug}`),
   ...ukServicePages.map((p) => `/uk/${p.slug}`),
+  ...usServicePages.map((p) => `/us/${p.slug}`),
   ...cityConsultingPages.map((p) => p.path),
   ...[...customerFacingAI, ...contentAndGrowthSystems, ...internalAutomation].map((o) => `/technology/${o.slug}`),
 ];

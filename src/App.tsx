@@ -57,6 +57,7 @@ export default function App() {
         {/* /au/ai-receptionist and /au/google-business-profile above are static, so they win. */}
         <Route path="/au/:slug" element={<InServicePage region="au" />} />
         <Route path="/uk/:slug" element={<InServicePage region="uk" />} />
+        <Route path="/us/:slug" element={<InServicePage region="us" />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

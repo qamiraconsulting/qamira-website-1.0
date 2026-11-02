@@ -1,11 +1,12 @@
-// /au/:slug and /uk/:slug -- Australian and UK landing pages for the build
-// services, one per ad group in the "AU - Search - Software & Web" and
-// "UK - Search - Software & Web" Google Ads campaigns
+// /au/:slug, /uk/:slug and /us/:slug -- Australian, UK and US landing pages
+// for the build services, one per ad group in the "<AU|UK|US> - Search -
+// Software & Web" Google Ads campaigns
 // (Sales/Qamira_Google_Ads_AU_UK_Software_Campaigns.md):
 //   /<region>/custom-software        QC-309 Custom Software, ERP & Portals
 //   /<region>/crm-development        QC-307 CRM Build + QC-309 for bigger systems
 //   /<region>/business-automation    QC-301 Automation Quick-Win + QC-306 Integration
 //   /<region>/website-development    QC-401 Website Starter + QC-402 Website Growth
+//   /<region>/ai-chatbot             QC-302 Custom AI Chatbot + QC-503 run service
 //
 // Same rules as inServices.ts: no prices on the website, brand-only voice,
 // the proof client described but never named, and no partnership claims.
@@ -15,7 +16,7 @@
 import type { InServicePage } from "@/data/content/inServices";
 
 type RegionCopy = {
-  prefix: "au" | "uk";
+  prefix: "au" | "uk" | "us";
   label: string; // breadcrumb suffix and eyebrow
   adjective: string; // "Australian", "UK"
   hours: string; // whose business hours calls run in
@@ -39,6 +40,14 @@ const regions: RegionCopy[] = [
     hours: "UK business hours",
     accounts: "Xero, Sage or QuickBooks",
     reach: "anywhere in the UK, from London and Manchester to Birmingham, Leeds and Glasgow",
+  },
+  {
+    prefix: "us",
+    label: "US",
+    adjective: "US",
+    hours: "US business hours, scheduled to suit your time zone",
+    accounts: "QuickBooks or Xero",
+    reach: "anywhere in the US, from New York and Chicago to Texas, Florida and California",
   },
 ];
 
@@ -324,8 +333,78 @@ function pagesFor(r: RegionCopy): InServicePage[] {
       },
       related: { label: "Custom software", to: `${p}/custom-software` },
     },
+    {
+      slug: "ai-chatbot",
+      serviceCodes: ["QC-302", "QC-503"],
+      seoTitle: `AI Chatbot for ${r.adjective} Businesses`,
+      description: `A custom AI chatbot for ${r.adjective} businesses, trained on your services and prices: it answers questions, quotes, books and captures leads, then hands over to your team. Written scope and fixed quote after a free 20-minute call.`,
+      breadcrumbLabel: `AI Chatbot (${r.label})`,
+      eyebrow: `AI chatbot · ${r.label}`,
+      title: "A website chatbot that answers, quotes and books, day and night.",
+      lede: `A custom AI chatbot for ${r.adjective} businesses, trained on your own services, prices and policies. It answers questions, captures the enquiry and books the job, then hands the conversation to your team when a person is needed.`,
+      photo: { src: "/photos/technology/internal-knowledge-agents.jpg", label: "A laptop showing an AI assistant answering a question." },
+      pain: {
+        eyebrow: "Sound familiar?",
+        heading: "Enquiries arrive when nobody is there to answer.",
+        lede: "Many enquiries come in the evening or at the weekend, and the business that replies first is often the one that gets the job.",
+        points: [
+          "Visitors leave because they can't get a quick answer to a simple question.",
+          "Your team answers the same handful of questions by hand, every day.",
+          "Website forms sit unread until the next morning, and the lead has moved on.",
+          "Generic chat widgets give vague answers because they don't know your prices or policies.",
+        ],
+      },
+      build: {
+        eyebrow: "What we build",
+        heading: "A chatbot that knows your business, not just the internet.",
+        lede: "We train it on your services, prices, service areas and policies, and connect it to the tools you already use.",
+        items: [
+          {
+            title: "Answers from your own information",
+            body: "Services, coverage, opening hours and policies, in your tone, with clear limits on what it won't guess.",
+          },
+          {
+            title: "Quotes and bookings",
+            body: "Instant quotes from your own rate card and bookings into your calendar or system, with a confirmation for the customer.",
+          },
+          {
+            title: "Lead capture and hand-over",
+            body: "Every conversation is logged to your CRM or inbox, and anything the chatbot can't handle goes straight to a person.",
+          },
+          {
+            title: "Looked after once it's live",
+            body: "We review conversations, close the gaps and keep it up to date as your prices and services change.",
+          },
+        ],
+      },
+      faq: [
+        {
+          question: "How much does a chatbot cost?",
+          answer: "It depends on what it needs to know and connect to. After a free 20-minute call you get a written scope and a fixed quote, before any work starts. No obligation.",
+        },
+        {
+          question: "How long does it take?",
+          answer: "Usually 2 to 4 weeks from the scoping call, depending on how many of your systems it connects to.",
+        },
+        {
+          question: "Will it make things up?",
+          answer: "It answers only from the information you approve. When it isn't sure, it says so and passes the conversation to your team. We test it on real customer questions before it goes live.",
+        },
+        {
+          question: "Can it work on WhatsApp as well as our website?",
+          answer: "Yes. The same assistant can run on your website and on WhatsApp, so customers get the same answers wherever they ask.",
+        },
+        teamFaq(r),
+      ],
+      cta: {
+        heading: "See what a chatbot would handle for you.",
+        body: "Book a free 20-minute call. We'll look at the questions and enquiries you get today and tell you honestly whether a chatbot would pay back.",
+      },
+      related: { label: "CRM development", to: `${p}/crm-development` },
+    },
   ];
 }
 
 export const auServicePages = pagesFor(regions[0]);
 export const ukServicePages = pagesFor(regions[1]);
+export const usServicePages = pagesFor(regions[2]);
