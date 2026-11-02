@@ -12,9 +12,10 @@
 // - The proof client is described, never named, until they agree to be
 //   named publicly (they have agreed to private 1:1 outreach only). Swap
 //   `proof.client` for the real name once they say yes.
-// - Only claims what is actually running: the instant-quote engine is in
-//   production; the booking assistant and voice receptionist are being
-//   rolled out on it. Update `proof` when that changes.
+// - Only claims what is actually running: the instant-quote engine, the
+//   chat booking assistant and the team's booking dashboard are live. The
+//   client did not take the voice receptionist (2026-11-02), so never say
+//   it runs there. Update `proof` when that changes.
 // - No vendor or platform names, and no third-party statistics we can't
 //   source.
 //
@@ -114,7 +115,7 @@ export const proof = {
   heading: "We built the quoting engine behind a Melbourne removals company.",
   body: [
     "Our first Australian client is a Melbourne removals business. We built its instant-quote engine: once a job is entered, the customer gets a branded quote in about 20 seconds.",
-    "Its chat booking assistant and AI receptionist are being rolled out on that same engine. That matters: the price a caller hears is worked out the same way as the price on the website, so the two can't disagree.",
+    "Its chat booking assistant now runs on that same engine, with a booking dashboard for the team. That matters: the price a customer gets in the chat is worked out the same way as the price on the website, so the two can't disagree. An AI receptionist plugs into the same engine, so a caller would hear that price too.",
   ],
   note: "Client named on request in a private conversation.",
 };
