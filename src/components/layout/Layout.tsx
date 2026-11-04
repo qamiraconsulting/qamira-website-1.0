@@ -8,6 +8,7 @@ import { ScrollToTop } from "@/components/layout/ScrollToTop";
 import { MetaPixel } from "@/components/MetaPixel";
 import { GoogleTag } from "@/components/GoogleTag";
 import { ApolloTracker } from "@/components/ApolloTracker";
+import { ContactLinkTracking } from "@/components/ContactLinkTracking";
 
 export function Layout() {
   return (
@@ -16,6 +17,7 @@ export function Layout() {
       <MetaPixel />
       <GoogleTag />
       <ApolloTracker />
+      <ContactLinkTracking />
       <SkipLink />
       <Header />
       <main id="main">

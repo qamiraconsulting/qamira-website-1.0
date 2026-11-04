@@ -57,9 +57,14 @@ export function InServicePage({ region = "in" }: { region?: ServiceRegion }) {
     });
   };
 
+  // Outside India the team is remote, so the call is by video, and email
+  // sits beside it as an equal option: the only phone line is an Indian
+  // WhatsApp number, which an overseas buyer may not want to use.
+  const overseas = region !== "in";
+
   const cta = (
     <Button to="/contact" onClick={addToShortlist}>
-      Book a free 20-minute scoping call
+      {overseas ? "Book a free 20-minute video call" : "Book a free 20-minute scoping call"}
     </Button>
   );
 
@@ -123,6 +128,15 @@ export function InServicePage({ region = "in" }: { region?: ServiceRegion }) {
                   How it works
                 </Button>
               </div>
+              {overseas && (
+                <p className="mt-4 text-sm text-charcoal-dim">
+                  Prefer email? Write to{" "}
+                  <a href={`mailto:${site.email}`} className="text-brass underline hover:text-brass-bright">
+                    {site.email}
+                  </a>{" "}
+                  and we'll reply within one business day.
+                </p>
+              )}
             </div>
             <PhotoSlot src={page.photo.src} label={page.photo.label} alt={page.photo.label} className="hidden lg:block" />
           </Reveal>

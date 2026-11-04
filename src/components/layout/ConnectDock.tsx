@@ -126,18 +126,24 @@ export function ConnectDock() {
   };
 
   /**
-   * Report a channel click to both ad platforms.
+   * Report a social-profile click to both ad platforms. WhatsApp and email
+   * clicks are reported by ContactLinkTracking, which covers those links
+   * everywhere on the site, so they are not reported here as well.
    *
    * Meta's `Contact` is the standard event for contact between a customer
-   * and the business, which a chat click is; `content_name` keeps it
-   * separable from the contact form in Events Manager. No `eventId` is
-   * passed because nothing matching is sent server-side, so there is
-   * nothing to deduplicate against.
+   * and the business; `content_name` keeps it separable from the contact
+   * form in Events Manager. No `eventId` is passed because nothing
+   * matching is sent server-side, so there is nothing to deduplicate
+   * against.
    */
   const report = (channel: string) => {
     track("Contact", { content_name: channel });
-    trackGoogleContactChannel(channel);
+    trackGoogleContactChannel(channel, "Dock");
   };
+
+  // The line is an Indian number. On the AU, UK and US pages, say so
+  // before someone taps it expecting a local call.
+  const overseas = /^\/(au|uk|us)(\/|$)/.test(pathname);
 
   // Naming the page gives the reply somewhere to start, and tells us which
   // pages actually earn conversations.
@@ -172,21 +178,23 @@ export function ConnectDock() {
                 href={whatsappUrl(message)}
                 target="_blank"
                 rel="noreferrer"
-                onClick={() => report("WhatsApp")}
+                data-contact-location="Dock"
                 className="group flex items-center gap-3 rounded-md px-3 py-3 transition-colors hover:bg-parchment focus-visible:bg-parchment"
               >
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#25d366]/10 text-[#128c47] transition-colors group-hover:bg-[#25d366] group-hover:text-white">
                   <WhatsAppGlyph className="h-[1.1rem] w-[1.1rem]" />
                 </span>
                 <span className="min-w-0">
-                  <span className="block text-sm font-medium text-charcoal">WhatsApp</span>
+                  <span className="block text-sm font-medium text-charcoal">
+                    WhatsApp{overseas && <span className="font-normal text-charcoal-dim"> · team in India</span>}
+                  </span>
                   <span className="block font-mono text-xs text-charcoal-dim">{site.phone}</span>
                 </span>
               </a>
 
               <a
                 href={`mailto:${site.email}`}
-                onClick={() => report("Email")}
+                data-contact-location="Dock"
                 className="group flex items-center gap-3 rounded-md px-3 py-3 transition-colors hover:bg-parchment focus-visible:bg-parchment"
               >
                 <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brass/10 text-brass transition-colors group-hover:bg-brass group-hover:text-white">

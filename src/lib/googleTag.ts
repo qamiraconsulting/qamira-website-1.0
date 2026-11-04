@@ -86,15 +86,23 @@ export function trackGoogleLead(formName: "AI Business Assessment" | "Contact fo
 }
 
 /**
- * Record a click on a direct contact channel (WhatsApp, email, a social
- * profile) from the connect dock.
+ * Record a click on a direct contact channel (WhatsApp, email, phone, a
+ * social profile). `linkLocation` says which part of the page the link
+ * was in ("Dock", "Footer", "Page").
  *
  * Deliberately NOT `generate_lead`: that event is a marked key event fed
  * into Google Ads and means "a form was submitted". A click on a chat
  * link is intent, not a submitted lead, and folding it in would silently
  * inflate a conversion number that is already being optimised against.
+ *
+ * WhatsApp clicks also send their own `whatsapp_click`, so that one
+ * channel can be a GA4 key event (imported into Ads as a Secondary
+ * conversion) without social-profile clicks riding along with it.
  */
-export function trackGoogleContactChannel(channel: string): void {
+export function trackGoogleContactChannel(channel: string, linkLocation?: string): void {
   if (typeof window === "undefined" || !resolveMeasurementId()) return;
-  window.gtag?.("event", "contact_channel_click", { channel });
+  window.gtag?.("event", "contact_channel_click", { channel, link_location: linkLocation });
+  if (channel === "WhatsApp") {
+    window.gtag?.("event", "whatsapp_click", { link_location: linkLocation });
+  }
 }

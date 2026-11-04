@@ -248,9 +248,9 @@ export function Assessment() {
         description="A multi-step assessment generating your personalized AI Opportunity Report -- GTM optimization, churn prediction, process automation, analytics, and a roadmap."
       />
       <PageHero
-        eyebrow="Diagnose your performance"
-        title="Get your AI Opportunity Report."
-        lede="Five short steps. We'll tell you plainly where the highest-leverage AI opportunity in your business likely sits -- a starting point for a real conversation, not a substitute for one."
+        eyebrow="Free business health check"
+        title="Find what's really holding your business back."
+        lede="Five short steps, one tap per question. Your AI Opportunity Report appears on screen straight away: where time and money are leaking, and where the highest-leverage fix likely sits -- a starting point for a real conversation, not a substitute for one."
         breadcrumbLabel="AI Business Assessment"
       />
 

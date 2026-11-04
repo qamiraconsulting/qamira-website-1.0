@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Logo } from "@/components/brand/Logo";
 import { Container } from "@/components/ui/Container";
 import { footerNav } from "@/data/navigation";
@@ -8,6 +8,9 @@ import { XGlyph } from "@/components/brand/XGlyph";
 
 export function Footer() {
   const year = new Date().getFullYear();
+  // The WhatsApp line is an Indian number; on the AU, UK and US pages,
+  // say so before someone taps it expecting a local call.
+  const overseas = /^\/(au|uk|us)(\/|$)/.test(useLocation().pathname);
 
   return (
     <footer className="border-t border-charcoal/10 bg-white pb-8 pt-16 text-charcoal-dim sm:pt-20">
@@ -37,6 +40,7 @@ export function Footer() {
                   className="text-sm transition-colors hover:text-brass"
                 >
                   WhatsApp {site.phone}
+                  {overseas && " (team in India)"}
                 </a>
               </li>
               <li>
