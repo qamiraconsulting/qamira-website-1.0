@@ -85,7 +85,7 @@ export const jobs: Job[] = [
       {
         heading: "About us",
         paragraphs: [
-          "Qamira Consulting helps businesses grow through process optimisation, automation, digital marketing and lead generation. Team Qamira brings years of expertise in performance excellence and process optimisation.",
+          "Qamira Consulting helps businesses grow through consulting, process optimisation, automation, IT and software services, and digital marketing. Team Qamira brings years of expertise in performance excellence and process optimisation.",
           "You will join our team and work full-time on the account of an Australian client, an established company in Melbourne.",
         ],
       },

@@ -41,7 +41,7 @@ export function Services() {
       <Seo
         title="Services"
         path="/services"
-        description="45 services from free assessments to managed retainers: diagnostics, process and AI consulting, automation builds, growth marketing and training. Start from the problem you have."
+        description="44 services from free assessments to managed retainers: diagnostics, process and AI consulting, automation and software builds, digital marketing, SEO and AI content, and training. Start from the problem you have."
         jsonLd={[serviceListJsonLd, faqJsonLd]}
       />
       <PageHero

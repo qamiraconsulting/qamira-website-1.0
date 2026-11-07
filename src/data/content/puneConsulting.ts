@@ -88,8 +88,8 @@ export const puneConsultingPage: CityConsultingPage = {
         to: "/in/custom-software",
       },
       {
-        title: "Growth and lead generation",
-        body: "Google Business Profile, search, ads and outbound prospecting, with tracking so you can see which channel brings enquiries that turn into sales.",
+        title: "Digital marketing, SEO and AI content",
+        body: "Google Business Profile, SEO, ads, and AI-made content and video, with tracking so you can see which channel brings enquiries that turn into sales.",
         to: "/growth-os",
       },
       {

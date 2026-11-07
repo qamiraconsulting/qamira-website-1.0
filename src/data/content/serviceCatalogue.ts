@@ -1,4 +1,4 @@
-// The full Qamira service catalogue (45 services, QC-codes), mirrored from
+// The full Qamira service catalogue (44 services, QC-codes), mirrored from
 // Sales Enablement Kit/Qamira - Pricing Catalogue (INR) 1.1.xlsx, "Client
 // Rate Card" tab. Descriptions are the client-safe copy from that tab.
 // Prices are deliberately NOT here: they vary by scope and market, so the
@@ -74,12 +74,11 @@ export const catalogue: CatalogueService[] = [
   { code: "QC-401", stage: "build", name: "Website Starter", description: "Up to ~6 pages, mobile-first, enquiry form, basic SEO, analytics and a Google Business Profile link.", unit: "One-time", duration: "2–3 weeks" },
   { code: "QC-402", stage: "build", name: "Website Growth", description: "A conversion-focused site with quote and booking flows, integrations, SEO structure and content.", unit: "One-time", duration: "4–6 weeks" },
   { code: "QC-403", stage: "build", name: "Google Business Profile & Local SEO Setup", description: "Profile build or clean-up, categories, service areas, a review process and citation listings.", unit: "One-time", duration: "1–2 weeks" },
-  { code: "QC-404", stage: "run", name: "Lead-Gen Growth Retainer", description: "Google Business Profile, marketplaces, short-form social video and paid-ads management.", unit: "Monthly", duration: "Min. 3 months" },
+  { code: "QC-404", stage: "run", name: "Digital Marketing Retainer", description: "Ongoing SEO, Google Business Profile, AI content and short-form video, and paid-ads management.", unit: "Monthly", duration: "Min. 3 months" },
   { code: "QC-405", stage: "run", name: "Content Creation & Scheduled Publishing", description: "A monthly content calendar, AI-assisted posts and auto-publishing across your channels.", unit: "Monthly", duration: "Min. 3 months" },
   { code: "QC-406", stage: "build", name: "Marketing Automation & Lead Scoring", description: "Nurture sequences, lead scoring and hand-off rules so sales talks to the right leads first.", unit: "One-time build", duration: "3–5 weeks" },
   { code: "QC-407", stage: "build", name: "AI Short-Form Video", description: "A 15–30 second branded video for social or ads, from script to final cut.", unit: "Per video", duration: "3–5 days" },
   { code: "QC-408", stage: "build", name: "AI Brand Film", description: "A 30–60 second brand or product film with voice-over, music and multiple scenes.", unit: "Per film", duration: "1–2 weeks" },
-  { code: "QC-409", stage: "run", name: "B2B Outbound Prospecting Programme", description: "A researched target list, decision-makers found, a personalised opener for each, and a monitored email sequence.", unit: "Monthly", duration: "Min. 3 months" },
   { code: "QC-410", stage: "build", name: "AI Search Visibility (GEO)", description: "An audit of how you appear in ChatGPT and Google AI answers, plus a plan to get cited.", unit: "One-time", duration: "1–2 weeks" },
   { code: "QC-411", stage: "build", name: "Tracking & Analytics Setup", description: "GA4, Search Console, Bing, Meta pixel and conversion tracking, set up and tested.", unit: "One-time", duration: "3–5 days" },
 
@@ -125,7 +124,7 @@ export const problems: Problem[] = [
   { id: "cold", label: "Enquiries go cold before anyone replies", codes: ["QC-002", "QC-302", "QC-303", "QC-307", "QC-503"] },
   { id: "numbers", label: "We don't trust our own numbers", codes: ["QC-001", "QC-101", "QC-203", "QC-308", "QC-505"] },
   { id: "paper", label: "Paperwork eats most of our team's day", codes: ["QC-001", "QC-101", "QC-304", "QC-305", "QC-501"] },
-  { id: "leads", label: "We're not getting enough of the right leads", codes: ["QC-002", "QC-104", "QC-410", "QC-409", "QC-404"] },
+  { id: "leads", label: "The right customers can't find us online", codes: ["QC-002", "QC-403", "QC-410", "QC-405", "QC-404"] },
   { id: "stalled", label: "Growth has stalled and we can't see why", codes: ["QC-001", "QC-104", "QC-202", "QC-502"] },
   { id: "website", label: "Our website doesn't bring in work", codes: ["QC-002", "QC-402", "QC-403", "QC-411", "QC-507"] },
   { id: "ai", label: "We know AI matters, but not where to start", codes: ["QC-001", "QC-103", "QC-204", "QC-602"] },
