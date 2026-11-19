@@ -34,7 +34,7 @@ export const site = {
  * rather than shipping a guess.
  */
 export type SocialProfile = {
-  label: "LinkedIn" | "Instagram" | "Facebook" | "X";
+  label: "LinkedIn" | "Instagram" | "Facebook" | "X" | "YouTube";
   url: string;
 };
 
@@ -46,6 +46,8 @@ export const socialProfiles: readonly SocialProfile[] = [
   { label: "Facebook", url: "https://www.facebook.com/qamiraconsulting" },
   // "qamiraconsulting" was too long for an X handle (15-character limit).
   { label: "X", url: "https://x.com/QamiraConsult" },
+  // Channel-id URL, not an @handle, so it keeps resolving if the handle changes.
+  { label: "YouTube", url: "https://www.youtube.com/channel/UCJkqMxTA-R8GYNlIwRaEoTg" },
 ];
 
 /** The profiles that actually resolve. Everything renders from this. */

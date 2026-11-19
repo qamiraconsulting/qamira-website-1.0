@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Facebook, Instagram, Linkedin, Mail, X } from "lucide-react";
+import { Facebook, Instagram, Linkedin, Mail, X, Youtube } from "lucide-react";
 import clsx from "clsx";
 import { activeSocialProfiles, site, whatsappUrl, type SocialProfile } from "@/data/site";
 import { XGlyph } from "@/components/brand/XGlyph";
@@ -35,6 +35,7 @@ const socialIcons: Record<SocialProfile["label"], typeof Linkedin | typeof XGlyp
   Instagram: Instagram,
   Facebook: Facebook,
   X: XGlyph,
+  YouTube: Youtube,
 };
 
 /**
