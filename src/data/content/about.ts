@@ -37,7 +37,7 @@ export const pillarsDetail = [
 export const differentiators = [
   {
     title: "We refuse the request that starts with a tool.",
-    body: "“Build us a Power BI dashboard” isn't a brief we accept at face value. We insist on the request that starts with a business problem -- “why is margin eroding on our top account.” The dashboard, if one is even needed, is the last deliverable, not the first.",
+    body: "“Build us a dashboard” isn't a brief we accept at face value. We insist on the request that starts with a business problem -- “why is margin eroding on our top account.” The dashboard, if one is even needed, is the last deliverable, not the first.",
   },
   {
     title: "Boutique attention, enterprise-grade methodology.",

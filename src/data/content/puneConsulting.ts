@@ -57,7 +57,7 @@ export const puneConsultingPage: CityConsultingPage = {
     lede: "Most of the Pune SMEs we talk to aren't short of work. They're short of time, because the business still runs the way it did when it was half the size.",
     points: [
       "Every decision still goes through the owner, because nobody else has the full picture.",
-      "Orders, stock and follow-ups live across Tally, Excel and WhatsApp groups.",
+      "Orders, stock and follow-ups live across accounting software, spreadsheets and WhatsApp groups.",
       "Margins are slipping, and nobody can say exactly which jobs or customers are causing it.",
       "New hires take months to get productive because the way work gets done isn't written down.",
     ],

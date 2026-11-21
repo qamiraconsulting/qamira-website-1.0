@@ -20,7 +20,7 @@ type RegionCopy = {
   label: string; // breadcrumb suffix and eyebrow
   adjective: string; // "Australian", "UK"
   hours: string; // whose business hours calls run in
-  accounts: string; // the accounting tools a buyer here typically uses
+  accounts: string; // how the copy refers to the buyer's accounting system (no product names)
   reach: string; // where we work, for the "outside X" FAQ
 };
 
@@ -30,7 +30,7 @@ const regions: RegionCopy[] = [
     label: "Australia",
     adjective: "Australian",
     hours: "Australian business hours",
-    accounts: "Xero or MYOB",
+    accounts: "your accounting software",
     reach: "anywhere in Australia, from Melbourne and Sydney to Brisbane, Perth and regional towns",
   },
   {
@@ -38,7 +38,7 @@ const regions: RegionCopy[] = [
     label: "UK",
     adjective: "UK",
     hours: "UK business hours",
-    accounts: "Xero, Sage or QuickBooks",
+    accounts: "your accounting software",
     reach: "anywhere in the UK, from London and Manchester to Birmingham, Leeds and Glasgow",
   },
   {
@@ -46,7 +46,7 @@ const regions: RegionCopy[] = [
     label: "US",
     adjective: "US",
     hours: "US business hours, scheduled to suit your time zone",
-    accounts: "QuickBooks or Xero",
+    accounts: "your accounting software",
     reach: "anywhere in the US, from New York and Chicago to Texas, Florida and California",
   },
 ];
@@ -74,7 +74,7 @@ function pagesFor(r: RegionCopy): InServicePage[] {
       pain: {
         eyebrow: "Sound familiar?",
         heading: "When the business outgrows the tools it started with.",
-        lede: `Most growing firms run on ${r.accounts}, a few spreadsheets and one or two apps that were never meant to work together. It holds until it doesn't.`,
+        lede: `Most growing firms run on an accounting package, a few spreadsheets and one or two apps that were never meant to work together. It holds until it doesn't.`,
         points: [
           "The same job, invoice or customer gets typed into three different places.",
           "Only one or two people know how the master spreadsheet really works.",
@@ -115,7 +115,7 @@ function pagesFor(r: RegionCopy): InServicePage[] {
           answer: "It depends on scope, so we agree the timeline in the written scope before starting. You see working pieces every week or two and sign each milestone off.",
         },
         {
-          question: `Will it work with ${r.accounts} and the tools we already use?`,
+          question: `Will it work with our accounting software and the tools we already use?`,
           answer: "That's usually the point. We connect to the systems you keep, so data is entered once and flows to the others, rather than forcing a switch. We confirm each connection on the scoping call before quoting.",
         },
         teamFaq(r),
@@ -139,7 +139,7 @@ function pagesFor(r: RegionCopy): InServicePage[] {
       pain: {
         eyebrow: "Sound familiar?",
         heading: "Leads, jobs and invoices living in different places.",
-        lede: `Sales tracks leads in a spreadsheet, operations works from email, accounts lives in ${r.accounts}, and nobody has the full picture.`,
+        lede: `Sales tracks leads in a spreadsheet, operations works from email, accounts lives in the accounting software, and nobody has the full picture.`,
         points: [
           "Follow-ups slip because nobody can see which leads are waiting on a reply.",
           "The CRM you bought is half set up, and the team went back to spreadsheets.",
