@@ -76,7 +76,7 @@ worth fixing in the same pass.
 Each of these sits beside the hero copy on `/technology/<slug>`, same treatment as the Technology page hero above (literal, product-style, since these illustrate real software capability rather than an abstract concept). Filenames go in a subfolder to keep them grouped separately from the seven general site photos above.
 
 ### 8. Custom SaaS Applications & AI Chatbots
-**File:** `public/photos/technology/custom-saas-chatbots.jpg` -- **Aspect:** 4:3
+**File:** `public/photos/technology/ai-chatbots.jpg` -- **Aspect:** 4:3
 
 > A bright, professional product-style photograph of a laptop screen on a sunlit desk, displaying a generic customer-service chat interface with a friendly AI assistant conversation bubble -- abstract UI elements only, no legible text. Natural daylight, warm and energetic, light color palette with brass-gold accent highlights in the interface. Shallow depth of field. No visible face, no logos, no watermark.
 

@@ -29,6 +29,8 @@ import { openJobs } from "@/data/content/jobs";
 import { inServicePages } from "@/data/content/inServices";
 import { auServicePages, ukServicePages, usServicePages } from "@/data/content/intlServices";
 import { cityConsultingPages } from "@/data/content/cityConsulting";
+import { puneConsultingPage } from "@/data/content/puneConsulting";
+import { melbourneConsultingPage } from "@/data/content/melbourneConsulting";
 import { customerFacingAI, contentAndGrowthSystems, internalAutomation } from "@/data/content/technology";
 
 const staticRoutes = [
@@ -78,16 +80,62 @@ export const routes: string[] = [
 export const notFoundRoute = "/404";
 
 /**
- * Real last-modified dates, for the routes that genuinely have one.
- *
- * Only the articles carry a true publication date, so only they get a
- * <lastmod>. The hand-maintained sitemap this replaces stamped every URL
- * with the same 2026-07-30 and then drifted out of date as pages shipped
- * -- and a uniform or stale lastmod is discounted rather than trusted, so
- * omitting it is strictly better than inventing one.
+ * Last-modified dates for the articles, which carry a real publication
+ * date. Every other route gets its <lastmod> from git instead -- see
+ * routeSources below and scripts/prerender.mjs.
  */
 export const lastModified: Record<string, string> = Object.fromEntries(
   articles.map((a) => [`/insights/${a.slug}`, a.datePublished]),
+);
+
+const P = "src/pages/";
+const C = "src/data/content/";
+
+/**
+ * The source files that make up each route's content: its page component
+ * and the content module it renders. The prerender step asks git when any
+ * of them last changed and uses that as the route's <lastmod>, so the date
+ * moves only when the page's own content does, not on every deploy.
+ *
+ * Shared chrome (header, footer, Seo) is deliberately left out: a footer
+ * tweak is not a change to every page. Pages that share one content file
+ * (all the industry pages, say) share a date, which errs towards "changed"
+ * but is never invented.
+ */
+const staticRouteSources: Record<string, string[]> = {
+  "/": [`${P}Home.tsx`, "src/components/sections/home", `${C}home.ts`],
+  "/about": [`${P}About.tsx`, `${C}about.ts`],
+  "/services": [`${P}Services.tsx`, `${C}services.ts`, `${C}serviceCatalogue.ts`, "src/components/sections/ServiceNavigator.tsx"],
+  "/technology": [`${P}Technology.tsx`, `${C}technology.ts`],
+  "/industries": [`${P}Industries.tsx`, `${C}industries.ts`],
+  "/methodology": [`${P}Methodology.tsx`, `${C}methodology.ts`, `${C}process.ts`],
+  "/growth-os": [`${P}GrowthOS.tsx`, `${C}growthOS.ts`],
+  "/ai-solutions": [`${P}AISolutions.tsx`, `${C}aiSolutions.ts`],
+  "/assessment": [`${P}Assessment.tsx`],
+  "/case-studies": [`${P}CaseStudies.tsx`, `${C}caseStudies.ts`],
+  "/insights": [`${P}Insights.tsx`, `${C}insights.ts`],
+  "/careers": [`${P}Careers.tsx`, `${C}careers.ts`, `${C}jobs.ts`],
+  "/contact": [`${P}Contact.tsx`],
+  "/privacy": [`${P}Privacy.tsx`, `${C}privacy.ts`],
+  "/au/ai-receptionist": [`${P}AuAiReceptionist.tsx`, `${C}auReceptionist.ts`],
+  "/au/google-business-profile": [`${P}AuGoogleBusinessProfile.tsx`, `${C}auGoogleBusinessProfile.ts`],
+  [puneConsultingPage.path]: [`${P}CityConsultingPage.tsx`, `${C}puneConsulting.ts`],
+  [melbourneConsultingPage.path]: [`${P}CityConsultingPage.tsx`, `${C}melbourneConsulting.ts`],
+};
+
+/** Route -> source files, for every route without a date in lastModified. */
+export const routeSources: Record<string, string[]> = Object.fromEntries(
+  routes
+    .filter((route) => !(route in lastModified))
+    .map((route): [string, string[]] => {
+      if (staticRouteSources[route]) return [route, staticRouteSources[route]];
+      if (route.startsWith("/industries/")) return [route, [`${P}IndustryDetail.tsx`, `${C}industries.ts`]];
+      if (route.startsWith("/careers/")) return [route, [`${P}JobDetail.tsx`, `${C}jobs.ts`]];
+      if (route.startsWith("/technology/")) return [route, [`${P}TechnologyDetail.tsx`, `${C}technology.ts`]];
+      if (route.startsWith("/in/")) return [route, [`${P}InServicePage.tsx`, `${C}inServices.ts`]];
+      if (/^\/(au|uk|us)\//.test(route)) return [route, [`${P}InServicePage.tsx`, `${C}intlServices.ts`]];
+      return [route, []];
+    }),
 );
 
 export type RenderResult = {

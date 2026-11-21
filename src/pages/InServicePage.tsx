@@ -1,6 +1,7 @@
 import { Link, useParams } from "react-router-dom";
 import { Check } from "lucide-react";
 import { Seo } from "@/lib/Seo";
+import { hreflangFor } from "@/lib/hreflang";
 import { site, orgRef } from "@/data/site";
 import { Section } from "@/components/ui/Section";
 import { Container } from "@/components/ui/Container";
@@ -74,6 +75,7 @@ export function InServicePage({ region = "in" }: { region?: ServiceRegion }) {
         title={page.seoTitle}
         path={path}
         description={page.description}
+        alternates={hreflangFor(path)}
         jsonLd={[
           {
             "@context": "https://schema.org",

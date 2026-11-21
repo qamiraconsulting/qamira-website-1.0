@@ -44,8 +44,8 @@ export function Header() {
         {/* Shrinks once scrolled so the two-row desktop header stays compact. */}
         <Logo large={!scrolled} />
         <div className="flex items-center gap-3 sm:gap-5">
-          <Button to="/assessment" variant="ghost" arrow={false} className="hidden lg:inline-flex" title="Answer 8 quick questions, get an instant AI-generated report">
-            Free AI Assessment
+          <Button to="/assessment" arrow={false} className="hidden lg:inline-flex" title="Answer a few questions about your business and get a personalised report">
+            Free AI Business Assessment
           </Button>
           <Button to="/contact" variant="ghost" arrow={false} className="hidden sm:inline-flex" title="Talk directly with a consultant about your business">
             Start a conversation

@@ -66,7 +66,7 @@ export const melbourneConsultingPage: CityConsultingPage = {
       {
         title: "Website and WhatsApp chatbots",
         body: "Trained on your business to answer questions, capture enquiries and book appointments, with a hand-over to staff when it matters.",
-        to: "/technology/custom-saas-chatbots",
+        to: "/technology/ai-chatbots",
       },
       {
         title: "Workflow automation",

@@ -21,7 +21,7 @@ export const mainNav: NavEntry[] = [
       { label: "All services", path: "/services", description: "44 services, from free assessments to managed retainers" },
       { label: "GrowthOS™", path: "/growth-os", description: "Our AI-powered growth operating system" },
       { label: "AI Solutions", path: "/ai-solutions", description: "How we apply AI, with people in control" },
-      { label: "AI Business Assessment", path: "/assessment", description: "8 quick questions, an instant report" },
+      { label: "Free AI Business Assessment", path: "/assessment", description: "A few questions, a personalised report" },
     ],
   },
   { label: "Technology", path: "/technology" },
@@ -52,7 +52,7 @@ export const footerNav = {
     { label: "Industries", path: "/industries" },
     { label: "GrowthOS", path: "/growth-os" },
     { label: "AI Solutions", path: "/ai-solutions" },
-    { label: "AI Business Assessment", path: "/assessment" },
+    { label: "Free AI Business Assessment", path: "/assessment" },
     { label: "Insights", path: "/insights" },
   ],
 } satisfies Record<string, NavItem[]>;

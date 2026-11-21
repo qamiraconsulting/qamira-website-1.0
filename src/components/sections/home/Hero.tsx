@@ -18,10 +18,10 @@ export function Hero() {
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease }}
-          className="max-w-[38rem]"
+          className="max-w-[44rem]"
         >
           <Eyebrow className="mb-6">{hero.kicker}</Eyebrow>
-          <h1 className="max-w-[18ch] text-charcoal">{hero.heading}</h1>
+          <h1 className="max-w-[22ch] text-charcoal">{hero.heading}</h1>
           <p className="mt-6 max-w-[44ch] text-lg text-charcoal-dim">{hero.lede}</p>
           <div className="mt-10 flex flex-wrap gap-4">
             <Button to={hero.primaryCta.to}>{hero.primaryCta.label}</Button>

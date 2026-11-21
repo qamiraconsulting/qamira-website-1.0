@@ -20,6 +20,8 @@
 // is a real bug and is allowed to fail the build rather than skipping
 // silently and shipping an empty shell.
 
+import { execFileSync } from "node:child_process";
+import { existsSync, readFileSync } from "node:fs";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
@@ -82,6 +84,67 @@ function buildSitemap(routes, lastModified) {
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`;
 }
 
+/**
+ * Run git and return trimmed stdout, or null if git isn't available or
+ * the build isn't running inside a repository.
+ */
+function git(args) {
+  try {
+    return execFileSync("git", args, { encoding: "utf-8", stdio: ["ignore", "pipe", "ignore"] }).trim();
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Commits at the edge of a shallow clone. Vercel clones with limited
+ * history, and in a shallow clone the oldest commit looks as if it added
+ * every file -- so a date that resolves to one of these commits is not a
+ * real last-modified date and is dropped rather than published.
+ * (Setting VERCEL_DEEP_CLONE=true in the Vercel project gives full history.)
+ */
+function shallowBoundary() {
+  const file = git(["rev-parse", "--git-path", "shallow"]);
+  if (!file || !existsSync(file)) return new Set();
+  return new Set(readFileSync(file, "utf-8").split(/\s+/).filter(Boolean));
+}
+
+/**
+ * <lastmod> for every route: the article dates from entry-server, plus
+ * the date of the last commit that touched each other route's own source
+ * files. A route whose date can't be established honestly gets none.
+ */
+function resolveLastModified(lastModified, routeSources) {
+  const result = { ...lastModified };
+  if (git(["rev-parse", "--is-inside-work-tree"]) !== "true") {
+    console.warn("[prerender] not a git checkout: sitemap gets article dates only");
+    return result;
+  }
+  const boundary = shallowBoundary();
+  const cache = new Map();
+  let dated = 0;
+
+  for (const [route, files] of Object.entries(routeSources)) {
+    if (!files.length) {
+      console.warn(`[prerender] no source files mapped for ${route}: no <lastmod>`);
+      continue;
+    }
+    const key = files.join("|");
+    if (!cache.has(key)) {
+      const out = git(["log", "-1", "--format=%H %cI", "--", ...files]);
+      const [hash, date] = out ? out.split(" ") : [];
+      cache.set(key, hash && date && !boundary.has(hash) ? date.slice(0, 10) : null);
+    }
+    const date = cache.get(key);
+    if (date) {
+      result[route] = date;
+      dated += 1;
+    }
+  }
+  console.log(`[prerender] lastmod from git for ${dated} of ${Object.keys(routeSources).length} routes`);
+  return result;
+}
+
 async function main() {
   const template = await readFile(path.join(DIST, "index.html"), "utf-8");
 
@@ -89,7 +152,7 @@ async function main() {
     throw new Error('dist/index.html has no empty <div id="root"></div> to render into');
   }
 
-  const { render, routes, notFoundRoute, lastModified } = await import(pathToFileURL(SSR_ENTRY).href);
+  const { render, routes, notFoundRoute, lastModified, routeSources } = await import(pathToFileURL(SSR_ENTRY).href);
   console.log(`[prerender] ${routes.length} routes`);
 
   const write = async (route, outFile) => {
@@ -115,7 +178,7 @@ async function main() {
   // every typo and dead link).
   await write(notFoundRoute, path.join(DIST, "404.html"));
 
-  await writeFile(path.join(DIST, "sitemap.xml"), buildSitemap(routes, lastModified), "utf-8");
+  await writeFile(path.join(DIST, "sitemap.xml"), buildSitemap(routes, resolveLastModified(lastModified, routeSources)), "utf-8");
   console.log(`[prerender] sitemap.xml -> ${routes.length} urls`);
 
   console.log(`[prerender] done: ${routes.length} routes + 404.html`);

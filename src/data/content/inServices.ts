@@ -92,7 +92,7 @@ export const inServicePages: InServicePage[] = [
     eyebrow: "Custom software · India",
     title: "Software built around how your business actually runs.",
     lede: "Custom applications, ERP and client portals for growing Indian businesses that have outgrown Excel sheets, WhatsApp groups and a patchwork of tools. Built to fit your process, connected to what you already use.",
-    photo: { src: "/photos/technology/custom-saas-chatbots.jpg", label: "A laptop showing a custom business application." },
+    photo: { src: "/photos/technology/ai-chatbots.jpg", label: "A laptop showing a custom business application." },
     pain: {
       eyebrow: "Sound familiar?",
       heading: "When the business outgrows the tools it started with.",

@@ -11,17 +11,17 @@ export const servicesFaq = [
   {
     question: "How is this different from a typical automation agency?",
     answer:
-      "An automation agency starts from the tool. We start from a diagnosis -- an automation agency will happily build you a chatbot for a process that shouldn't exist in its current form. QBPES™ identifies the root cause first, so what eventually gets automated is the right fix, not just the first one someone pitched you.",
+      "An automation agency usually starts from the tool it sells. We start from the problem: where time or money is being lost, and why. Sometimes the answer is a new system, sometimes it is a change to how the work is done, and often it is both, designed together. Because we have an advisory practice as well as a technology practice, we don't need every answer to be something we build.",
   },
   {
     question: "What does an engagement actually cost?",
     answer:
-      "Pricing scales with client tier and engagement depth rather than a flat rate card -- a focused Operational Excellence engagement costs meaningfully less than a full Business Performance Transformation. A first conversation is a diagnostic, not a sales pitch, and includes a plain-language estimate before anything is scoped.",
+      "Every engagement is fixed price, agreed in writing before any work starts. The price depends on the scope, so we quote after a first conversation rather than publish a rate card. That first conversation is free.",
   },
   {
-    question: "Do I need the full diagnostic before Technology gets built?",
+    question: "Do I need advisory work before you build anything?",
     answer:
-      "Not strictly, but it's the default path: most clients start with a Services diagnosis so any build on the Technology page is scoped against a confirmed bottleneck instead of a guess. If you already know exactly what you need built, that's a reasonable place to start a conversation too.",
+      "No. Clients use one practice, the other, or both. If you already know what you need built, we can scope it straight away. If you're not sure what's wrong, the advisory work is the better place to start.",
   },
   {
     question: "How long does a typical engagement take?",

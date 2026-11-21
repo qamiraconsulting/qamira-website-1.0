@@ -17,7 +17,7 @@ const allOfferings = [...customerFacingAI, ...contentAndGrowthSystems, ...intern
 // /photos/technology/<slug>.jpg -- see docs/photography-brief.md for the
 // prompts these correspond to.
 const photoDescriptions: Record<string, string> = {
-  "custom-saas-chatbots": "Laptop screen showing a generic AI customer-service chat interface, bright and sunlit.",
+  "ai-chatbots": "Laptop screen showing a generic AI customer-service chat interface, bright and sunlit.",
   "crm-build-configuration": "Laptop screen showing a generic CRM pipeline view, bright and sunlit.",
   "ai-voice-call-automation": "A headset beside a laptop showing a generic call-log interface, bright and sunlit.",
   "ai-video-creation": "Laptop screen showing a generic video-editing timeline, bright and sunlit.",

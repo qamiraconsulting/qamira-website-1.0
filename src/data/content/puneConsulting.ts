@@ -193,5 +193,5 @@ export const puneConsultingPage: CityConsultingPage = {
     heading: "Tell us what's slowing the business down.",
     body: "Book a free 20-minute call, or take the free AI Business Assessment first. We'll tell you honestly where the biggest gains are, and whether we're the right people to help.",
   },
-  secondaryCta: { label: "Take the free assessment", to: "/assessment" },
+  secondaryCta: { label: "Free AI Business Assessment", to: "/assessment" },
 };

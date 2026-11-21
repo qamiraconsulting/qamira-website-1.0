@@ -17,8 +17,8 @@ export function TechnologyPreview() {
       <Container>
         <Reveal className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-[42rem]">
-            <Eyebrow>The AI Accelerant layer, built</Eyebrow>
-            <h2 className="mt-4 text-charcoal">We don't just tell you what to fix. We can build it.</h2>
+            <Eyebrow>Technology practice</Eyebrow>
+            <h2 className="mt-4 text-charcoal">What our technology practice builds.</h2>
           </div>
           <Button to="/technology" variant="ghost">
             See all technology solutions

@@ -1,8 +1,16 @@
 import { Helmet } from "react-helmet-async";
-import { site } from "@/data/site";
+import { site, organizationSchema } from "@/data/site";
+
+/** One <link rel="alternate" hreflang> entry. `href` is a full URL. */
+export type HreflangLink = { hreflang: string; href: string };
 
 type SeoProps = {
   title: string;
+  /**
+   * The whole <title>, used as-is instead of "{title} | Qamira Consulting".
+   * For the homepage, whose title leads with what the firm does.
+   */
+  fullTitle?: string;
   description?: string;
   path?: string;
   /** One schema.org object, or several (rendered as separate <script> blocks). */
@@ -21,10 +29,13 @@ type SeoProps = {
   publishedTime?: string;
   /** Article category, only used when ogType is "article". */
   section?: string;
+  /** Equivalent pages for other countries, from hreflangFor(). Includes this page. */
+  alternates?: HreflangLink[];
 };
 
 export function Seo({
   title,
+  fullTitle: fullTitleOverride,
   description = site.description,
   path = "/",
   jsonLd,
@@ -33,23 +44,32 @@ export function Seo({
   ogType = "website",
   publishedTime,
   section,
+  alternates = [],
 }: SeoProps) {
-  const fullTitle = title === "Home" ? site.name : `${title} | ${site.name}`;
+  const fullTitle = fullTitleOverride ?? (title === "Home" ? site.name : `${title} | ${site.name}`);
   const socialTitle = ogTitle ? `${ogTitle} | ${site.name}` : fullTitle;
   const url = `${site.url}${path === "/" ? "" : path}`;
-  const jsonLdBlocks = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
+  // The organization node goes on every page, first, so the provider and
+  // publisher references (orgRef) on any page resolve without a crawler
+  // having to visit the homepage too.
+  const jsonLdBlocks = [organizationSchema, ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [])];
   // A real 1200x630 card. This previously pointed at the 180x180
   // apple-touch-icon while still declaring summary_large_image, so every
   // share on LinkedIn and WhatsApp rendered as a tiny icon or no image at
   // all -- on the two channels most Qamira links actually travel through.
   const image = `${site.url}${ogImage ?? site.ogImage}`;
-  const imageAlt = ogImage ? (ogTitle ?? title) : `${site.name} -- ${site.tagline}`;
+  const imageAlt = ogImage ? (ogTitle ?? title) : `${site.name}: ${site.tagline}`;
 
   return (
     <Helmet>
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
       <link rel="canonical" href={url} />
+      {alternates.map((alt) => (
+        // Spread, not hrefLang=: Helmet writes attribute names as given, and
+        // some SEO crawlers only match the lowercase "hreflang".
+        <link key={alt.hreflang} rel="alternate" {...{ hreflang: alt.hreflang }} href={alt.href} />
+      ))}
       <meta property="og:type" content={ogType} />
       <meta property="og:title" content={socialTitle} />
       <meta property="og:description" content={description} />

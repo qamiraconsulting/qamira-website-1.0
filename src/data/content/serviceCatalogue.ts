@@ -98,13 +98,12 @@ export const catalogue: CatalogueService[] = [
 // Services that already have their own page on the site.
 export const detailPaths: Record<string, string> = {
   "QC-104": "/growth-os",
-  "QC-302": "/technology/custom-saas-chatbots",
+  "QC-302": "/technology/ai-chatbots",
   "QC-303": "/technology/ai-voice-call-automation",
   "QC-304": "/technology/document-data-extraction",
   "QC-305": "/technology/internal-knowledge-agents",
   "QC-306": "/technology/workflow-systems-integration",
   "QC-307": "/technology/crm-build-configuration",
-  "QC-309": "/technology/custom-saas-chatbots",
   "QC-405": "/technology/content-scheduling-automation",
   "QC-406": "/technology/marketing-automation-lead-scoring",
   "QC-407": "/technology/ai-video-creation",
