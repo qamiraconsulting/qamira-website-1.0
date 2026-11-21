@@ -5,6 +5,7 @@ import { ArrowRight, ChevronUp, Mail, Phone, Sparkles, X } from "lucide-react";
 import clsx from "clsx";
 import { site, whatsappUrl } from "@/data/site";
 import { QamiChat, QAMI_AVATAR } from "@/components/chat/QamiChat";
+import { QamiBeacon } from "@/components/chat/QamiBeacon";
 import { trackQami } from "@/lib/googleTag";
 
 /**
@@ -284,6 +285,21 @@ export function ConnectDock() {
               </>
             )}
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Qami floats above the chip while the card is closed: the 24/7 way in. */}
+      <AnimatePresence>
+        {!open && (
+          <QamiBeacon
+            key="qami-beacon"
+            teamOnline={online}
+            reducedMotion={prefersReducedMotion}
+            onOpen={() => {
+              setOpen(true);
+              openChat();
+            }}
+          />
         )}
       </AnimatePresence>
 
