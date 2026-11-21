@@ -28,7 +28,7 @@ export function ShortlistBar() {
             animate={{ opacity: 1, y: 0 }}
             exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 24 }}
             transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed bottom-6 left-4 right-20 z-[75] sm:left-6 sm:right-auto sm:w-[min(36rem,calc(100vw-9rem))] print:hidden"
+            className="fixed bottom-20 left-4 right-20 z-[75] sm:bottom-6 sm:left-6 sm:right-auto sm:w-[min(36rem,calc(100vw-22rem))] print:hidden"
           >
             <div className="overflow-hidden rounded-md bg-navy text-cream shadow-[0_20px_55px_-15px_rgba(20,24,42,0.45)]">
               {open && (
