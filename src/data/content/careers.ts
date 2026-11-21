@@ -31,7 +31,7 @@ export const howYouGrow = [
   },
   {
     title: "From doing the analysis to directing it",
-    body: "As our AI agent library matures, training shifts from how to do the analysis toward how to direct, validate, and override agent output -- reviewing AI-generated findings critically rather than blindly trusting or redundantly redoing the work. That's the skill that keeps a consultant valuable as delivery gets more AI-native, not redundant to it.",
+    body: "As our AI agent library matures, training shifts from how to do the analysis toward how to direct, validate, and override agent output -- reviewing AI-generated findings critically rather than blindly trusting or redundantly redoing the work. That's the skill that keeps a consultant valuable as more of the delivery runs on AI.",
   },
   {
     title: "We practice what we sell",

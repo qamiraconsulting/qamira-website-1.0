@@ -388,7 +388,7 @@ export function ServiceNavigator() {
                 <div className="max-w-[36rem]">
                   <p className="font-display text-xl font-medium text-charcoal">None of these sound quite right?</p>
                   <p className="mt-1.5 text-charcoal-dim">
-                    Take the free AI Business Assessment. It takes about 15 minutes and returns an opportunity report
+                    Take the free AI Business Assessment. It takes a few minutes and returns an opportunity report
                     that points to the services worth looking at.
                   </p>
                 </div>

@@ -1,5 +1,6 @@
 import { Helmet } from "react-helmet-async";
 import { site, organizationSchema } from "@/data/site";
+import { seoOverrides } from "@/data/seoOverrides";
 
 /** One <link rel="alternate" hreflang> entry. `href` is a full URL. */
 export type HreflangLink = { hreflang: string; href: string };
@@ -36,7 +37,7 @@ type SeoProps = {
 export function Seo({
   title,
   fullTitle: fullTitleOverride,
-  description = site.description,
+  description: pageDescription = site.description,
   path = "/",
   jsonLd,
   ogTitle,
@@ -46,7 +47,12 @@ export function Seo({
   section,
   alternates = [],
 }: SeoProps) {
-  const fullTitle = fullTitleOverride ?? (title === "Home" ? site.name : `${title} | ${site.name}`);
+  // A search title or description set in data/seoOverrides.ts wins over
+  // the one the page passes in.
+  const override = seoOverrides[path];
+  const description = override?.description ?? pageDescription;
+  const fullTitle =
+    override?.title ?? fullTitleOverride ?? (title === "Home" ? site.name : `${title} | ${site.name}`);
   const socialTitle = ogTitle ? `${ogTitle} | ${site.name}` : fullTitle;
   const url = `${site.url}${path === "/" ? "" : path}`;
   // The organization node goes on every page, first, so the provider and

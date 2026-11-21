@@ -17,7 +17,7 @@ export function Careers() {
       <Seo
         title="Careers"
         path="/careers"
-        description="We hire for diagnostic judgment first, technical skill second -- careers at a boutique consultancy built for the AI era."
+        description="Join a remote consulting and technology team based in India, working with businesses in India, Australia, the UK and Europe. See our open roles."
       />
       <PageHero
         eyebrow={careersHero.eyebrow}

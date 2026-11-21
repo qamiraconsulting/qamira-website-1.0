@@ -14,7 +14,7 @@ export function Insights() {
       <Seo
         title="Insights"
         path="/insights"
-        description="Qamira's perspective on performance, process, and AI-native execution -- why most transformation programs fail before the technology is even chosen."
+        description="Short articles from our team on running and growing a business: performance, processes, data and reporting, and where AI genuinely helps."
       />
       <PageHero
         eyebrow={insightsHero.eyebrow}

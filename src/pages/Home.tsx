@@ -14,7 +14,7 @@ import { CTABand } from "@/components/sections/home/CTABand";
 export function Home() {
   return (
     <>
-      {/* The organization schema is added by Seo on every page. */}
+      {/* The organisation schema is added by Seo on every page. */}
       <Seo title="Home" fullTitle="Business Advisory & Technology Services | Qamira Consulting" path="/" />
       <Hero />
       <Practices />

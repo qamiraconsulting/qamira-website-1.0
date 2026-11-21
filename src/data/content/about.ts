@@ -20,12 +20,12 @@ export const pillarsDetail = [
   {
     index: "01",
     title: "Architecture",
-    body: "Defining the structural end-state of a business using the QBPES™ framework -- what the organization should look like once performance is fixed, not just what's broken today.",
+    body: "Defining the structural end-state of a business using the QBPES™ framework -- what the organisation should look like once performance is fixed, not just what's broken today.",
   },
   {
     index: "02",
     title: "Process",
-    body: "Standardizing and optimizing workflows through disciplined process mapping and waste elimination, so a redesign removes friction instead of automating it.",
+    body: "Standardizing and optimising workflows through disciplined process mapping and waste elimination, so a redesign removes friction instead of automating it.",
   },
   {
     index: "03",
@@ -41,7 +41,7 @@ export const differentiators = [
   },
   {
     title: "Boutique attention, enterprise-grade methodology.",
-    body: "We compete against low-cost BI freelancers on one side and slow-moving Big Four SI firms on the other. Qamira sits between them deliberately: senior-partner attention on every engagement, sized for mid-market clients the big firms won't prioritize, structured with methodology those clients otherwise can't access.",
+    body: "We compete against low-cost BI freelancers on one side and slow-moving Big Four SI firms on the other. Qamira sits between them deliberately: senior-partner attention on every engagement, sized for mid-market clients the big firms won't prioritise, structured with methodology those clients otherwise can't access.",
   },
   {
     title: "An executive voice, not a jargon generator.",
@@ -52,11 +52,11 @@ export const differentiators = [
 export const idealClientSignals = [
   "Leadership can feel that performance is off, but can't yet point to the root cause.",
   "Decisions rely on gut feel, spreadsheets, or conflicting reports instead of a single source of truth.",
-  "The organization has already tried a technology fix that didn't move the underlying number.",
+  "The organisation has already tried a technology fix that didn't move the underlying number.",
 ];
 
 export const brandPromise = {
   eyebrow: "Our promise",
-  heading: "We solve the business problem. Technology is never the recommendation until the problem is understood.",
-  body: "That promise gets more durable with every engagement, not less. QBPES™ is a named, structured, repeatable methodology -- not ad hoc BI or generic “AI consulting.” Every engagement deepens our playbooks and our AI agent library, so delivery gets faster and sharper with each client. And because AI-native execution absorbs the repetitive layers of an engagement, we can offer enterprise-caliber structure at boutique speed -- a combination that's hard to find on either side of this market.",
+  heading: "We fix the business problem, whether that takes advice, a new system or both.",
+  body: "QBPES™ is a named, repeatable method, not ad hoc reporting or generic AI consulting. Every engagement adds to our playbooks and to the AI tools our team works with, so delivery gets faster with each client. That is how we can offer structured, senior-level work at a fixed price, delivered in weeks.",
 };

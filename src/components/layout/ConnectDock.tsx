@@ -1,27 +1,22 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { useLocation } from "react-router-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Facebook, Instagram, Linkedin, Mail, X, Youtube } from "lucide-react";
+import { Mail, Phone, X } from "lucide-react";
 import clsx from "clsx";
-import { activeSocialProfiles, site, whatsappUrl, type SocialProfile } from "@/data/site";
-import { XGlyph } from "@/components/brand/XGlyph";
-import { track } from "@/lib/metaPixel";
-import { trackGoogleContactChannel } from "@/lib/googleTag";
+import { site, whatsappUrl } from "@/data/site";
 
 /**
- * The floating "talk to us" dock, mounted once in Layout so it is present
- * on every route.
+ * The side contact widget, mounted once in Layout so it is on every route:
+ * three tabs fixed to the right edge for WhatsApp, a phone call and email.
+ * Hovering or focusing a tab slides out a label with the number or address;
+ * on touch screens a tap goes straight to the app.
  *
- * Three things live here rather than in three separate widgets, because
- * for the visitor they are one decision -- "how do I reach these people":
- *   1. a WhatsApp deep link to the firm's line, pre-filled with the page
- *      the visitor was reading;
- *   2. the enquiries mailbox, for anyone who would rather write;
- *   3. the public social profiles.
+ * Clicks are reported by ContactLinkTracking, which watches every wa.me,
+ * tel: and mailto: link on the site, so nothing is tracked here directly.
+ * data-contact-location="Dock" keeps these clicks separable in GA4 and Meta.
  *
- * No third-party chat script is loaded. wa.me is a plain link, so this
- * adds no network requests, nothing that can watch the visitor, and
- * nothing that can slow the page down.
+ * No third-party chat script is loaded: all three are plain links, so the
+ * widget adds no network requests and nothing that can slow the page down.
  */
 
 /** Marks the teaser bubble as already seen, so it shows at most once. */
@@ -30,19 +25,13 @@ const TEASER_SEEN_KEY = "qamira:connect-teaser-seen";
 /** Long enough that the bubble reads as an offer of help, not an interruption. */
 const TEASER_DELAY_MS = 14000;
 
-const socialIcons: Record<SocialProfile["label"], typeof Linkedin | typeof XGlyph> = {
-  LinkedIn: Linkedin,
-  Instagram: Instagram,
-  Facebook: Facebook,
-  X: XGlyph,
-  YouTube: Youtube,
-};
+/** WhatsApp's own brand green, used for its tab only. */
+const WHATSAPP_GREEN = "#25D366";
 
-/**
- * The WhatsApp glyph. Not in lucide -- it dropped brand marks -- so the
- * official single-path logo is inlined rather than adding an icon package
- * for one shape.
- */
+/** "+91 9096236852" -> "+91 90962 36852", easier to read and to dial. */
+const displayPhone = site.phone.replace(/^(\+\d{2})\s?(\d{5})(\d{5})$/, "$1 $2 $3");
+
+/** The official single-path WhatsApp mark (lucide dropped brand icons). */
 function WhatsAppGlyph({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" className={className}>
@@ -51,15 +40,55 @@ function WhatsAppGlyph({ className }: { className?: string }) {
   );
 }
 
+type TabProps = {
+  href: string;
+  label: string;
+  detail: string;
+  external?: boolean;
+  className: string;
+  style?: CSSProperties;
+  children: ReactNode;
+};
+
+/** One tab: a square handle on the edge, with a label that slides out to its left. */
+function Tab({ href, label, detail, external, className, style, children }: TabProps) {
+  return (
+    <a
+      href={href}
+      target={external ? "_blank" : undefined}
+      rel={external ? "noreferrer" : undefined}
+      data-contact-location="Dock"
+      aria-label={`${label}: ${detail}`}
+      className="group relative flex"
+    >
+      <span
+        aria-hidden="true"
+        className={clsx(
+          "pointer-events-none absolute right-full top-1/2 mr-2 hidden -translate-y-1/2 translate-x-2 whitespace-nowrap rounded-md bg-navy px-3 py-2 text-left opacity-0 shadow-lg sm:block",
+          "transition-all duration-200 ease-signature group-hover:translate-x-0 group-hover:opacity-100 group-focus-visible:translate-x-0 group-focus-visible:opacity-100",
+          "motion-reduce:transition-none",
+        )}
+      >
+        <span className="block text-xs font-medium text-white">{label}</span>
+        <span className="block font-mono text-[11px] text-white/75">{detail}</span>
+      </span>
+      <span
+        className={clsx(
+          "flex h-11 w-11 items-center justify-center rounded-l-md shadow-[0_8px_22px_-10px_rgba(20,24,42,0.55)] transition-[width] duration-200 ease-signature sm:h-12 sm:w-12 sm:group-hover:w-14 motion-reduce:transition-none",
+          className,
+        )}
+        style={style}
+      >
+        {children}
+      </span>
+    </a>
+  );
+}
+
 export function ConnectDock() {
-  const [open, setOpen] = useState(false);
   const [teaserVisible, setTeaserVisible] = useState(false);
   const prefersReducedMotion = useReducedMotion();
   const { pathname } = useLocation();
-
-  const rootRef = useRef<HTMLDivElement>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const firstLinkRef = useRef<HTMLAnchorElement>(null);
 
   /** Never offer the bubble again, on this browser, once it has had its turn. */
   const retireTeaser = useCallback(() => {
@@ -67,8 +96,8 @@ export function ConnectDock() {
     try {
       window.localStorage.setItem(TEASER_SEEN_KEY, "1");
     } catch {
-      // Private mode or blocked storage. The bubble simply reappears on a
-      // later visit, which is a far smaller problem than throwing.
+      // Private mode or blocked storage: the bubble may reappear on a later
+      // visit, which is a far smaller problem than throwing.
     }
   }, []);
 
@@ -88,170 +117,41 @@ export function ConnectDock() {
     return () => window.clearTimeout(timer);
   }, []);
 
-  // A panel left hanging open across a route change looks like a bug.
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
-
-  // Escape and outside-click both dismiss. Bound only while open, so the
-  // closed dock costs nothing.
-  useEffect(() => {
-    if (!open) return;
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== "Escape") return;
-      setOpen(false);
-      triggerRef.current?.focus();
-    };
-    const onPointerDown = (event: PointerEvent) => {
-      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
-    };
-
-    document.addEventListener("keydown", onKeyDown);
-    document.addEventListener("pointerdown", onPointerDown);
-    return () => {
-      document.removeEventListener("keydown", onKeyDown);
-      document.removeEventListener("pointerdown", onPointerDown);
-    };
-  }, [open]);
-
-  // Move focus into the panel so a keyboard visitor lands on the action
-  // they opened it for.
-  useEffect(() => {
-    if (open) firstLinkRef.current?.focus();
-  }, [open]);
-
-  const toggle = () => {
-    retireTeaser();
-    setOpen((value) => !value);
-  };
-
-  /**
-   * Report a social-profile click to both ad platforms. WhatsApp and email
-   * clicks are reported by ContactLinkTracking, which covers those links
-   * everywhere on the site, so they are not reported here as well.
-   *
-   * Meta's `Contact` is the standard event for contact between a customer
-   * and the business; `content_name` keeps it separable from the contact
-   * form in Events Manager. No `eventId` is passed because nothing
-   * matching is sent server-side, so there is nothing to deduplicate
-   * against.
-   */
-  const report = (channel: string) => {
-    track("Contact", { content_name: channel });
-    trackGoogleContactChannel(channel, "Dock");
-  };
-
   // The line is an Indian number. On the AU, UK and US pages, say so
   // before someone taps it expecting a local call.
   const overseas = /^\/(au|uk|us)(\/|$)/.test(pathname);
+  const india = overseas ? " · team in India" : "";
 
   // Naming the page gives the reply somewhere to start, and tells us which
   // pages actually earn conversations.
-  const message = `Hi Qamira, I was reading ${site.url}${pathname} and would like to talk.`;
+  const whatsappHref = whatsappUrl(`Hi Qamira, I was reading ${site.url}${pathname} and would like to talk.`);
 
   return (
-    <div ref={rootRef} className="fixed bottom-6 right-6 z-[80] flex flex-col items-end gap-3 print:hidden">
+    <aside
+      aria-label="Contact Qamira Consulting"
+      className="fixed right-0 top-1/2 z-[80] flex -translate-y-1/2 items-center print:hidden"
+    >
       <AnimatePresence>
-        {open && (
+        {teaserVisible && (
           <motion.div
-            id="connect-dock-panel"
-            role="dialog"
-            aria-label="Ways to reach Qamira Consulting"
-            initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 12, scale: 0.96 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 12, scale: 0.96 }}
-            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-            style={{ transformOrigin: "bottom right" }}
-            className="w-[min(21rem,calc(100vw-3rem))] overflow-hidden rounded-lg border border-charcoal/10 bg-white shadow-[0_20px_55px_-15px_rgba(20,24,42,0.32)]"
-          >
-            <div className="border-b border-charcoal/10 bg-gradient-to-br from-parchment-2 to-parchment px-5 py-4">
-              <p className="font-mono text-[0.65rem] uppercase tracking-[0.12em] text-brass">Talk to us</p>
-              <h2 className="mt-1 font-display text-lg text-charcoal">Start a conversation</h2>
-              <p className="mt-1 text-xs leading-relaxed text-charcoal-dim">
-                Ask a question, or tell us what is not working. No form, no gate.
-              </p>
-            </div>
-
-            <div className="flex flex-col gap-1 p-2">
-              <a
-                ref={firstLinkRef}
-                href={whatsappUrl(message)}
-                target="_blank"
-                rel="noreferrer"
-                data-contact-location="Dock"
-                className="group flex items-center gap-3 rounded-md px-3 py-3 transition-colors hover:bg-parchment focus-visible:bg-parchment"
-              >
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#25d366]/10 text-[#128c47] transition-colors group-hover:bg-[#25d366] group-hover:text-white">
-                  <WhatsAppGlyph className="h-[1.1rem] w-[1.1rem]" />
-                </span>
-                <span className="min-w-0">
-                  <span className="block text-sm font-medium text-charcoal">
-                    WhatsApp{overseas && <span className="font-normal text-charcoal-dim"> · team in India</span>}
-                  </span>
-                  <span className="block font-mono text-xs text-charcoal-dim">{site.phone}</span>
-                </span>
-              </a>
-
-              <a
-                href={`mailto:${site.email}`}
-                data-contact-location="Dock"
-                className="group flex items-center gap-3 rounded-md px-3 py-3 transition-colors hover:bg-parchment focus-visible:bg-parchment"
-              >
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-brass/10 text-brass transition-colors group-hover:bg-brass group-hover:text-white">
-                  <Mail className="h-[1.1rem] w-[1.1rem]" aria-hidden="true" />
-                </span>
-                <span className="min-w-0">
-                  <span className="block text-sm font-medium text-charcoal">Email</span>
-                  <span className="block truncate font-mono text-xs text-charcoal-dim">{site.email}</span>
-                </span>
-              </a>
-            </div>
-
-            {activeSocialProfiles.length > 0 && (
-              <div className="flex items-center justify-between gap-3 border-t border-charcoal/10 bg-parchment/60 px-5 py-3">
-                <span className="font-mono text-[0.65rem] uppercase tracking-[0.12em] text-charcoal-dim">Follow</span>
-                <div className="flex items-center gap-1.5">
-                  {activeSocialProfiles.map((profile) => {
-                    const Icon = socialIcons[profile.label];
-                    return (
-                      <a
-                        key={profile.label}
-                        href={profile.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        aria-label={`Qamira Consulting on ${profile.label}`}
-                        onClick={() => report(profile.label)}
-                        className="flex h-8 w-8 items-center justify-center rounded-full border border-charcoal/10 bg-white text-charcoal-dim transition-colors hover:border-brass hover:text-brass"
-                      >
-                        <Icon className="h-3.5 w-3.5" aria-hidden="true" />
-                      </a>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {teaserVisible && !open && (
-          <motion.div
-            initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, x: 12, scale: 0.96 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.96 }}
+            initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0 }}
             transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            style={{ transformOrigin: "bottom right" }}
-            className="flex max-w-[min(17rem,calc(100vw-3rem))] items-start gap-2 rounded-lg border border-charcoal/10 bg-white py-2.5 pl-4 pr-2 shadow-[0_14px_38px_-14px_rgba(20,24,42,0.3)]"
+            // Above the tabs, not beside them, so it never covers the
+            // labels that slide out to the left on hover.
+            className="absolute bottom-full right-2 mb-3 flex w-[min(15rem,calc(100vw-2rem))] items-start gap-1 rounded-lg border border-charcoal/10 bg-white py-2.5 pl-3.5 pr-1.5 shadow-[0_14px_38px_-14px_rgba(20,24,42,0.3)]"
           >
-            <button
-              type="button"
-              onClick={toggle}
-              className="text-left text-xs leading-relaxed text-charcoal transition-colors hover:text-brass"
+            <a
+              href={whatsappHref}
+              target="_blank"
+              rel="noreferrer"
+              data-contact-location="Teaser"
+              onClick={retireTeaser}
+              className="text-xs leading-relaxed text-charcoal transition-colors hover:text-[#128c47]"
             >
-              Got a question? Message us on WhatsApp — you will reach a person, not a bot.
-            </button>
+              Got a question? Message us on WhatsApp. You'll reach a person, not a bot.
+            </a>
             <button
               type="button"
               onClick={retireTeaser}
@@ -264,56 +164,29 @@ export function ConnectDock() {
         )}
       </AnimatePresence>
 
-      <button
-        ref={triggerRef}
-        type="button"
-        onClick={toggle}
-        aria-expanded={open}
-        aria-controls="connect-dock-panel"
-        aria-label={open ? "Close contact options" : "Open contact options"}
-        className={clsx(
-          "relative flex h-14 w-14 items-center justify-center rounded-full text-white",
-          "bg-gradient-to-br from-brass-bright to-brass-dim shadow-[0_10px_28px_-8px_rgba(184,134,58,0.75)]",
-          "transition-all duration-300 ease-signature hover:-translate-y-0.5",
-          "hover:shadow-[0_16px_34px_-8px_rgba(184,134,58,0.85)]",
-        )}
-      >
-        {/* One slow halo rather than a strobe: enough to catch the eye on a
-            long page without competing with the content. */}
-        {!open && !prefersReducedMotion && (
-          <span
-            aria-hidden="true"
-            className="absolute inset-0 animate-ping rounded-full bg-brass/30 [animation-duration:2.8s]"
-          />
-        )}
-        <span className="relative">
-          <AnimatePresence mode="wait" initial={false}>
-            {open ? (
-              <motion.span
-                key="close"
-                initial={{ opacity: 0, rotate: -90 }}
-                animate={{ opacity: 1, rotate: 0 }}
-                exit={{ opacity: 0, rotate: 90 }}
-                transition={{ duration: 0.18 }}
-                className="block"
-              >
-                <X className="h-5 w-5" aria-hidden="true" />
-              </motion.span>
-            ) : (
-              <motion.span
-                key="open"
-                initial={{ opacity: 0, rotate: 90 }}
-                animate={{ opacity: 1, rotate: 0 }}
-                exit={{ opacity: 0, rotate: -90 }}
-                transition={{ duration: 0.18 }}
-                className="block"
-              >
-                <WhatsAppGlyph className="h-6 w-6" />
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </span>
-      </button>
-    </div>
+      <div className="flex flex-col items-end gap-1.5">
+        <Tab
+          href={whatsappHref}
+          external
+          label={`WhatsApp us${india}`}
+          detail={displayPhone}
+          className="text-white"
+          style={{ backgroundColor: WHATSAPP_GREEN }}
+        >
+          <WhatsAppGlyph className="h-6 w-6" />
+        </Tab>
+        <Tab
+          href={`tel:${site.phone.replace(/\s/g, "")}`}
+          label={`Call us${india}`}
+          detail={displayPhone}
+          className="bg-navy text-white"
+        >
+          <Phone className="h-5 w-5" aria-hidden="true" />
+        </Tab>
+        <Tab href={`mailto:${site.email}`} label="Email us" detail={site.email} className="bg-brass-logo text-navy">
+          <Mail className="h-5 w-5" aria-hidden="true" />
+        </Tab>
+      </div>
+    </aside>
   );
 }

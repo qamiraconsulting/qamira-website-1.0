@@ -45,7 +45,7 @@ export function Footer() {
               </li>
               <li>
                 <Link to="/contact" className="text-sm transition-colors hover:text-brass">
-                  Our offices
+                  Book a free call
                 </Link>
               </li>
               <li>

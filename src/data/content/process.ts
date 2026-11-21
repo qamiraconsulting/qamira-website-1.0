@@ -26,9 +26,9 @@ export const processSteps = [
   },
   {
     step: "03",
-    title: "Optimize the Processes",
+    title: "Optimise the Processes",
     icon: "SlidersHorizontal",
-    body: "Root cause analysis separates symptoms from causes, and workflows are redesigned to remove waste and friction -- before any technology is applied.",
+    body: "Root cause analysis separates symptoms from causes, and workflows are redesigned to remove waste and friction.",
   },
   {
     step: "04",
@@ -40,7 +40,7 @@ export const processSteps = [
     step: "05",
     title: "Integrate with AI",
     icon: "Cpu",
-    body: "Agentic AI and intelligent automation execute the optimized, people-ready process at a speed and scale no team can match manually -- always governed, always checked by a human.",
+    body: "Agentic AI and intelligent automation execute the optimised, people-ready process at a speed and scale no team can match manually -- always governed, always checked by a human.",
   },
   {
     step: "06",

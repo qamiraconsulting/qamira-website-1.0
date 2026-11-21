@@ -47,7 +47,7 @@ const DOMAIN_DETAILS: Record<(typeof PERFORMANCE_DOMAINS)[number], { question: s
     example: "e.g. two staff handling the same type of order follow the same steps, in the same order, every time.",
   },
   People: {
-    question: "Does the organization have the skills, culture, and capacity the strategy requires?",
+    question: "Does the organisation have the skills, culture, and capacity the strategy requires?",
     explanation: "Whether the team has the right skills, workload, and clarity of ownership to actually execute on the plan.",
     example: "e.g. everyone knows who owns a decision, and nobody is the single point of failure for a critical task.",
   },
@@ -79,12 +79,12 @@ const DOMAIN_DETAILS: Record<(typeof PERFORMANCE_DOMAINS)[number], { question: s
 const MATURITY_LEVELS: { level: 1 | 2 | 3 | 4 | 5; title: string; body: string }[] = [
   { level: 1, title: "Ad Hoc", body: "Undocumented, dependent on individuals." },
   { level: 2, title: "Emerging", body: "Some structure exists but is inconsistently applied." },
-  { level: 3, title: "Defined", body: "Documented and standardized, not yet measured." },
+  { level: 3, title: "Defined", body: "Documented and standardised, not yet measured." },
   { level: 4, title: "Managed", body: "Measured against KPIs with regular review." },
-  { level: 5, title: "Optimized", body: "Actively improved using data and, increasingly, AI." },
+  { level: 5, title: "Optimised", body: "Actively improved using data and, increasingly, AI." },
 ];
 
-const MATURITY_TITLES: Record<number, string> = { 1: "Ad Hoc", 2: "Emerging", 3: "Defined", 4: "Managed", 5: "Optimized" };
+const MATURITY_TITLES: Record<number, string> = { 1: "Ad Hoc", 2: "Emerging", 3: "Defined", 4: "Managed", 5: "Optimised" };
 
 const TRUST_STEPS = [
   {
@@ -101,7 +101,7 @@ const TRUST_STEPS = [
   },
   {
     step: "03",
-    title: "Analyzed instantly",
+    title: "Analysed instantly",
     icon: "Cpu",
     body: "Our AI reasons through your answers against the QBPES™ framework and drafts your report in seconds.",
   },
@@ -245,7 +245,7 @@ export function Assessment() {
       <Seo
         title="AI Business Assessment"
         path="/assessment"
-        description="A multi-step assessment generating your personalized AI Opportunity Report -- GTM optimization, churn prediction, process automation, analytics, and a roadmap."
+        description="A multi-step assessment generating your personalised AI Opportunity Report -- GTM optimisation, churn prediction, process automation, analytics, and a roadmap."
       />
       <PageHero
         eyebrow="Free business health check"
@@ -656,7 +656,7 @@ export function Assessment() {
 function ReportView({ report, companyName }: { report: AssessmentReport; companyName: string }) {
   return (
     <>
-      <Seo title="Your AI Opportunity Report" path="/assessment" description="Your personalized AI Opportunity Report from Qamira." />
+      <Seo title="Your AI Opportunity Report" path="/assessment" description="Your personalised AI Opportunity Report from Qamira." />
       <PageHero
         eyebrow="Your AI Opportunity Report"
         title={`Here's where the leverage is for ${companyName}.`}

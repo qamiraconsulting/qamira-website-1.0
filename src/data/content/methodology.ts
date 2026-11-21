@@ -13,7 +13,7 @@ export const domains = [
   { title: "Strategy", question: "Are objectives and priorities clear and shared?" },
   { title: "Financial Performance", question: "Is profitability and cost visible and explainable?" },
   { title: "Process", question: "Are workflows designed deliberately, or accumulated by accident?" },
-  { title: "People", question: "Does the organization have the skills, culture, and capacity the strategy requires?" },
+  { title: "People", question: "Does the organisation have the skills, culture, and capacity the strategy requires?" },
   { title: "Data", question: "Is information trustworthy, timely, and unified?" },
   { title: "Technology", question: "Do systems serve the business, or fragment it?" },
   { title: "Customer", question: "Is the client experience understood end-to-end?" },
@@ -23,9 +23,9 @@ export const domains = [
 export const maturityLevels = [
   { level: "01", title: "Ad Hoc", body: "Undocumented, dependent on individuals." },
   { level: "02", title: "Emerging", body: "Some structure exists but is inconsistently applied." },
-  { level: "03", title: "Defined", body: "Documented and standardized, not yet measured." },
+  { level: "03", title: "Defined", body: "Documented and standardised, not yet measured." },
   { level: "04", title: "Managed", body: "Measured against KPIs with regular review." },
-  { level: "05", title: "Optimized", body: "Actively improved using data and, increasingly, AI." },
+  { level: "05", title: "Optimised", body: "Actively improved using data and, increasingly, AI." },
 ];
 
 export const interoperabilityNote = {

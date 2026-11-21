@@ -11,7 +11,7 @@
 export const caseStudiesHero = {
   eyebrow: "Illustrative, not testimonial",
   title: "The kinds of problems we get called in for.",
-  lede: "We're a young firm -- these are illustrative, composite scenarios written to show the kind of problem we solve and how we think about it, not claims about specific clients. We'll publish real engagement results here as they become citable.",
+  lede: "These are illustrative, composite scenarios written to show the kind of problem we solve and how we approach it, not claims about specific clients. We'll add named client results here as clients approve them.",
   disclaimer:
     "Illustrative scenario -- not an actual client engagement. Figures are representative of the kind of outcome we target, not a verified result.",
 };
@@ -41,7 +41,7 @@ export const scenarios = [
   },
   {
     slug: "process-optimization",
-    tier: "Process Optimization",
+    tier: "Process Optimisation",
     title: "Cutting a five-day approval into a same-day one",
     situation:
       "A routine internal approval -- the kind that happens every week -- was taking almost a week because it bounced between people over email with no clear order.",
@@ -51,8 +51,8 @@ export const scenarios = [
       "What used to take the better part of a week now gets done in a day, and staff spend far less time chasing approvals instead of doing their actual jobs.",
   },
   {
-    slug: "system-optimization",
-    tier: "System Optimization",
+    slug: "system-optimisation",
+    tier: "System Optimisation",
     title: "Retiring five tools that were only ever doing the job of two",
     situation:
       "Over a few years, the business had picked up a handful of different software tools that all did roughly the same thing. Staff were re-typing the same information into three different systems just to get one task done.",

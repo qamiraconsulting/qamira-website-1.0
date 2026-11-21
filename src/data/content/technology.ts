@@ -11,15 +11,15 @@
 // goodFitIf) rendered at /technology/:slug -- see TechnologyDetail.tsx.
 
 export const technologyHero = {
-  eyebrow: "The AI Accelerant layer, built",
-  title: "The technology that makes AI-native execution real, not a slide.",
-  lede: "Every QBPES™ engagement identifies where AI should carry the work. This is where we actually build it -- production software, agents, and content systems, not a proof-of-concept that stalls the moment the workshop ends.",
+  eyebrow: "Technology practice",
+  title: "Software, AI and automation, built at a fixed price in weeks.",
+  lede: "We build the systems a business runs on: websites, custom software, CRMs, chatbots and AI receptionists, and the automation that connects them. Each one is scoped in writing and priced before we start, and it goes into daily use, not a pilot that stalls.",
 };
 
 export const technologyFraming = {
   eyebrow: "How this fits",
-  heading: "Services diagnoses. Technology builds. Managed Services keeps it running.",
-  body: "A Services engagement maps what's broken and designs the fix. Technology is where that redesign gets built into working software and agents. Once it's live, our Managed Services retainers (see the Services page) keep it monitored, current, and governed -- so nothing we build is left to degrade unattended.",
+  heading: "Advice, a build or both, and support once it's live.",
+  body: "Our advisory practice helps you decide what to change. Our technology practice builds it, whether the plan came from us, from you or from someone else. Once it's live, our managed services keep it monitored and up to date, so nothing we build is left to degrade.",
 };
 
 export type TechnologyOffering = {
