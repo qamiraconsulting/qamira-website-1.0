@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ArrowRight, Mail, Phone, X } from "lucide-react";
+import { ArrowRight, ChevronUp, Mail, Phone, X } from "lucide-react";
 import clsx from "clsx";
 import { site, whatsappUrl } from "@/data/site";
 
@@ -253,24 +253,51 @@ export function ConnectDock() {
         initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        aria-label={`${online ? `Our team is online, ${time} IST` : `Our team is offline, ${back}`}. Talk to us: WhatsApp, call or email`}
         className={clsx(
-          "flex items-center gap-2.5 rounded-full border border-white/10 bg-navy py-2.5 pl-3.5 pr-4 text-left text-white",
+          "group flex items-center gap-3 rounded-full border border-white/10 bg-navy py-2 pl-2 pr-4 text-left text-white sm:pl-3.5",
           "shadow-[0_16px_36px_-14px_rgba(15,24,48,0.7)] transition-transform duration-200 ease-signature hover:-translate-y-0.5",
           "outline-none focus-visible:ring-2 focus-visible:ring-brass-logo focus-visible:ring-offset-2",
         )}
       >
-        <StatusDot online={online} reducedMotion={prefersReducedMotion} />
-        <span className="text-[13px] font-medium">
-          {online ? (
-            <>
-              <span className="sm:hidden">We're online</span>
-              <span className="hidden sm:inline">Our team is online</span>
-            </>
-          ) : (
-            "Message us"
-          )}
+        {/* Status: on larger screens only. On phones it shows in the card. */}
+        <span className="hidden items-center gap-2.5 sm:flex">
+          <StatusDot online={online} reducedMotion={prefersReducedMotion} />
+          <span className="text-[13px] font-medium">{online ? "Our team is online" : "Offline"}</span>
+          <span className="font-mono text-[11px] text-white/55">{online ? `${time} IST` : back}</span>
+          <span aria-hidden="true" className="ml-0.5 h-5 w-px bg-white/15" />
         </span>
-        <span className="hidden font-mono text-[11px] text-brass-logo sm:inline">{online ? `${time} IST` : back}</span>
+
+        {/* The call to action: the three channels at a glance, then words. */}
+        <span aria-hidden="true" className="flex -space-x-1.5">
+          <span
+            className="relative z-[3] flex h-7 w-7 items-center justify-center rounded-full text-white ring-2 ring-navy"
+            style={{ backgroundColor: WHATSAPP_GREEN }}
+          >
+            <WhatsAppGlyph className="h-3.5 w-3.5" />
+            {/* On phones the status dot moves onto the WhatsApp icon. */}
+            <span
+              className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full ring-2 ring-navy sm:hidden"
+              style={{ backgroundColor: online ? WHATSAPP_GREEN : "#cf9e3b" }}
+            />
+          </span>
+          <span className="relative z-[2] flex h-7 w-7 items-center justify-center rounded-full bg-white text-navy ring-2 ring-navy">
+            <Phone className="h-3 w-3" />
+          </span>
+          <span className="relative z-[1] flex h-7 w-7 items-center justify-center rounded-full bg-brass-logo text-navy ring-2 ring-navy">
+            <Mail className="h-3 w-3" />
+          </span>
+        </span>
+        <span className="flex items-center gap-1 text-[13px] font-medium text-brass-logo">
+          {online ? "Talk to us" : "Message us"}
+          <ChevronUp
+            aria-hidden="true"
+            className={clsx(
+              "h-3.5 w-3.5 transition-transform duration-200 group-hover:-translate-y-0.5",
+              open && "rotate-180 group-hover:translate-y-0",
+            )}
+          />
+        </span>
       </motion.button>
     </div>
   );
