@@ -15,8 +15,7 @@ export function BackToTop() {
   return (
     <AnimatePresence>
       {visible && (
-        // Bottom-right corner. The contact widget sits mid-height on the
-        // right edge, so the two never overlap.
+        // Just above the availability chip in the bottom-right corner.
         <motion.button
           type="button"
           aria-label="Back to top"
@@ -25,7 +24,7 @@ export function BackToTop() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 10 }}
           transition={{ duration: 0.2 }}
-          className="fixed bottom-6 right-4 sm:right-6 z-[70] flex h-11 w-11 items-center justify-center rounded-full border border-charcoal/15 bg-white text-brass shadow-card transition-colors hover:border-brass"
+          className="fixed bottom-20 right-4 sm:right-6 z-[70] flex h-11 w-11 items-center justify-center rounded-full border border-charcoal/15 bg-white text-brass shadow-card transition-colors hover:border-brass"
         >
           <ArrowUp className="h-4 w-4" aria-hidden="true" />
         </motion.button>

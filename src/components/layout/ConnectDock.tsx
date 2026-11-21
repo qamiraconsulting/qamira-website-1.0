@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowRight, Mail, Phone, X } from "lucide-react";
@@ -6,33 +6,62 @@ import clsx from "clsx";
 import { site, whatsappUrl } from "@/data/site";
 
 /**
- * The side contact rail, mounted once in Layout so it is on every route.
+ * The availability chip, mounted once in Layout so it is on every route.
  *
- * A navy panel fixed to the right edge with three channels (WhatsApp, call,
- * email). On a pointer device it opens out on hover or keyboard focus into
- * a small concierge card: a heading, each channel with its detail, and a
- * link to book a free call. On touch screens it stays a slim rail and a tap
- * goes straight to the app.
+ * A small navy pill in the bottom-right corner that says whether the team
+ * is working right now, with the time in India: "Our team is online ·
+ * 3:42 pm IST" during working hours, "Message us · back at 9 am IST"
+ * outside them. Clicking it opens a card with WhatsApp, a call and email.
+ *
+ * Working hours are Monday to Saturday, 9 am to 7 pm India time. Public
+ * holidays are not modelled, so on a holiday the chip still says online.
  *
  * Clicks are reported by ContactLinkTracking, which watches every wa.me,
  * tel: and mailto: link on the site, so nothing is tracked here directly.
  * data-contact-location="Dock" keeps these clicks separable in GA4 and Meta.
  *
- * No third-party chat script is loaded: every channel is a plain link, so
- * the rail adds no network requests and nothing that can slow the page.
+ * Rendered only after mount: the page is prerendered at build time, and a
+ * baked-in "online" or "offline" would be wrong for most visitors.
  */
 
-/** Marks the teaser bubble as already seen, so it shows at most once. */
-const TEASER_SEEN_KEY = "qamira:connect-teaser-seen";
+const OPEN_HOUR = 9; // 9 am IST
+const CLOSE_HOUR = 19; // 7 pm IST
+const WORKING_DAYS = new Set([1, 2, 3, 4, 5, 6]); // Mon-Sat (0 = Sunday)
 
-/** Long enough that the bubble reads as an offer of help, not an interruption. */
-const TEASER_DELAY_MS = 14000;
-
-/** WhatsApp's own brand green, for its icon only. */
+/** WhatsApp's own brand green, for its icon and the online dot. */
 const WHATSAPP_GREEN = "#25D366";
 
 /** "+91 9096236852" -> "+91 90962 36852", easier to read and to dial. */
 const displayPhone = site.phone.replace(/^(\+\d{2})\s?(\d{5})(\d{5})$/, "$1 $2 $3");
+
+type Availability = { online: boolean; time: string; back: string };
+
+/** The current time in India, and whether it falls inside working hours. */
+function availabilityAt(date: Date): Availability {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Kolkata",
+    weekday: "short",
+    hour: "numeric",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(date);
+  const get = (type: string) => parts.find((p) => p.type === type)?.value ?? "";
+  const day = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].indexOf(get("weekday"));
+  const hour = Number(get("hour"));
+  const minute = get("minute");
+
+  const online = WORKING_DAYS.has(day) && hour >= OPEN_HOUR && hour < CLOSE_HOUR;
+  const time = `${hour % 12 || 12}:${minute} ${hour < 12 ? "am" : "pm"}`;
+
+  // When the team is next in: later today, tomorrow, or Monday.
+  let back = "back at 9 am IST";
+  if (!online) {
+    const beforeOpenToday = WORKING_DAYS.has(day) && hour < OPEN_HOUR;
+    const nextDay = (day + 1) % 7;
+    if (!beforeOpenToday) back = WORKING_DAYS.has(nextDay) ? "back tomorrow, 9 am IST" : "back Monday, 9 am IST";
+  }
+  return { online, time, back };
+}
 
 /** The official single-path WhatsApp mark (lucide dropped brand icons). */
 function WhatsAppGlyph({ className }: { className?: string }) {
@@ -43,199 +72,206 @@ function WhatsAppGlyph({ className }: { className?: string }) {
   );
 }
 
-/** Classes for text that only appears once the rail has opened out. */
-const revealed =
-  "opacity-0 transition-opacity duration-200 sm:group-hover/rail:opacity-100 sm:group-hover/rail:delay-100 sm:group-focus-within/rail:opacity-100 sm:group-focus-within/rail:delay-100 motion-reduce:transition-none";
+/** Green and gently pulsing when the team is in; a still gold dot when not. */
+function StatusDot({ online, reducedMotion }: { online: boolean; reducedMotion: boolean }) {
+  return (
+    <span className="relative flex h-2 w-2 shrink-0" aria-hidden="true">
+      {online && !reducedMotion && (
+        <span
+          className="absolute inset-0 animate-ping rounded-full opacity-60 [animation-duration:2.4s]"
+          style={{ backgroundColor: WHATSAPP_GREEN }}
+        />
+      )}
+      <span className="relative h-2 w-2 rounded-full" style={{ backgroundColor: online ? WHATSAPP_GREEN : "#cf9e3b" }} />
+    </span>
+  );
+}
 
-type ChannelProps = {
+type RowProps = {
   href: string;
   external?: boolean;
   label: string;
   detail: string;
-  icon: ReactNode;
   iconClassName: string;
+  icon: ReactNode;
 };
 
-/** One channel: a round icon that is always visible, and its label beside it. */
-function Channel({ href, external, label, detail, icon, iconClassName }: ChannelProps) {
+function Row({ href, external, label, detail, iconClassName, icon }: RowProps) {
   return (
     <a
       href={href}
       target={external ? "_blank" : undefined}
       rel={external ? "noreferrer" : undefined}
       data-contact-location="Dock"
-      aria-label={`${label}: ${detail}`}
-      className="group/channel flex items-center gap-3.5 rounded-xl p-1 outline-none sm:p-1.5 transition-colors duration-200 hover:bg-white/[0.06] focus-visible:bg-white/[0.08] focus-visible:ring-1 focus-visible:ring-brass-logo/60"
+      className="group flex items-center gap-3 rounded-lg px-2.5 py-2.5 outline-none transition-colors hover:bg-parchment focus-visible:bg-parchment"
     >
-      <span
-        className={clsx(
-          "flex h-9 w-9 shrink-0 items-center justify-center rounded-full ring-1 sm:h-10 sm:w-10 ring-inset transition-transform duration-200 ease-signature group-hover/channel:scale-105 motion-reduce:transition-none",
-          iconClassName,
-        )}
-      >
-        {icon}
+      <span className={clsx("flex h-9 w-9 shrink-0 items-center justify-center rounded-full", iconClassName)}>{icon}</span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-sm font-medium text-charcoal">{label}</span>
+        <span className="block truncate font-mono text-[11px] text-charcoal-dim">{detail}</span>
       </span>
-      <span className={clsx("min-w-0 whitespace-nowrap", revealed)}>
-        <span className="block text-[13px] font-medium leading-tight text-white">{label}</span>
-        <span className="mt-0.5 block truncate font-mono text-[11px] leading-tight text-white/60">{detail}</span>
-      </span>
+      <ArrowRight
+        className="h-3.5 w-3.5 shrink-0 text-transparent transition-all group-hover:translate-x-0.5 group-hover:text-charcoal-dim"
+        aria-hidden="true"
+      />
     </a>
   );
 }
 
 export function ConnectDock() {
-  const [teaserVisible, setTeaserVisible] = useState(false);
-  const prefersReducedMotion = useReducedMotion();
+  const [now, setNow] = useState<Date | null>(null);
+  const [open, setOpen] = useState(false);
+  const prefersReducedMotion = Boolean(useReducedMotion());
   const { pathname } = useLocation();
+  const rootRef = useRef<HTMLDivElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
 
-  /** Never offer the bubble again, on this browser, once it has had its turn. */
-  const retireTeaser = useCallback(() => {
-    setTeaserVisible(false);
-    try {
-      window.localStorage.setItem(TEASER_SEEN_KEY, "1");
-    } catch {
-      // Private mode or blocked storage: the bubble may reappear on a later
-      // visit, which is a far smaller problem than throwing.
-    }
-  }, []);
-
-  // Offer the bubble once per browser, after the visitor has had time to
-  // start reading. Guarded on `window` because this module is imported by
-  // the build-time prerender (scripts/prerender.mjs).
+  // Start the clock after mount (see the note at the top), then keep it
+  // current so the minutes and the online state roll over on their own.
   useEffect(() => {
-    if (typeof window === "undefined") return;
-    let seen = false;
-    try {
-      seen = window.localStorage.getItem(TEASER_SEEN_KEY) === "1";
-    } catch {
-      seen = false;
-    }
-    if (seen) return;
-    const timer = window.setTimeout(() => setTeaserVisible(true), TEASER_DELAY_MS);
-    return () => window.clearTimeout(timer);
+    setNow(new Date());
+    const timer = window.setInterval(() => setNow(new Date()), 30_000);
+    return () => window.clearInterval(timer);
   }, []);
 
-  // The line is an Indian number. On the AU, UK and US pages, say so
-  // before someone taps it expecting a local call.
-  const overseas = /^\/(au|uk|us)(\/|$)/.test(pathname);
+  // A card left open across a route change looks like a bug.
+  useEffect(() => setOpen(false), [pathname]);
+
+  // Escape and outside-click both close it. Bound only while open.
+  useEffect(() => {
+    if (!open) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      setOpen(false);
+      triggerRef.current?.focus();
+    };
+    const onPointerDown = (event: PointerEvent) => {
+      if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    document.addEventListener("pointerdown", onPointerDown);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("pointerdown", onPointerDown);
+    };
+  }, [open]);
+
+  if (!now) return null;
+  const { online, time, back } = availabilityAt(now);
 
   // Naming the page gives the reply somewhere to start, and tells us which
   // pages actually earn conversations.
   const whatsappHref = whatsappUrl(`Hi Qamira, I was reading ${site.url}${pathname} and would like to talk.`);
 
   return (
-    <aside
-      aria-label="Contact Qamira Consulting"
-      // Phones: low on the right, clear of headlines and the bottom bars.
-      // Larger screens: centred on the right edge.
-      className="fixed bottom-28 right-0 z-[80] print:hidden sm:bottom-auto sm:top-1/2 sm:-translate-y-1/2"
-    >
+    <div ref={rootRef} className="fixed bottom-5 right-4 z-[80] flex flex-col items-end gap-3 sm:right-6 print:hidden">
       <AnimatePresence>
-        {teaserVisible && (
+        {open && (
           <motion.div
-            initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            // Above the rail, so it never sits under the opened-out card.
-            className="absolute bottom-full right-3 mb-3 flex w-[min(15rem,calc(100vw-2rem))] items-start gap-1 rounded-xl border border-charcoal/10 bg-white py-2.5 pl-3.5 pr-1.5 shadow-[0_18px_40px_-16px_rgba(15,24,48,0.45)]"
+            id="availability-card"
+            role="dialog"
+            aria-label="Contact Qamira Consulting"
+            initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 10, scale: 0.97 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 10, scale: 0.97 }}
+            transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
+            style={{ transformOrigin: "bottom right" }}
+            className="w-[min(20rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-charcoal/10 bg-white shadow-[0_28px_60px_-22px_rgba(15,24,48,0.5)]"
           >
-            <a
-              href={whatsappHref}
-              target="_blank"
-              rel="noreferrer"
-              data-contact-location="Teaser"
-              onClick={retireTeaser}
-              className="text-xs leading-relaxed text-charcoal transition-colors hover:text-[#128c47]"
+            <div className="relative border-b border-charcoal/10 px-5 pb-4 pt-5">
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                aria-label="Close"
+                className="absolute right-3 top-3 rounded-full p-1.5 text-charcoal-dim transition-colors hover:bg-parchment hover:text-charcoal"
+              >
+                <X className="h-4 w-4" aria-hidden="true" />
+              </button>
+              <p className="flex items-center gap-2 pr-8 font-mono text-[10.5px] uppercase tracking-[0.12em] text-brass-ink">
+                <StatusDot online={online} reducedMotion={prefersReducedMotion} />
+                {online ? `Online now · ${time} IST` : `Offline · ${back}`}
+              </p>
+              <h2 className="mt-2 font-display text-xl leading-snug text-charcoal">Talk to our team</h2>
+              <p className="mt-1 text-xs leading-relaxed text-charcoal-dim">
+                Based in India, working Monday to Saturday, 9 am to 7 pm IST.
+                {online ? " You'll reach a person." : " Leave a message and we'll reply when we're back."}
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-0.5 p-2">
+              <Row
+                href={whatsappHref}
+                external
+                label="WhatsApp"
+                detail={online ? "Usually the fastest reply" : "Message us any time"}
+                iconClassName="text-white"
+                icon={
+                  <span
+                    className="flex h-full w-full items-center justify-center rounded-full"
+                    style={{ backgroundColor: WHATSAPP_GREEN }}
+                  >
+                    <WhatsAppGlyph className="h-[1.15rem] w-[1.15rem]" />
+                  </span>
+                }
+              />
+              <Row
+                href={`tel:${site.phone.replace(/\s/g, "")}`}
+                label={online ? "Call us" : "Call us (from 9 am IST)"}
+                detail={displayPhone}
+                iconClassName="bg-navy text-white"
+                icon={<Phone className="h-4 w-4" aria-hidden="true" />}
+              />
+              <Row
+                href={`mailto:${site.email}`}
+                label="Email"
+                detail={site.email}
+                iconClassName="bg-brass-logo text-navy"
+                icon={<Mail className="h-4 w-4" aria-hidden="true" />}
+              />
+            </div>
+
+            <Link
+              to="/contact"
+              className="group flex items-center justify-between border-t border-charcoal/10 bg-parchment/60 px-5 py-3 text-xs text-charcoal transition-colors hover:text-brass-ink"
             >
-              Got a question? Message us on WhatsApp. You'll reach a person, not a bot.
-            </a>
-            <button
-              type="button"
-              onClick={retireTeaser}
-              aria-label="Dismiss"
-              className="-mt-0.5 shrink-0 rounded p-1 text-charcoal-dim transition-colors hover:text-charcoal"
-            >
-              <X className="h-3.5 w-3.5" aria-hidden="true" />
-            </button>
+              <span>
+                Book a free 20-minute call
+                <span className="block text-[11px] text-charcoal-dim">We reply within one business day</span>
+              </span>
+              <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+            </Link>
           </motion.div>
         )}
       </AnimatePresence>
 
-      <motion.div
-        initial={prefersReducedMotion ? false : { x: 24, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      <motion.button
+        ref={triggerRef}
+        type="button"
+        onClick={() => setOpen((value) => !value)}
+        aria-expanded={open}
+        aria-controls="availability-card"
+        initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.6, ease: [0.16, 1, 0.3, 1] }}
         className={clsx(
-          "group/rail relative overflow-hidden rounded-l-2xl border border-r-0 border-brass-logo/25 bg-navy/95 backdrop-blur-md",
-          "shadow-[0_24px_60px_-20px_rgba(15,24,48,0.65)]",
-          // Opens out on hover or keyboard focus, on pointer devices only.
-          "w-[3.25rem] transition-[width] sm:w-[3.75rem] duration-300 ease-signature motion-reduce:transition-none",
-          "sm:hover:w-[19.5rem] sm:focus-within:w-[19.5rem]",
+          "flex items-center gap-2.5 rounded-full border border-white/10 bg-navy py-2.5 pl-3.5 pr-4 text-left text-white",
+          "shadow-[0_16px_36px_-14px_rgba(15,24,48,0.7)] transition-transform duration-200 ease-signature hover:-translate-y-0.5",
+          "outline-none focus-visible:ring-2 focus-visible:ring-brass-logo focus-visible:ring-offset-2",
         )}
       >
-        {/* A gold hairline down the inner edge: the one flourish. */}
-        <span aria-hidden="true" className="absolute inset-y-4 left-0 w-px bg-gradient-to-b from-transparent via-brass-logo/70 to-transparent" />
-
-        {/* Header: a gold dot when closed, the heading when open. */}
-        <div className="relative flex h-9 items-center gap-3 px-[1.25rem] pt-1.5 sm:h-11 sm:px-[1.4rem] sm:pt-2">
-          <span aria-hidden="true" className="h-1.5 w-1.5 shrink-0 rounded-full bg-brass-logo" />
-          <span className={clsx("whitespace-nowrap font-mono text-[10px] uppercase tracking-[0.16em] text-brass-logo", revealed)}>
-            Talk to our team
-          </span>
-        </div>
-
-        <div className="flex flex-col gap-0.5 px-1 pb-1.5 sm:gap-1 sm:px-[0.55rem] sm:pb-2">
-          <Channel
-            href={whatsappHref}
-            external
-            label="WhatsApp"
-            detail={overseas ? "Chat with our team in India" : "Chat with our team"}
-            iconClassName="text-white ring-white/10"
-            icon={
-              <span className="flex h-full w-full items-center justify-center rounded-full" style={{ backgroundColor: WHATSAPP_GREEN }}>
-                <WhatsAppGlyph className="h-5 w-5" />
-              </span>
-            }
-          />
-          <Channel
-            href={`tel:${site.phone.replace(/\s/g, "")}`}
-            label={overseas ? "Call us in India" : "Call us"}
-            detail={displayPhone}
-            iconClassName="bg-white/[0.07] text-white ring-white/15 group-hover/channel:ring-brass-logo/60"
-            icon={<Phone className="h-[1.05rem] w-[1.05rem]" aria-hidden="true" />}
-          />
-          <Channel
-            href={`mailto:${site.email}`}
-            label="Email"
-            detail={site.email}
-            iconClassName="bg-white/[0.07] text-brass-logo ring-white/15 group-hover/channel:ring-brass-logo/60"
-            icon={<Mail className="h-[1.05rem] w-[1.05rem]" aria-hidden="true" />}
-          />
-        </div>
-
-        {/* Footer: only in the opened-out card. Hidden from touch and from
-            the closed rail so it never takes a tap meant for a channel. */}
-        <div
-          className={clsx(
-            "hidden max-h-0 overflow-hidden border-t border-transparent px-4 transition-[max-height,padding,border-color] duration-300 ease-signature sm:block",
-            "sm:group-hover/rail:max-h-20 sm:group-hover/rail:border-white/10 sm:group-hover/rail:py-3",
-            "sm:group-focus-within/rail:max-h-20 sm:group-focus-within/rail:border-white/10 sm:group-focus-within/rail:py-3",
-            revealed,
+        <StatusDot online={online} reducedMotion={prefersReducedMotion} />
+        <span className="text-[13px] font-medium">
+          {online ? (
+            <>
+              <span className="sm:hidden">We're online</span>
+              <span className="hidden sm:inline">Our team is online</span>
+            </>
+          ) : (
+            "Message us"
           )}
-        >
-          <Link
-            to="/contact"
-            className="group/book flex items-center justify-between whitespace-nowrap text-xs text-white/80 transition-colors hover:text-brass-logo"
-          >
-            <span>
-              Book a free 20-minute call
-              <span className="block text-[10.5px] text-white/45">We reply within one business day</span>
-            </span>
-            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover/book:translate-x-0.5" aria-hidden="true" />
-          </Link>
-        </div>
-      </motion.div>
-    </aside>
+        </span>
+        <span className="hidden font-mono text-[11px] text-brass-logo sm:inline">{online ? `${time} IST` : back}</span>
+      </motion.button>
+    </div>
   );
 }
