@@ -20,7 +20,7 @@ export function WhoWeAre() {
             </p>
           </div>
           <PhotoSlot
-            src="/photos/who-we-are.jpg"
+            src="/photos/who-we-are.webp"
             label="Diagnosis in progress -- hands annotating a printed process map on a sunlit desk, warm and high-key."
             alt="Hands annotating a printed business process map on a sunlit desk"
           />

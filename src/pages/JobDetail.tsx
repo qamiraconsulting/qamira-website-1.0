@@ -40,7 +40,7 @@ type Status = "idle" | "submitting" | "success" | "notice" | "error";
 const inputClass =
   "border border-charcoal/20 bg-white px-4 py-3 text-sm text-charcoal transition-colors focus:border-brass focus:outline-none";
 const labelClass = "font-mono text-xs uppercase tracking-[0.06em] text-charcoal-dim";
-const optional = <span className="normal-case tracking-normal text-charcoal-dim/70"> (optional)</span>;
+const optional = <span className="normal-case tracking-normal text-charcoal-dim"> (optional)</span>;
 
 function readAsBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {

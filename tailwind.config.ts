@@ -25,6 +25,9 @@ export default {
           DEFAULT: "#b8863a",
           bright: "#c69a4e",
           dim: "#8a6a37",
+          // Text and button-fill shade of brass: 5.2:1 or better on every
+          // light surface, where the default brass is only about 3:1.
+          ink: "#7d5f30",
         },
         slate: {
           teal: "#3e6f6f",

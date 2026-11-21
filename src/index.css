@@ -79,3 +79,18 @@
     @apply fixed left-4 top-3 z-[100] -translate-y-24 rounded-sm bg-brass px-4 py-2 font-mono text-sm tracking-wide text-ink transition-transform duration-200 focus:translate-y-0;
   }
 }
+
+/*
+ * Contrast fix (WCAG AA). Brass text is only about 3:1 against the light
+ * surfaces, below the 4.5:1 small text needs, and most brass text on the
+ * site is small (eyebrows, labels, numbers). On light surfaces it renders
+ * in the darker ink shade instead; on the dark surfaces, where brass
+ * already passes, it stays as it was. Declared after the utilities so it
+ * wins over the generated .text-brass. A stopgap until the rebrand palette.
+ */
+.text-brass {
+  color: theme("colors.brass.ink");
+}
+:is(.bg-navy, .bg-navy-2, .bg-navy-3, .bg-charcoal, .bg-ink) .text-brass {
+  color: theme("colors.brass.DEFAULT");
+}

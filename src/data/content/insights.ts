@@ -35,11 +35,20 @@ export type Article = {
   body: ArticleBlock[];
   // Third-party research the article cites, listed at the end.
   sources?: ArticleSource[];
+  /** ISO date of the last real content change. Defaults to datePublished. */
+  dateModified?: string;
+  /**
+   * The one or two service pages the article supports, linked at the end.
+   * Every article should have these: they are how an article passes
+   * readers, and search ranking, on to the pages that win work.
+   */
+  related?: { label: string; to: string }[];
 };
 
 export const articles: Article[] = [
   {
     slug: "is-your-business-invisible-to-chatgpt",
+    related: [{ label: "SEO & AI search visibility", to: "/technology/seo-geo" }, { label: "Websites & online stores", to: "/technology/websites" }],
     category: "AI Search",
     title: "Is your business invisible to ChatGPT? How AI search decides which local businesses to recommend.",
     summary:
@@ -102,6 +111,7 @@ export const articles: Article[] = [
   },
   {
     slug: "dashboard-is-the-last-deliverable",
+    related: [{ label: "Our services, including dashboards and KPI design", to: "/services" }, { label: "QBPES™, our assessment method", to: "/methodology" }],
     category: "Strategy",
     title: "The dashboard is the last deliverable, not the first.",
     summary:
@@ -117,6 +127,7 @@ export const articles: Article[] = [
   },
   {
     slug: "ai-accelerant-not-ai-first",
+    related: [{ label: "How we apply AI", to: "/ai-solutions" }, { label: "Free AI Business Assessment", to: "/assessment" }],
     category: "AI",
     title: "AI Accelerant, not AI-first: a different reading of \"AI-native.\"",
     summary:
@@ -132,6 +143,7 @@ export const articles: Article[] = [
   },
   {
     slug: "divergence-is-a-finding",
+    related: [{ label: "Workflow & systems integration", to: "/technology/workflow-systems-integration" }, { label: "QBPES™, our assessment method", to: "/methodology" }],
     category: "Process",
     title: "Divergence is a finding, not a data quality problem.",
     summary:
@@ -147,6 +159,7 @@ export const articles: Article[] = [
   },
   {
     slug: "most-common-finding-in-every-data-audit",
+    related: [{ label: "Workflow & systems integration", to: "/technology/workflow-systems-integration" }, { label: "Document & data extraction", to: "/technology/document-data-extraction" }],
     category: "Data",
     title: "The most common finding in every data audit we run.",
     summary:
@@ -162,6 +175,7 @@ export const articles: Article[] = [
   },
   {
     slug: "why-we-score-ai-readiness-first",
+    related: [{ label: "Free AI Business Assessment", to: "/assessment" }, { label: "How we apply AI", to: "/ai-solutions" }],
     category: "Governance",
     title: "Why we score AI readiness before we recommend automation.",
     summary:
@@ -177,6 +191,7 @@ export const articles: Article[] = [
   },
   {
     slug: "what-breaks-first-scaling-headcount-before-process",
+    related: [{ label: "HR software", to: "/technology/hr-software" }, { label: "CRM build & configuration", to: "/technology/crm-build-configuration" }],
     category: "Growth",
     title: "What breaks first when a startup scales headcount before process.",
     summary:

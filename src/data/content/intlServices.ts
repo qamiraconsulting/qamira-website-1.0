@@ -70,7 +70,7 @@ function pagesFor(r: RegionCopy): InServicePage[] {
       eyebrow: `Custom software · ${r.label}`,
       title: "Software built around how your business actually runs.",
       lede: `Custom applications, business systems and client portals for growing ${r.adjective} businesses that have outgrown spreadsheets, shared inboxes and a patchwork of apps. Built to fit your process, connected to what you already use.`,
-      photo: { src: "/photos/technology/ai-chatbots.jpg", label: "A laptop showing a custom business application." },
+      photo: { src: "/photos/technology/ai-chatbots.webp", label: "A laptop showing a custom business application." },
       pain: {
         eyebrow: "Sound familiar?",
         heading: "When the business outgrows the tools it started with.",
@@ -135,7 +135,7 @@ function pagesFor(r: RegionCopy): InServicePage[] {
       eyebrow: `CRM development · ${r.label}`,
       title: "A CRM set up around how you actually sell.",
       lede: "Whether you need a CRM your sales team will actually use or a bigger system that ties leads, jobs and invoicing together, we build and configure it around your process and connect it to the tools you keep.",
-      photo: { src: "/photos/technology/crm-build-configuration.jpg", label: "A laptop showing a sales pipeline view." },
+      photo: { src: "/photos/technology/crm-build-configuration.webp", label: "A laptop showing a sales pipeline view." },
       pain: {
         eyebrow: "Sound familiar?",
         heading: "Leads, jobs and invoices living in different places.",
@@ -204,7 +204,7 @@ function pagesFor(r: RegionCopy): InServicePage[] {
       eyebrow: `Automation & integration · ${r.label}`,
       title: "Stop typing the same data into three different systems.",
       lede: "We connect the tools you already use, such as your accounting system, spreadsheets, CRM and email, so information is entered once and moves on its own. No forced switch to new software.",
-      photo: { src: "/photos/technology/workflow-systems-integration.jpg", label: "A laptop showing connected business systems." },
+      photo: { src: "/photos/technology/workflow-systems-integration.webp", label: "A laptop showing connected business systems." },
       pain: {
         eyebrow: "Sound familiar?",
         heading: "Hours lost every week to copy and paste.",
@@ -273,7 +273,7 @@ function pagesFor(r: RegionCopy): InServicePage[] {
       eyebrow: `Website development · ${r.label}`,
       title: "A website that brings in enquiries, not just visitors.",
       lede: `Mobile-first websites for ${r.adjective} small businesses, built around the one thing a site is for: getting the right people to call, book or ask for a quote. Set up for Google from day one.`,
-      photo: { src: "/photos/technology/marketing-automation-lead-scoring.jpg", label: "A laptop showing where enquiries come from." },
+      photo: { src: "/photos/technology/marketing-automation-lead-scoring.webp", label: "A laptop showing where enquiries come from." },
       pain: {
         eyebrow: "Sound familiar?",
         heading: "The site looks fine. It just doesn't bring in work.",
@@ -342,7 +342,7 @@ function pagesFor(r: RegionCopy): InServicePage[] {
       eyebrow: `AI chatbot · ${r.label}`,
       title: "A website chatbot that answers, quotes and books, day and night.",
       lede: `A custom AI chatbot for ${r.adjective} businesses, trained on your own services, prices and policies. It answers questions, captures the enquiry and books the job, then hands the conversation to your team when a person is needed.`,
-      photo: { src: "/photos/technology/internal-knowledge-agents.jpg", label: "A laptop showing an AI assistant answering a question." },
+      photo: { src: "/photos/technology/internal-knowledge-agents.webp", label: "A laptop showing an AI assistant answering a question." },
       pain: {
         eyebrow: "Sound familiar?",
         heading: "Enquiries arrive when nobody is there to answer.",

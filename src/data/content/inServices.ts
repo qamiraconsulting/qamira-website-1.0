@@ -4,6 +4,8 @@
 //   /in/custom-software        QC-309 Custom Software, ERP & Portals
 //   /in/erp-crm-development    QC-307 CRM Build + QC-309 for custom ERP
 //   /in/business-automation    QC-301 Automation Quick-Win + QC-306 Integration
+//   /in/ai-chatbot             QC-302 Custom AI Chatbot + QC-503 run service (WhatsApp-led)
+//   /in/website-development    QC-401 Website Starter + QC-402 Website Growth
 //
 // Rules this copy keeps:
 // - No prices on the website, by decision (2026-10-20): "from" prices appear
@@ -92,7 +94,7 @@ export const inServicePages: InServicePage[] = [
     eyebrow: "Custom software · India",
     title: "Software built around how your business actually runs.",
     lede: "Custom applications, ERP and client portals for growing Indian businesses that have outgrown Excel sheets, WhatsApp groups and a patchwork of tools. Built to fit your process, connected to what you already use.",
-    photo: { src: "/photos/technology/ai-chatbots.jpg", label: "A laptop showing a custom business application." },
+    photo: { src: "/photos/technology/ai-chatbots.webp", label: "A laptop showing a custom business application." },
     pain: {
       eyebrow: "Sound familiar?",
       heading: "When the business outgrows the tools it started with.",
@@ -161,7 +163,7 @@ export const inServicePages: InServicePage[] = [
     eyebrow: "ERP & CRM builds · India",
     title: "A CRM and ERP set up around how you sell and operate.",
     lede: "Whether you need a CRM your sales team will actually use or an ERP that ties orders, stock and billing together, we build and configure it around your process and connect it to the tools you keep.",
-    photo: { src: "/photos/technology/crm-build-configuration.jpg", label: "A laptop showing a sales pipeline view." },
+    photo: { src: "/photos/technology/crm-build-configuration.webp", label: "A laptop showing a sales pipeline view." },
     pain: {
       eyebrow: "Sound familiar?",
       heading: "Leads, orders and stock living in different places.",
@@ -234,7 +236,7 @@ export const inServicePages: InServicePage[] = [
     eyebrow: "Automation & integration · India",
     title: "Stop typing the same data into three different systems.",
     lede: "We connect the tools you already use, such as your accounting system, Excel, CRM and email, so information is entered once and moves on its own. No forced switch to new software.",
-    photo: { src: "/photos/technology/workflow-systems-integration.jpg", label: "A laptop showing connected business systems." },
+    photo: { src: "/photos/technology/workflow-systems-integration.webp", label: "A laptop showing connected business systems." },
     pain: {
       eyebrow: "Sound familiar?",
       heading: "Hours lost every week to copy and paste.",
@@ -296,6 +298,153 @@ export const inServicePages: InServicePage[] = [
       body: "Book a free 20-minute scoping call. Tell us which tasks your team repeats every day, and we'll tell you which ones are worth automating and roughly what it would cost.",
     },
     related: { label: "Custom software", to: "/in/custom-software" },
+  },
+  {
+    // Leads with WhatsApp: in India that is where customers ask first.
+    slug: "ai-chatbot",
+    serviceCodes: ["QC-302", "QC-503"],
+    seoTitle: "WhatsApp & Website AI Chatbots for Indian Businesses",
+    description:
+      "An AI chatbot for WhatsApp and your website, trained on your products, prices and policies. Answers in English, Hindi and more, books and hands over to your team.",
+    breadcrumbLabel: "AI Chatbots (India)",
+    eyebrow: "WhatsApp & website chatbots · India",
+    title: "A WhatsApp chatbot that answers customers while your team is busy.",
+    lede: "An AI chatbot for WhatsApp and your website, trained on your own products, prices and policies. It answers questions, shares details and payment links, takes orders and bookings, and hands the chat to your team when a person is needed.",
+    photo: { src: "/photos/technology/internal-knowledge-agents.webp", label: "A laptop showing an AI assistant answering a question." },
+    pain: {
+      eyebrow: "Sound familiar?",
+      heading: "WhatsApp is busy, and every reply waits for a person.",
+      lede: "Most Indian customers would rather send a WhatsApp message than fill a form or make a call. That works until the messages arrive faster than your team can answer them.",
+      points: [
+        "The same questions come in all day: price, stock, timings, location, delivery.",
+        "Messages after 7pm and on Sundays wait until the next working day, and the customer has moved on.",
+        "Replies depend on who picks up the phone, so prices and promises vary.",
+        "Enquiries sit in one person's phone instead of in a system the business can see.",
+      ],
+    },
+    build: {
+      eyebrow: "What we build",
+      heading: "A chatbot that knows your business, in your customers' language.",
+      lede: "We train it on your catalogue, price list and policies, set clear limits on what it answers, and connect it to the tools you already use.",
+      items: [
+        {
+          title: "WhatsApp first, website too",
+          body: "One assistant on your WhatsApp business number and your website, so customers get the same answer wherever they ask.",
+        },
+        {
+          title: "English, Hindi and regional languages",
+          body: "It replies in the language the customer writes in, including Hindi and mixed Hindi-English, and in other Indian languages where you need them.",
+        },
+        {
+          title: "Orders, bookings and payment links",
+          body: "Takes the order or booking, sends a UPI payment link where you use one, and confirms it, with every chat saved to your CRM or a shared sheet.",
+        },
+        {
+          title: "Hand-over to your team",
+          body: "Complaints, bulk orders and anything unusual go to a person with the chat attached, so nobody has to ask the customer to repeat themselves.",
+        },
+      ],
+    },
+    faq: [
+      {
+        question: "How much does a WhatsApp chatbot cost?",
+        answer: "It depends on what it needs to know and connect to. After a free 20-minute scoping call you get a written scope and a fixed quote, before any work starts. WhatsApp's own messaging charges are separate and passed through at cost.",
+      },
+      {
+        question: "Can it run on our existing WhatsApp number?",
+        answer: "Usually, yes, once the number is moved to a WhatsApp Business account that allows automated replies. We check this on the scoping call and handle the set-up with you.",
+      },
+      {
+        question: "Will it make things up?",
+        answer: "It answers only from the information you approve. When it isn't sure, it says so and passes the chat to your team. We test it on real customer questions before it goes live.",
+      },
+      {
+        question: "What about customer data and the DPDP Act?",
+        answer: "The chatbot collects only what it needs to answer, book or take an order, and tells customers it's an automated assistant. We give you a plain list of what it stores and for how long, so you can check it against your obligations under the Digital Personal Data Protection Act.",
+      },
+      {
+        question: "How long does it take?",
+        answer: "Usually 2 to 4 weeks from the scoping call, depending on how many of your systems it connects to.",
+      },
+    ],
+    cta: {
+      heading: "See what a WhatsApp chatbot would handle for you.",
+      body: "Book a free 20-minute scoping call. Show us the questions your team answers every day, and we'll tell you honestly how many a chatbot could take on.",
+    },
+    related: { label: "Business automation & integration", to: "/in/business-automation" },
+  },
+  {
+    slug: "website-development",
+    serviceCodes: ["QC-401", "QC-402"],
+    seoTitle: "Website Development for Indian Businesses",
+    description:
+      "Fast, mobile-first websites for Indian businesses, built to bring in enquiries on WhatsApp, calls and forms. Written scope and fixed quote after a free scoping call.",
+    breadcrumbLabel: "Website Development (India)",
+    eyebrow: "Website development · India",
+    title: "A website that brings in enquiries, not just visitors.",
+    lede: "Mobile-first websites for Indian businesses, built for the phones and connections your customers actually use, and for the one thing a site is for: getting the right people to message, call or ask for a quote.",
+    photo: { src: "/photos/technology/marketing-automation-lead-scoring.webp", label: "A laptop showing where enquiries come from." },
+    pain: {
+      eyebrow: "Sound familiar?",
+      heading: "The site exists. It just doesn't bring in business.",
+      lede: "Many business websites in India were built once, handed over and never looked at again. Customers find you through search and maps, open the site on a phone, and leave.",
+      points: [
+        "It loads slowly on mobile data, so visitors give up before it opens.",
+        "There's no quick way to message you on WhatsApp or call from the page.",
+        "Your products or services aren't described in the words customers search for.",
+        "You can't tell which enquiries came from the website, so you can't tell whether it's working.",
+      ],
+    },
+    build: {
+      eyebrow: "What we build",
+      heading: "From a clean starter site to a full enquiry and booking flow.",
+      lede: "We build the smallest site that does the job, then add catalogues, quote forms and bookings only where they pay back.",
+      items: [
+        {
+          title: "Starter website",
+          body: "A fast, mobile-first site of about six pages with click-to-WhatsApp, click-to-call, an enquiry form, basic search set-up and analytics.",
+        },
+        {
+          title: "Catalogue and enquiry flows",
+          body: "Product or service pages, quote requests and bookings that arrive in your inbox or CRM with the details already filled in.",
+        },
+        {
+          title: "Found in search and maps",
+          body: "Service and location pages for the areas you cover, your business profile linked, and the technical set-up search engines and AI answers look for.",
+        },
+        {
+          title: "English and Hindi, if you need it",
+          body: "Pages in Hindi or another Indian language alongside English, for customers who search in their own language.",
+        },
+      ],
+    },
+    faq: [
+      {
+        question: "How much does a website cost?",
+        answer: "A starter site costs much less than one with catalogues and booking flows, and both depend on the pages and features you need. You get a written scope and fixed quote after a free 20-minute scoping call.",
+      },
+      {
+        question: "How long does it take?",
+        answer: "A starter site usually takes 2 to 3 weeks. A site with enquiry and booking flows takes 4 to 6 weeks, delivered in stages you sign off.",
+      },
+      {
+        question: "Will we be able to update it ourselves?",
+        answer: "Yes. We hand over access and show your team how to change text, prices and photos. Optional monthly care covers hosting, updates, backups and small changes.",
+      },
+      {
+        question: "Can you redo our existing site rather than start again?",
+        answer: "Often, yes. We look at what's working on the current site first and keep it, then fix what's costing you enquiries.",
+      },
+      {
+        question: "Do you work outside Pune and Mumbai?",
+        answer: "Yes. We're based in Pune and work with businesses across India. Scoping, builds and support all work well remotely.",
+      },
+    ],
+    cta: {
+      heading: "Find out what your website is missing.",
+      body: "Book a free 20-minute scoping call. We'll look at your current site with you and tell you honestly whether it needs a rebuild, a few fixes, or nothing at all.",
+    },
+    related: { label: "WhatsApp & website chatbots", to: "/in/ai-chatbot" },
   },
 ];
 

@@ -37,7 +37,7 @@ export function InsightArticle() {
             headline: article.title,
             description: article.summary,
             datePublished: article.datePublished,
-            dateModified: article.datePublished,
+            dateModified: article.dateModified ?? article.datePublished,
             articleSection: article.category,
             author: orgRef,
             publisher: orgRef,
@@ -75,8 +75,8 @@ export function InsightArticle() {
               <Eyebrow>{article.category}</Eyebrow>
             </div>
             <h1 className="mt-4 text-charcoal">{article.title}</h1>
-            <p className="mt-3 font-mono text-xs uppercase tracking-[0.05em] text-charcoal-dim/70">
-              {new Date(article.datePublished).toLocaleDateString("en-US", {
+            <p className="mt-3 font-mono text-xs uppercase tracking-[0.05em] text-charcoal-dim">
+              {new Date(article.datePublished).toLocaleDateString("en-GB", {
                 year: "numeric",
                 month: "long",
                 day: "numeric",
@@ -139,6 +139,20 @@ export function InsightArticle() {
                   ))}
                 </ul>
               </div>
+            )}
+            {article.related && article.related.length > 0 && (
+              <nav aria-label="Related services" className="mt-6 border-t border-charcoal/10 pt-6">
+                <p className="font-mono text-xs uppercase tracking-[0.06em] text-charcoal-dim">Related services</p>
+                <ul className="mt-3 flex flex-col gap-2 text-base">
+                  {article.related.map((link) => (
+                    <li key={link.to}>
+                      <Link to={link.to} className="text-brass-dim underline underline-offset-4 hover:text-charcoal">
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
             )}
           </Reveal>
         </Container>

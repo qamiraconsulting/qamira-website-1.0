@@ -2,7 +2,7 @@
 // software, agents, and content systems Qamira actually builds, distinct
 // from the consulting engagements on the Services page. Framing is
 // deliberate: Services diagnoses and redesigns; Technology builds the fix;
-// Managed Services (on the Services page) keeps it running. Kept to nine
+// Managed Services (on the Services page) keeps it running. Kept to twelve
 // offerings across three groups rather than an open-ended menu, to avoid
 // the "ecosystem sprawl" pattern flagged in competitive research as a
 // competitor weakness.
@@ -45,8 +45,16 @@ export type TechnologyOffering = {
   goodFitIf: string[];
   /** Other names people search for; added to the Service schema. */
   alternateNames?: string[];
-  /** A market-specific landing page for the same offering, linked from the hero. */
-  localVersion?: { lead: string; label: string; path: string };
+  /** Market-specific landing pages for the same offering, linked from the hero. */
+  localVersions?: { lead: string; links: { label: string; path: string }[] };
+  /** Hero photo, when it isn't /photos/technology/<slug>.webp. */
+  photo?: string;
+};
+
+// Country page links, for offerings that have country versions.
+const countryLinks = (slug: string, regions: ("in" | "au" | "uk" | "us")[]) => {
+  const names = { in: "India", au: "Australia", uk: "UK", us: "US" } as const;
+  return regions.map((r) => ({ label: names[r], path: `/${r}/${slug}` }));
 };
 
 export const customerFacingAI: TechnologyOffering[] = [
@@ -72,6 +80,10 @@ export const customerFacingAI: TechnologyOffering[] = [
       "You want automation on the first line, not instead of a human when it matters.",
     ],
     alternateNames: ["AI chatbot", "Website chatbot", "WhatsApp chatbot", "Customer service chatbot"],
+    localVersions: {
+      lead: "See AI chatbots for your country:",
+      links: countryLinks("ai-chatbot", ["in", "au", "uk", "us"]),
+    },
   },
   {
     slug: "crm-build-configuration",
@@ -117,15 +129,62 @@ export const customerFacingAI: TechnologyOffering[] = [
       "Missed calls are costing you bookings and letting leads go cold.",
       "Your team spends meaningful time on calls that don't require judgment.",
     ],
-    localVersion: {
-      lead: "In Australia?",
-      label: "See our AI receptionist for tradies and clinics",
-      path: "/au/ai-receptionist",
+    localVersions: {
+      lead: "See the AI receptionist for your country:",
+      links: countryLinks("ai-receptionist", ["au", "uk", "us"]),
     },
   },
 ];
 
 export const contentAndGrowthSystems: TechnologyOffering[] = [
+  {
+    slug: "websites",
+    group: "Content & growth systems",
+    title: "Websites & Online Stores",
+    alternateNames: ["Website development", "Website design", "Online store development", "Ecommerce website"],
+    body: "Fast, mobile-first websites and online stores built around the one thing a site is for: turning visitors into enquiries, bookings and orders. Set up for search from day one, with every enquiry tracked back to where it came from.",
+    icon: "marketing-automation",
+    photo: "/photos/technology/marketing-automation-lead-scoring.webp",
+    howItWorks:
+      "We start from what the site needs to produce, whether that's calls, quote requests, bookings or orders, and build the smallest site that does it well. Quote forms, booking flows and payments are added only where they pay back. You can update text, prices and photos yourself, and optional monthly care covers hosting, updates and backups.",
+    benefits: [
+      "A site that loads quickly on a phone, where most of your visitors are.",
+      "Visitors can see in seconds what you do, where you work and how to get in touch.",
+      "Enquiries, bookings and orders arrive with the details filled in, not as a vague message.",
+      "Every call, form and order tracked back to the page, search or ad that brought it in.",
+    ],
+    goodFitIf: [
+      "Your current site looks fine but rarely brings in work.",
+      "It's slow or awkward on a phone, or hard to update.",
+      "You want to take bookings or sell online without a separate system for each.",
+    ],
+    localVersions: {
+      lead: "See website development for your country:",
+      links: countryLinks("website-development", ["in", "au", "uk", "us"]),
+    },
+  },
+  {
+    slug: "seo-geo",
+    group: "Content & growth systems",
+    title: "SEO & AI Search Visibility (GEO)",
+    alternateNames: ["Search engine optimisation", "Generative engine optimisation", "AI search optimisation", "Local SEO"],
+    body: "Getting found when customers search, and named when they ask an AI assistant for a recommendation. Search engine optimisation (SEO) for your site and local listings, plus generative engine optimisation (GEO) so AI answers can find and cite you.",
+    icon: "content-scheduler",
+    photo: "/photos/technology/content-scheduling-automation.webp",
+    howItWorks:
+      "We check how you show up today: in search results, in maps and local listings, and in the answers AI assistants give to the questions your customers ask. Then we fix the site structure, pages and listings that hold you back, and add the content and evidence AI answers draw on. You get a short report each month on what changed and what it brought in.",
+    benefits: [
+      "Found by customers searching for what you do, in the places you work.",
+      "A business profile and listings that are complete, consistent and reviewed.",
+      "A better chance of being named when someone asks an AI assistant who to call.",
+      "Plain monthly reporting on rankings, mentions and the enquiries they produced.",
+    ],
+    goodFitIf: [
+      "Competitors show up in search and AI answers, and you don't.",
+      "Most of your work comes from referrals and you want a second steady source.",
+      "You've paid for SEO before and couldn't tell what it achieved.",
+    ],
+  },
   {
     slug: "ai-video-creation",
     group: "Content & growth systems",
@@ -189,6 +248,28 @@ export const contentAndGrowthSystems: TechnologyOffering[] = [
 ];
 
 export const internalAutomation: TechnologyOffering[] = [
+  {
+    slug: "hr-software",
+    group: "Internal automation & intelligence",
+    title: "HR Software",
+    alternateNames: ["HRM system", "HR management software", "Leave management system", "Staff records system"],
+    body: "One place for staff records, leave, hiring and reviews, built around how your business actually manages people. It replaces the spreadsheets, paper forms and message threads that HR runs on in most growing firms.",
+    icon: "workflow-integration",
+    photo: "/photos/technology/workflow-systems-integration.webp",
+    howItWorks:
+      "We map how staff records, leave requests, hiring and reviews work in your business today, then set up a system that follows the same rules, with approvals going to the right manager. Staff request leave and see their own details, managers approve in a click, and the owner sees the whole picture without asking around. Where you already run payroll, we connect to it rather than replace it.",
+    benefits: [
+      "Staff records, documents and leave balances in one place, not spread across spreadsheets and inboxes.",
+      "Leave and other requests approved by the right person, with a record of who approved what.",
+      "Hiring tracked from application to offer, so good candidates don't get lost.",
+      "Reviews and probation dates that come round on time instead of being forgotten.",
+    ],
+    goodFitIf: [
+      "HR lives in spreadsheets, paper forms and message threads.",
+      "Nobody is quite sure how much leave anyone has left.",
+      "Off-the-shelf HR software is either too expensive or doesn't fit how you work.",
+    ],
+  },
   {
     slug: "workflow-systems-integration",
     group: "Internal automation & intelligence",

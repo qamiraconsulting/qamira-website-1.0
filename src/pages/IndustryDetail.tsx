@@ -12,7 +12,7 @@ import { PhotoSlot } from "@/components/brand/PhotoSlot";
 import { allIndustries } from "@/data/content/industries";
 import { NotFound } from "@/pages/NotFound";
 
-// Alt text for each industry photo at /photos/industries/<slug>.jpg --
+// Alt text for each industry photo at /photos/industries/<slug>.webp --
 // same convention as the technology detail pages, see
 // docs/photography-brief-industries.md for the prompts these were
 // generated from.
@@ -92,7 +92,7 @@ export function IndustryDetail() {
               <p className="mt-5 max-w-[56ch] text-base text-charcoal-dim sm:text-lg">{industry.body}</p>
             </div>
             <PhotoSlot
-              src={`/photos/industries/${industry.slug}.jpg`}
+              src={`/photos/industries/${industry.slug}.webp`}
               label={photoDescriptions[industry.slug]}
               alt={photoDescriptions[industry.slug]}
               className="hidden lg:block"

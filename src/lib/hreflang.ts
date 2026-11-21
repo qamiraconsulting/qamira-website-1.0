@@ -1,6 +1,7 @@
 import { site } from "@/data/site";
 import { inServicePages } from "@/data/content/inServices";
 import { auServicePages, ukServicePages, usServicePages } from "@/data/content/intlServices";
+import { receptionistPages } from "@/data/content/receptionist";
 import type { HreflangLink } from "@/lib/Seo";
 
 // hreflang for the country page sets (/in, /au, /uk, /us).
@@ -15,8 +16,7 @@ import type { HreflangLink } from "@/lib/Seo";
 //
 // Only pages that really are the same offer go in a set. The Pune and
 // Melbourne consulting pages are city pages, not translations of each
-// other, so they are left out. Add the UK and US AI receptionist pages to
-// a set when they exist.
+// other, so they are left out.
 
 type Region = "in" | "au" | "uk" | "us";
 
@@ -32,6 +32,8 @@ const inSlugFor: Record<string, string> = {
   "custom-software": "custom-software",
   "crm-development": "erp-crm-development",
   "business-automation": "business-automation",
+  "website-development": "website-development",
+  "ai-chatbot": "ai-chatbot",
 };
 
 const has = (pages: { slug: string }[], slug: string) => pages.some((p) => p.slug === slug);
@@ -45,6 +47,9 @@ const sets: Partial<Record<Region, string>>[] = auServicePages.map(({ slug }) =>
   if (inSlug && has(inServicePages, inSlug)) set.in = `/in/${inSlug}`;
   return set;
 });
+
+// The AI receptionist pages have their own template and content file.
+sets.push(Object.fromEntries(receptionistPages.map((p) => [p.region, p.path])));
 
 /** The hreflang links for `path`, or none if it isn't part of a country set. */
 export function hreflangFor(path: string): HreflangLink[] {

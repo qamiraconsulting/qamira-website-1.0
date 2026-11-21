@@ -30,10 +30,10 @@ export function PhotoSlot({
       )}
     >
       <div className="px-6">
-        <span className="block font-mono text-[10px] uppercase tracking-[0.08em] text-charcoal-dim/60">
+        <span className="block font-mono text-[10px] uppercase tracking-[0.08em] text-charcoal-dim">
           Photo pending
         </span>
-        <span className="mt-1 block text-xs text-charcoal-dim/50">{label}</span>
+        <span className="mt-1 block text-xs text-charcoal-dim">{label}</span>
       </div>
     </div>
   );

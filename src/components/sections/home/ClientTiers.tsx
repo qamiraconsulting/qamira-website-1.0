@@ -12,7 +12,7 @@ const tierPhotoLabels = [
   "Enterprise-division context -- a larger, more structured office setting.",
 ];
 
-const tierPhotoSrcs = ["/photos/client-tier-smb.jpg", "/photos/client-tier-growth.jpg", "/photos/client-tier-enterprise.jpg"];
+const tierPhotoSrcs = ["/photos/client-tier-smb.webp", "/photos/client-tier-growth.webp", "/photos/client-tier-enterprise.webp"];
 
 export function ClientTiers() {
   return (

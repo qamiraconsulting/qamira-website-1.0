@@ -152,7 +152,10 @@ async function main() {
     throw new Error('dist/index.html has no empty <div id="root"></div> to render into');
   }
 
-  const { render, routes, notFoundRoute, lastModified, routeSources } = await import(pathToFileURL(SSR_ENTRY).href);
+  const { render, routes, notFoundRoute, lastModified, routeSources, preloadAllPages } = await import(
+    pathToFileURL(SSR_ENTRY).href
+  );
+  await preloadAllPages();
   console.log(`[prerender] ${routes.length} routes`);
 
   const write = async (route, outFile) => {
