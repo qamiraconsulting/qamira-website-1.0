@@ -5,6 +5,7 @@ import { ArrowRight, ChevronUp, Mail, Phone, Sparkles, X } from "lucide-react";
 import clsx from "clsx";
 import { site, whatsappUrl } from "@/data/site";
 import { QamiChat, QAMI_AVATAR } from "@/components/chat/QamiChat";
+import { QamiBeacon } from "@/components/chat/QamiBeacon";
 import { trackQami } from "@/lib/googleTag";
 
 /**
@@ -287,6 +288,21 @@ export function ConnectDock() {
         )}
       </AnimatePresence>
 
+      {/* Qami floats above the chip while the card is closed: the 24/7 way in. */}
+      <AnimatePresence>
+        {!open && (
+          <QamiBeacon
+            key="qami-beacon"
+            teamOnline={online}
+            reducedMotion={prefersReducedMotion}
+            onOpen={() => {
+              setOpen(true);
+              openChat();
+            }}
+          />
+        )}
+      </AnimatePresence>
+
       <motion.button
         ref={triggerRef}
         type="button"
@@ -316,7 +332,6 @@ export function ConnectDock() {
 
         {/* The call to action: the three channels at a glance, then words. */}
         <span aria-hidden="true" className="flex -space-x-1.5">
-          <img src={QAMI_AVATAR} alt="" className="relative z-[4] h-7 w-7 rounded-full ring-2 ring-navy" />
           <span
             className="relative z-[3] flex h-7 w-7 items-center justify-center rounded-full text-white ring-2 ring-navy"
             style={{ backgroundColor: WHATSAPP_GREEN }}
@@ -336,7 +351,7 @@ export function ConnectDock() {
           </span>
         </span>
         <span className="flex items-center gap-1 text-[13px] font-medium text-brass-logo">
-          {online ? "Talk to us" : "Ask Qami"}
+          {online ? "Talk to us" : "Message us"}
           <ChevronUp
             aria-hidden="true"
             className={clsx(
