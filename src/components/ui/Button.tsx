@@ -20,7 +20,7 @@ const base =
   "group inline-flex items-center gap-2.5 whitespace-nowrap rounded-sm border px-6 py-3.5 font-mono text-xs uppercase tracking-[0.08em] transition-all duration-200 ease-signature hover:-translate-y-px";
 
 const variantClasses: Record<Variant, string> = {
-  primary: "border-brass bg-brass text-navy hover:border-brass-bright hover:bg-brass-bright",
+  primary: "border-brass-logo bg-brass-logo text-navy hover:border-brass-logo-hover hover:bg-brass-logo-hover",
   ghost: "border-charcoal/20 text-charcoal hover:border-brass hover:text-brass",
 };
 
