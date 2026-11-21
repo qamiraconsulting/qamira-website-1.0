@@ -2,8 +2,8 @@ import { Link, useLocation } from "react-router-dom";
 import { Logo } from "@/components/brand/Logo";
 import { Container } from "@/components/ui/Container";
 import { footerNav } from "@/data/navigation";
-import { activeSocialProfiles, site, whatsappUrl } from "@/data/site";
-import { Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
+import { activeDirectoryProfiles, activeSocialProfiles, site, whatsappUrl } from "@/data/site";
+import { AtSign, Facebook, Instagram, Linkedin, Youtube } from "lucide-react";
 import { XGlyph } from "@/components/brand/XGlyph";
 
 export function Footer() {
@@ -19,7 +19,7 @@ export function Footer() {
           <div className="lg:col-span-1">
             <Logo />
             <p className="mt-4 max-w-[32ch] text-sm">
-              Better processes and practical AI, built together.
+              {site.tagline}
             </p>
           </div>
           <FooterColumn title="Firm" items={footerNav.firm} />
@@ -60,6 +60,7 @@ export function Footer() {
               </li>
             </ul>
             <SocialLinks />
+            <DirectoryLinks />
           </div>
         </div>
         <div className="flex flex-col gap-3 border-t border-charcoal/10 pt-6 font-mono text-xs sm:flex-row sm:items-center sm:justify-between">
@@ -84,7 +85,8 @@ export function Footer() {
 function SocialLinks() {
   if (activeSocialProfiles.length === 0) return null;
 
-  const icons = { LinkedIn: Linkedin, Instagram, Facebook, X: XGlyph, YouTube: Youtube } as const;
+  // lucide has no Threads mark; its "@" is the closest plain glyph.
+  const icons = { LinkedIn: Linkedin, Instagram, Facebook, X: XGlyph, Threads: AtSign, YouTube: Youtube } as const;
 
   return (
     <ul className="mt-5 flex items-center gap-2">
@@ -105,6 +107,28 @@ function SocialLinks() {
         );
       })}
     </ul>
+  );
+}
+
+/**
+ * Where people can read about us and leave a review: the Google Business
+ * Profile and the directory listings, from the same list as the schema's
+ * sameAs.
+ */
+function DirectoryLinks() {
+  if (activeDirectoryProfiles.length === 0) return null;
+  return (
+    <p className="mt-4 text-xs">
+      <span className="font-mono uppercase tracking-[0.08em]">Find us on </span>
+      {activeDirectoryProfiles.map((profile, i) => (
+        <span key={profile.label}>
+          {i > 0 && <span aria-hidden="true"> · </span>}
+          <a href={profile.url} target="_blank" rel="noreferrer" className="underline-offset-2 transition-colors hover:text-brass hover:underline">
+            {profile.label}
+          </a>
+        </span>
+      ))}
+    </p>
   );
 }
 
