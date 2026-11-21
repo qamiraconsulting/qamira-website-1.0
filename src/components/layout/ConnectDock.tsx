@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ArrowRight, ChevronUp, Mail, Phone, X } from "lucide-react";
+import { ArrowRight, ChevronUp, Mail, Phone, Sparkles, X } from "lucide-react";
 import clsx from "clsx";
 import { site, whatsappUrl } from "@/data/site";
+import { QamiChat, QAMI_AVATAR } from "@/components/chat/QamiChat";
+import { trackQami } from "@/lib/googleTag";
 
 /**
  * The availability chip, mounted once in Layout so it is on every route.
@@ -121,6 +123,8 @@ function Row({ href, external, label, detail, iconClassName, icon }: RowProps) {
 export function ConnectDock() {
   const [now, setNow] = useState<Date | null>(null);
   const [open, setOpen] = useState(false);
+  // "chat" swaps the card for a conversation with Qami, the AI assistant.
+  const [view, setView] = useState<"channels" | "chat">("channels");
   const prefersReducedMotion = Boolean(useReducedMotion());
   const { pathname } = useLocation();
   const rootRef = useRef<HTMLDivElement>(null);
@@ -134,8 +138,12 @@ export function ConnectDock() {
     return () => window.clearInterval(timer);
   }, []);
 
-  // A card left open across a route change looks like a bug.
-  useEffect(() => setOpen(false), [pathname]);
+  // A card left open across a route change looks like a bug -- except a
+  // chat with Qami, which follows the visitor as they open the pages it links to.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (view !== "chat") setOpen(false);
+  }, [pathname]);
 
   // Escape and outside-click both close it. Bound only while open.
   useEffect(() => {
@@ -146,6 +154,7 @@ export function ConnectDock() {
       triggerRef.current?.focus();
     };
     const onPointerDown = (event: PointerEvent) => {
+      if (view === "chat") return;
       if (!rootRef.current?.contains(event.target as Node)) setOpen(false);
     };
     document.addEventListener("keydown", onKeyDown);
@@ -154,13 +163,18 @@ export function ConnectDock() {
       document.removeEventListener("keydown", onKeyDown);
       document.removeEventListener("pointerdown", onPointerDown);
     };
-  }, [open]);
+  }, [open, view]);
 
   if (!now) return null;
   const { online, time, back } = availabilityAt(now);
 
   // Naming the page gives the reply somewhere to start, and tells us which
   // pages actually earn conversations.
+  const openChat = () => {
+    setView("chat");
+    trackQami("qami_open");
+  };
+
   const whatsappHref = whatsappUrl(`Hi Qamira, I was reading ${site.url}${pathname} and would like to talk.`);
 
   return (
@@ -176,18 +190,45 @@ export function ConnectDock() {
             exit={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, y: 10, scale: 0.97 }}
             transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
             style={{ transformOrigin: "bottom right" }}
-            className="w-[min(20rem,calc(100vw-2rem))] overflow-hidden rounded-2xl border border-charcoal/10 bg-white shadow-[0_28px_60px_-22px_rgba(15,24,48,0.5)]"
+            className={clsx(
+              "relative overflow-hidden rounded-2xl border border-charcoal/10 bg-white shadow-[0_28px_60px_-22px_rgba(15,24,48,0.5)]",
+              view === "chat" ? "w-[min(23.5rem,calc(100vw-2rem))]" : "w-[min(20rem,calc(100vw-2rem))]",
+            )}
           >
+            {view === "chat" ? (
+              <QamiChat onBack={() => setView("channels")} onClose={() => setOpen(false)} />
+            ) : (
+              <>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              aria-label="Close"
+              className="absolute right-2.5 top-2.5 z-10 rounded-full p-1.5 text-charcoal-dim transition-colors hover:bg-white hover:text-charcoal"
+            >
+              <X className="h-4 w-4" aria-hidden="true" />
+            </button>
+            {/* Qami first: the one option that answers straight away, any hour. */}
+            <button
+              type="button"
+              onClick={openChat}
+              className="group flex w-full items-center gap-3 border-b border-charcoal/10 bg-gradient-to-br from-parchment to-white py-3.5 pl-4 pr-11 text-left transition-colors hover:from-parchment-2"
+            >
+              <img src={QAMI_AVATAR} alt="" className="h-11 w-11 shrink-0 rounded-full ring-2 ring-brass-logo/60" />
+              <span className="min-w-0 flex-1">
+                <span className="flex items-center gap-1.5 text-sm font-medium text-charcoal">
+                  Ask Qami
+                  <Sparkles className="h-3.5 w-3.5 text-brass-logo" aria-hidden="true" />
+                </span>
+                <span className="block text-[11.5px] leading-snug text-charcoal-dim">Our AI assistant. Instant answers, 24/7.</span>
+                <span className="mt-1 inline-flex items-center gap-1 text-[11.5px] font-medium text-brass-ink">
+                  Start a chat
+                  <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
+                </span>
+              </span>
+            </button>
+
             <div className="relative border-b border-charcoal/10 px-5 pb-4 pt-5">
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                aria-label="Close"
-                className="absolute right-3 top-3 rounded-full p-1.5 text-charcoal-dim transition-colors hover:bg-parchment hover:text-charcoal"
-              >
-                <X className="h-4 w-4" aria-hidden="true" />
-              </button>
-              <p className="flex items-center gap-2 pr-8 font-mono text-[10.5px] uppercase tracking-[0.12em] text-brass-ink">
+              <p className="flex items-center gap-2 font-mono text-[10.5px] uppercase tracking-[0.12em] text-brass-ink">
                 <StatusDot online={online} reducedMotion={prefersReducedMotion} />
                 {online ? `Online now · ${time} IST` : `Offline · ${back}`}
               </p>
@@ -240,6 +281,8 @@ export function ConnectDock() {
               </span>
               <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden="true" />
             </Link>
+              </>
+            )}
           </motion.div>
         )}
       </AnimatePresence>
@@ -247,7 +290,10 @@ export function ConnectDock() {
       <motion.button
         ref={triggerRef}
         type="button"
-        onClick={() => setOpen((value) => !value)}
+        onClick={() => {
+          if (!open) setView("channels");
+          setOpen((value) => !value);
+        }}
         aria-expanded={open}
         aria-controls="availability-card"
         initial={prefersReducedMotion ? false : { opacity: 0, y: 12 }}
@@ -270,6 +316,7 @@ export function ConnectDock() {
 
         {/* The call to action: the three channels at a glance, then words. */}
         <span aria-hidden="true" className="flex -space-x-1.5">
+          <img src={QAMI_AVATAR} alt="" className="relative z-[4] h-7 w-7 rounded-full ring-2 ring-navy" />
           <span
             className="relative z-[3] flex h-7 w-7 items-center justify-center rounded-full text-white ring-2 ring-navy"
             style={{ backgroundColor: WHATSAPP_GREEN }}
@@ -289,7 +336,7 @@ export function ConnectDock() {
           </span>
         </span>
         <span className="flex items-center gap-1 text-[13px] font-medium text-brass-logo">
-          {online ? "Talk to us" : "Message us"}
+          {online ? "Talk to us" : "Ask Qami"}
           <ChevronUp
             aria-hidden="true"
             className={clsx(

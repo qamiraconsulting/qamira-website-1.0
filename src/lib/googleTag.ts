@@ -80,7 +80,7 @@ export function initGoogleTag(): void {
  * single key event (and a single Ads conversion) counts them together;
  * `form_name` keeps them separable in GA4 reports.
  */
-export function trackGoogleLead(formName: "AI Business Assessment" | "Contact form"): void {
+export function trackGoogleLead(formName: "AI Business Assessment" | "Contact form" | "Qami chat"): void {
   if (typeof window === "undefined" || !resolveMeasurementId()) return;
   window.gtag?.("event", "generate_lead", { form_name: formName });
 }
@@ -105,4 +105,14 @@ export function trackGoogleContactChannel(channel: string, linkLocation?: string
   if (channel === "WhatsApp") {
     window.gtag?.("event", "whatsapp_click", { link_location: linkLocation });
   }
+}
+
+/**
+ * Qami (the site chatbot) activity that isn't a lead: a chat started, a
+ * message sent. Plain GA4 events, never key events, so they don't inflate
+ * the lead conversion.
+ */
+export function trackQami(action: "qami_open" | "qami_chat_start" | "qami_message"): void {
+  if (typeof window === "undefined" || !resolveMeasurementId()) return;
+  window.gtag?.("event", action);
 }

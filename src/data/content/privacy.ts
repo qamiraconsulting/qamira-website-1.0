@@ -43,6 +43,7 @@ export const sections = [
       "Contact form submissions are used solely to respond to your enquiry.",
       "Job applications are used only to assess you for the role you applied for and similar roles at Qamira. They are stored in our own database and inbox, read only by the people hiring, and never shared with our clients without your agreement. They are not sent to any AI service, and are not shared with Meta or Google.",
       "Assessment submissions are sent to a third-party AI provider to generate your personalised AI Opportunity Report. Under the provider's commercial terms, data we send is not used to train its models, and is retained only briefly for abuse and safety monitoring.",
+      "Chats with Qami, the AI assistant on this site, are sent to the same third-party AI provider to generate its replies, under the same terms. We store the chat in our own database so our team can follow up and improve the assistant. If you leave your name and email in a chat, they are emailed to our team and added to our enquiry records, the same as a contact form enquiry.",
       "We do not sell your information. We do share limited data with Meta (Facebook/Instagram) and Google to measure our own advertising, and with Apollo.io to see which companies visit our site -- see \"Cookies and advertising measurement\" below for exactly what. We do not share your information with any other third party for marketing.",
     ],
   },
@@ -65,13 +66,14 @@ export const sections = [
       "Assessment submissions are retained by Qamira only if you choose to continue into a consultation with us. If you don't, we don't keep your submission on file for any other purpose.",
       "Where we do retain your information, it is used only for your own ongoing engagement with Qamira -- never repurposed for another client, and never used to train any AI model.",
       "Contact form messages are kept only as long as needed for correspondence with you.",
+      "Qami chats are kept only as long as needed to follow up on your enquiry and improve the assistant.",
       "Job applications, including your résumé, are deleted 12 months after you apply, or sooner if you ask us to.",
     ],
   },
   {
     heading: "Who else touches it",
     body: [
-      "A third-party AI provider -- processes assessment answers to generate your report, under commercial terms that stop it training its models on your data.",
+      "A third-party AI provider -- processes assessment answers and Qami chat messages to generate your report and Qami's replies, under commercial terms that stop it training its models on your data.",
       "Meta Platforms -- receives the advertising measurement data described above. Meta acts under its own terms and privacy policy, not ours.",
       "Google -- receives the analytics and advertising measurement data described above, under its own terms and privacy policy.",
       "Apollo.io -- receives the website visit data described above, to identify visiting companies, under its own terms and privacy policy.",
