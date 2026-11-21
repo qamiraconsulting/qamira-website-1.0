@@ -7,8 +7,7 @@ export function Logo({ className, large = false }: { className?: string; large?:
     <Link to="/" aria-label="Qamira Consulting — home" className={clsx("flex items-center gap-3", className)}>
       <img
         src={logoMark}
-        alt=""
-        aria-hidden="true"
+        alt="Qamira Consulting"
         width={large ? 92 : 46}
         height={large ? 92 : 46}
         className={clsx(

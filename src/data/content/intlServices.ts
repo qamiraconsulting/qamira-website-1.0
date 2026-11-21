@@ -70,7 +70,7 @@ function pagesFor(r: RegionCopy): InServicePage[] {
       eyebrow: `Custom software · ${r.label}`,
       title: "Software built around how your business actually runs.",
       lede: `Custom applications, business systems and client portals for growing ${r.adjective} businesses that have outgrown spreadsheets, shared inboxes and a patchwork of apps. Built to fit your process, connected to what you already use.`,
-      photo: { src: "/photos/technology/custom-saas-chatbots.jpg", label: "A laptop showing a custom business application." },
+      photo: { src: "/photos/technology/ai-chatbots.jpg", label: "A laptop showing a custom business application." },
       pain: {
         eyebrow: "Sound familiar?",
         heading: "When the business outgrows the tools it started with.",

@@ -289,9 +289,9 @@ export const growthOSCta = {
       cta: { label: "Start a conversation", to: "/contact" },
     },
     {
-      title: "Get your AI Opportunity Report",
-      body: "Prefer a data point first? Answer 8 quick questions and get an instant, personalized report you can review before deciding whether to talk to us.",
-      cta: { label: "Take the free assessment", to: "/assessment" },
+      title: "Start with a data point",
+      body: "Prefer a data point first? Answer a few questions about your business and get a personalised report you can read before deciding whether to talk to us.",
+      cta: { label: "Free AI Business Assessment", to: "/assessment" },
     },
   ],
 };

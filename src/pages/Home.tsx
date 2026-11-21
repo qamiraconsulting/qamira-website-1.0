@@ -1,10 +1,8 @@
 import { Seo } from "@/lib/Seo";
-import { organizationSchema } from "@/data/site";
 import { Hero } from "@/components/sections/home/Hero";
+import { Practices } from "@/components/sections/home/Practices";
 import { StatsStrip } from "@/components/sections/home/StatsStrip";
 import { WhoWeAre } from "@/components/sections/home/WhoWeAre";
-import { Philosophy } from "@/components/sections/home/Philosophy";
-import { ServiceBanner } from "@/components/sections/home/ServiceBanner";
 import { MethodologyPreview } from "@/components/sections/home/MethodologyPreview";
 import { TechnologyPreview } from "@/components/sections/home/TechnologyPreview";
 import { ClientTiers } from "@/components/sections/home/ClientTiers";
@@ -15,16 +13,12 @@ import { CTABand } from "@/components/sections/home/CTABand";
 export function Home() {
   return (
     <>
-      <Seo
-        title="Home"
-        path="/"
-        jsonLd={organizationSchema}
-      />
+      {/* The organization schema is added by Seo on every page. */}
+      <Seo title="Home" fullTitle="Business Advisory & Technology Services | Qamira Consulting" path="/" />
       <Hero />
-      <ServiceBanner />
+      <Practices />
       <StatsStrip />
       <WhoWeAre />
-      <Philosophy />
       <MethodologyPreview />
       <TechnologyPreview />
       <CaseStudiesPreview />

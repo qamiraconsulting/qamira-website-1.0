@@ -13,10 +13,10 @@ export function WhoWeAre() {
         <Reveal className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:gap-14">
           <div>
             <Eyebrow>Who we are</Eyebrow>
-            <h2 className="mt-4 text-charcoal">A Business Performance Excellence firm, built AI-native from day one.</h2>
+            <h2 className="mt-4 text-charcoal">One team for the advice and the build.</h2>
             <p className="mt-4 text-base text-charcoal-dim sm:text-lg">
-              Most firms treat AI as a bolt-on. Qamira treats business performance as the foundation, AI-native
-              execution as the mechanism, and reusable intellectual property as the moat that keeps getting stronger.
+              Most firms either advise or build. We do both, so the people who work out what to change can also put
+              it in place, and you deal with one team throughout.
             </p>
           </div>
           <PhotoSlot

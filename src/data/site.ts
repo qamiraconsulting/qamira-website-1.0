@@ -1,10 +1,23 @@
 export const site = {
   name: "Qamira Consulting",
   shortName: "Qamira",
-  tagline: "Business Performance Excellence, AI-Native Execution",
-  motto: "Strategy Foundation. Process Structure. People Capability. AI Accelerant.",
+  /** The firm statement. Used as the homepage H1 and the social card's alt text. */
+  tagline: "We advise on what to change, and build the systems that change it.",
+  /** Footer line. Kept short and free of any ordering between advice and technology. */
+  motto: "Advisory and technology. Fixed price, delivered in weeks.",
+  /**
+   * The homepage meta description, and the fallback for any page that
+   * doesn't set its own. Keep it under 155 characters so search results
+   * don't cut it off.
+   */
   description:
-    "Qamira Consulting is a Business Performance Excellence firm. We diagnose what's constraining growth, redesign the process and operating model beneath it, and deploy AI-native execution to make the fix permanent -- governed by QBPES™, our proprietary performance system.",
+    "We advise owner-led and mid-sized businesses on what to change, and build the systems that change it. Start with a free AI Business Assessment.",
+  /**
+   * The longer, CTA-free version used in the organization schema, where a
+   * call to action would read oddly.
+   */
+  summary:
+    "Qamira Consulting is a business advisory and technology firm. We advise owner-led and mid-sized businesses on what to change, and build the systems that change it, at a fixed price and in weeks. Our team is based in India and works remotely across Indian, Australian, UK and European business hours.",
   email: "enquiries@qamiraconsulting.com",
   /** Job applications. Duplicated as CAREERS_TO_EMAIL in api/apply.ts. */
   careersEmail: "careers@qamiraconsulting.com",
@@ -21,7 +34,7 @@ export const site = {
   // Bump ?v= whenever scripts/make-og-card.py regenerates the card:
   // LinkedIn and others cache preview images by URL, so a same-URL
   // replacement keeps showing the old card.
-  ogImage: "/og/qamira-og.png?v=2",
+  ogImage: "/og/qamira-og.png?v=3",
 } as const;
 
 /**
@@ -49,6 +62,19 @@ export const socialProfiles: readonly SocialProfile[] = [
   // Channel-id URL, not an @handle, so it keeps resolving if the handle changes.
   { label: "YouTube", url: "https://www.youtube.com/channel/UCJkqMxTA-R8GYNlIwRaEoTg" },
 ];
+
+/**
+ * Directory listings that describe the firm (review and agency sites).
+ * Schema-only: they go into the organization's sameAs, but are not shown
+ * in the connect dock or footer. Same rule as above -- leave a URL blank
+ * until it is confirmed live.
+ */
+export const directoryProfiles: readonly { label: string; url: string }[] = [
+  { label: "GoodFirms", url: "" },
+  { label: "Clutch", url: "" },
+];
+
+export const activeDirectoryProfiles = directoryProfiles.filter((profile) => profile.url !== "");
 
 /** The profiles that actually resolve. Everything renders from this. */
 export const activeSocialProfiles = socialProfiles.filter((profile) => profile.url !== "");
@@ -86,40 +112,55 @@ export const orgRef = { "@id": orgId } as const;
  */
 export const organizationSchema = {
   "@context": "https://schema.org",
-  "@type": "ProfessionalService",
+  // Both types: Organization is what search engines look for first, and
+  // ProfessionalService says what kind of organization it is.
+  "@type": ["Organization", "ProfessionalService"],
   "@id": orgId,
   name: site.name,
-  description: site.description,
+  description: site.summary,
   url: site.url,
   logo: `${site.url}/logo/apple-touch-icon.png`,
   image: `${site.url}${site.ogImage}`,
   email: site.email,
   telephone: site.phone,
+  // Region and country only. No street address: there is no public office.
   address: {
     "@type": "PostalAddress",
     addressRegion: "Maharashtra",
     addressCountry: "IN",
   },
-  // Named explicitly rather than "Global": the firm's go-to-market is
-  // India-primary with existing delivery in Australia, and a truthful,
-  // specific areaServed is a stronger relevance signal than a broad one.
+  // Named explicitly rather than "Global": a truthful, specific list of the
+  // markets the firm sells into is a stronger relevance signal than a
+  // broad one. Keep in step with the country pages (/in, /au, /uk, /us).
   areaServed: [
     { "@type": "Country", name: "India" },
     { "@type": "Country", name: "Australia" },
+    { "@type": "Country", name: "United Kingdom" },
+    { "@type": "Country", name: "United States" },
+    { "@type": "Country", name: "United Arab Emirates" },
   ],
+  // The two practices, in the same words the homepage uses.
   knowsAbout: [
-    "Business Performance Excellence",
-    "Operational Excellence",
-    "Business Process Optimization",
-    "Business Intelligence and Analytics Strategy",
-    "AI Strategy and Intelligent Automation",
+    "Business advisory",
+    "Operating model design",
+    "Business process improvement",
+    "Pricing strategy",
+    "Growth planning",
+    "Website and online store development",
+    "Search engine optimisation",
+    "Generative engine optimisation",
+    "AI chatbots and assistants",
+    "AI voice reception",
+    "CRM development",
+    "HR management software",
+    "Business reporting and dashboards",
   ],
   contactPoint: {
     "@type": "ContactPoint",
     email: site.email,
     telephone: site.phone,
     contactType: "customer service",
-    areaServed: ["IN", "AU"],
+    areaServed: ["IN", "AU", "GB", "US", "AE"],
     availableLanguage: ["English", "Hindi", "Marathi"],
   },
   // sameAs is the strongest entity-disambiguation signal available: it
@@ -128,9 +169,8 @@ export const organizationSchema = {
   // company of the same name on Crunchbase and Tracxn, and from
   // Qamr/Qamar Consulting in India.
   //
-  // Driven by socialProfiles above so the dock, the footer and this list
-  // can never drift apart. Only profiles that actually resolve appear --
-  // a URL that 404s is worse than an absent one. Add the Google Business
-  // Profile and Crunchbase entries to socialProfiles as they go live.
-  sameAs: activeSocialProfiles.map((profile) => profile.url),
+  // Driven by socialProfiles and directoryProfiles above, so the dock,
+  // the footer and this list can never drift apart. Only profiles that
+  // actually resolve appear -- a URL that 404s is worse than an absent one.
+  sameAs: [...activeSocialProfiles, ...activeDirectoryProfiles].map((profile) => profile.url),
 } as const;

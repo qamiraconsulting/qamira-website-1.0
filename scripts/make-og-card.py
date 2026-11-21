@@ -52,11 +52,11 @@ DIVIDER_Y = 430
 CARDS = [
     {
         "out": "qamira-og.png",
-        "eyebrow": "BUSINESS PERFORMANCE EXCELLENCE",
-        "headline": ["Better processes and practical AI,", "built together."],
+        "eyebrow": "BUSINESS ADVISORY & TECHNOLOGY",
+        "headline": ["We advise on what to change, and", "build the systems that change it."],
         "supporting": [
-            "Find what's really holding your growth back and fix it for good:",
-            "process, operating model and AI, delivered as one system.",
+            "For owner-led and mid-sized businesses.",
+            "Fixed price, delivered in weeks.",
         ],
         "footer_label": "Free AI Business Assessment",
     },

@@ -51,10 +51,12 @@ export type TechnologyOffering = {
 
 export const customerFacingAI: TechnologyOffering[] = [
   {
-    slug: "custom-saas-chatbots",
+    // Was /technology/custom-saas-chatbots ("Custom SaaS Applications & AI
+    // Chatbots"). vercel.json 301s the old URL here; social bios link to it.
+    slug: "ai-chatbots",
     group: "Customer-facing AI",
-    title: "Custom SaaS Applications & AI Chatbots",
-    body: "Purpose-built customer service applications with an embedded AI chatbot trained on your actual policies, product catalog, and past resolutions -- not a generic FAQ widget bolted onto your site. Handles first-line triage and routine requests, escalates cleanly to a human the moment a query needs judgment.",
+    title: "AI Chatbots",
+    body: "A chatbot for your website or WhatsApp, trained on your own policies, products and past answers rather than a generic FAQ widget. It answers routine questions and takes bookings day and night, and hands over to your team, with the conversation attached, when a question needs judgement.",
     icon: "chatbot-service",
     howItWorks:
       "Once it's live, it handles routine customer questions and requests on its own, day and night. The moment something needs real judgment, it hands off to a person on your team with full context attached, so nothing gets stuck in a queue or repeated from scratch.",
@@ -69,6 +71,7 @@ export const customerFacingAI: TechnologyOffering[] = [
       "Your current chatbot, if you have one, is a generic FAQ widget nobody trusts.",
       "You want automation on the first line, not instead of a human when it matters.",
     ],
+    alternateNames: ["AI chatbot", "Website chatbot", "WhatsApp chatbot", "Customer service chatbot"],
   },
   {
     slug: "crm-build-configuration",
