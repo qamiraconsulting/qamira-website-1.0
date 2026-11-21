@@ -123,9 +123,10 @@ export const organizationSchema = {
   image: `${site.url}${site.ogImage}`,
   email: site.email,
   telephone: site.phone,
-  // Region and country only. No street address: there is no public office.
+  // City, region and country only. No street address: there is no public office.
   address: {
     "@type": "PostalAddress",
+    addressLocality: "Pune",
     addressRegion: "Maharashtra",
     addressCountry: "IN",
   },

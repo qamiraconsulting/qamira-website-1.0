@@ -3,8 +3,8 @@
 
 export const servicesHero = {
   eyebrow: "What we do",
-  title: "Every service ties back to a QBPES™ domain or lifecycle stage.",
-  lede: "Nothing here exists as a standalone offer. Each service is scoped against the eight performance domains and the eight-step delivery process -- so the engagement you start with is sized to the problem you actually have.",
+  title: "Every service we offer, in one place.",
+  lede: "Advice, software and ongoing support for owner-led and mid-sized businesses. Start with one service or combine several. Each is scoped in writing and priced before we start, so the work is sized to the problem you actually have.",
 };
 
 export const servicesFaq = [

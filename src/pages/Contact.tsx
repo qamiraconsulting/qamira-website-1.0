@@ -260,7 +260,7 @@ export function Contact() {
                   <Link to="/assessment" className="text-brass hover:text-brass-bright">
                     AI Business Assessment
                   </Link>{" "}
-                  first -- five minutes for an instant, personalized report you can review before reaching out.
+                  first -- five minutes for an instant, personalised report you can review before reaching out.
                 </p>
               </div>
             </Reveal>

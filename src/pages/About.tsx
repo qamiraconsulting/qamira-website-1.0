@@ -21,7 +21,7 @@ export function About() {
       <Seo
         title="About"
         path="/about"
-        description="Qamira is a Business Performance Excellence firm, not a technology vendor. Learn our foundation, our three pillars, and who we're built for."
+        description="We advise owner-led and mid-sized businesses on what to change, and build the systems that change it. Our team is based in India and works remotely worldwide."
       />
       <PageHero
         eyebrow={aboutHero.eyebrow}
@@ -77,7 +77,7 @@ export function About() {
               <Eyebrow>Is this you?</Eyebrow>
               <h2 className="mt-4 text-charcoal">Our ideal client shares three signals.</h2>
               <p className="mt-4 text-base text-charcoal-dim sm:text-lg">
-                Regardless of size or industry, the clients we serve best recognize themselves here.
+                Regardless of size or industry, the clients we serve best recognise themselves here.
               </p>
             </Reveal>
             <RevealGroup className="flex flex-col gap-5">

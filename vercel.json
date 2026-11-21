@@ -76,6 +76,11 @@
       "source": "/technology/custom-saas-chatbots",
       "destination": "/technology/ai-chatbots",
       "statusCode": 301
+    },
+    {
+      "source": "/insights/ai-accelerant-not-ai-first",
+      "destination": "/ai-solutions",
+      "statusCode": 301
     }
   ],
   "headers": [

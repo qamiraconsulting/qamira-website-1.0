@@ -76,7 +76,7 @@ export const advisoryAssessmentFaq = [
   {
     question: "How is this different from the free AI Business Assessment?",
     answer:
-      "The free AI Business Assessment is a 15-minute online questionnaire that gives you a quick report. The QBPES™ assessment is six to twelve weeks of work with our team: interviews, your real numbers, and a plan built for your business.",
+      "The free AI Business Assessment is a five-minute online questionnaire that gives you a quick report. The QBPES™ assessment is six to twelve weeks of work with our team: interviews, your real numbers, and a plan built for your business.",
   },
   {
     question: "How much does it cost?",

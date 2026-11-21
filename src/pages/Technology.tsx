@@ -66,7 +66,7 @@ export function Technology() {
       <Seo
         title="Technology"
         path="/technology"
-        description="Custom SaaS applications, AI chatbots, CRM builds, AI video creation, scheduled content automation, and internal AI agents -- the software Qamira builds to make AI-native execution real."
+        description="Websites, custom software, CRMs, AI chatbots and receptionists, HR software and business automation, built by our technology practice at a fixed price."
         jsonLd={technologyListJsonLd}
       />
       <PageHero

@@ -45,19 +45,19 @@ export const industryGroups: IndustryGroup[] = [
         slug: "professional-services",
         group: "Professional Services & Digital",
         title: "Professional Services",
-        focus: "Utilization and realization, project profitability, WIP to cash",
-        body: "Pre-built utilization and project profitability KPI templates for firms that sell time and expertise rather than physical output -- accountancy and audit practices, law firms, recruitment agencies, engineering consultancies, and creative and IT shops. It is also the one accelerator we can validate against our own operating data, because Qamira is itself a professional services firm.",
+        focus: "Utilisation and realisation, project profitability, WIP to cash",
+        body: "Pre-built utilisation and project profitability KPI templates for firms that sell time and expertise rather than physical output -- accountancy and audit practices, law firms, recruitment agencies, engineering consultancies, and creative and IT shops. It is also the one accelerator we can validate against our own operating data, because Qamira is itself a professional services firm.",
         metaDescription:
-          "QBPES™ Industry Accelerator for professional services -- utilization and realization as a pair, engagement-level profitability, and WIP read as a cash cycle.",
+          "QBPES™ Industry Accelerator for professional services -- utilisation and realisation as a pair, engagement-level profitability, and WIP read as a cash cycle.",
         constraints: [
-          "Utilization is measured and reported while realization is not, so a fully-booked team and a team actually collecting its standard rate look identical until the cash lands.",
+          "Utilisation is measured and reported while realisation is not, so a fully-booked team and a team actually collecting its standard rate look identical until the cash lands.",
           "Scope creep on fixed-fee work is absorbed by delivery rather than surfaced as a commercial decision, which turns a margin problem into a retention problem.",
           "Work in progress ages quietly between delivery and invoice, and the firm ends up funding its clients' working capital without ever deciding to.",
           "Proposals, onboarding and approvals all route through the same partners who sell and deliver, which caps how much work the firm can take on.",
         ],
         prebuilt: [
-          "Utilization and realization defined as a pair, so the gap between hours worked and rate collected stops being invisible -- and \"non-billable\" stops hiding both the best investments and the worst leakage.",
-          "Project profitability definitions connecting delivery effort to realized margin at engagement level, not just at firm level.",
+          "Utilisation and realisation defined as a pair, so the gap between hours worked and rate collected stops being invisible -- and \"non-billable\" stops hiding both the best investments and the worst leakage.",
+          "Project profitability definitions connecting delivery effort to realised margin at engagement level, not just at firm level.",
           "A scope-change pattern that routes creep to a priced commercial decision instead of leaving the delivery team to absorb it.",
           "WIP and lock-up read as a cash cycle rather than an accounting artefact, so ageing work surfaces while it can still be billed.",
         ],
@@ -68,7 +68,7 @@ export const industryGroups: IndustryGroup[] = [
           "Repeat work gets cheaper to deliver, because the second engagement of a kind starts from an asset rather than a blank page.",
         ],
         goodFitIf: [
-          "Your team is fully utilized and the margin still is not there.",
+          "Your team is fully utilised and the margin still is not there.",
           "Scope creep on fixed-fee work is normal, absorbed, and never priced.",
           "Proposals, onboarding and approvals still wait on a partner who is also selling and delivering.",
         ],
@@ -77,8 +77,8 @@ export const industryGroups: IndustryGroup[] = [
         slug: "startups-tech",
         group: "Professional Services & Digital",
         title: "Growing Startups & Tech",
-        focus: "Agility mapping, burn-rate optimization",
-        body: "An agility mapping template that assesses whether process and governance can survive the next funding round, plus burn-rate optimization models tuned to venture-backed cost structures.",
+        focus: "Agility mapping, burn-rate optimisation",
+        body: "An agility mapping template that assesses whether process and governance can survive the next funding round, plus burn-rate optimisation models tuned to venture-backed cost structures.",
         metaDescription:
           "QBPES™ Accelerator for growing startups and tech -- agility mapping against the next funding round, plus burn-rate models for venture-backed cost structures.",
         constraints: [
@@ -89,7 +89,7 @@ export const industryGroups: IndustryGroup[] = [
         ],
         prebuilt: [
           "An agility mapping template that assesses whether current process and governance survive the next stage of growth, not just today's headcount.",
-          "Burn-rate optimization models tuned to venture-backed cost structures, framed by what spend buys rather than by department line.",
+          "Burn-rate optimisation models tuned to venture-backed cost structures, framed by what spend buys rather than by department line.",
           "A minimum-viable governance pattern -- enough evidence for diligence, deliberately not enough to slow the company down.",
           "A decision-rights rubric identifying which calls should stop reaching the founders, and what has to be true first.",
         ],
@@ -145,24 +145,24 @@ export const industryGroups: IndustryGroup[] = [
         slug: "logistics-supply-chain",
         group: "Asset-Heavy Verticals",
         title: "Logistics & Supply Chain",
-        focus: "Fleet utilization, route efficiency, warehouse analytics",
-        body: "Pre-built KPI and process templates for fleet utilization, route efficiency, and warehouse throughput, mapped to common logistics sub-processes -- dispatch, last-mile, returns -- for maturity scoring against vertical-specific evidence.",
+        focus: "Fleet utilisation, route efficiency, warehouse analytics",
+        body: "Pre-built KPI and process templates for fleet utilisation, route efficiency, and warehouse throughput, mapped to common logistics sub-processes -- dispatch, last-mile, returns -- for maturity scoring against vertical-specific evidence.",
         metaDescription:
-          "QBPES™ Accelerator for logistics and supply chain -- fleet utilization, route efficiency and warehouse throughput templates mapped to real sub-processes.",
+          "QBPES™ Accelerator for logistics and supply chain -- fleet utilisation, route efficiency and warehouse throughput templates mapped to real sub-processes.",
         constraints: [
-          "Fleet utilization is reported as a single percentage nobody can decompose into idle, deadhead, and revenue-earning time.",
+          "Fleet utilisation is reported as a single percentage nobody can decompose into idle, deadhead, and revenue-earning time.",
           "Route planning optimises for distance, while the real cost accumulates after the vehicle arrives -- dwell time, failed deliveries, and re-attempts.",
           "Warehouse performance is measured at the dock but not through pick, pack, and returns, so the internal bottleneck stays invisible.",
           "Dispatch, last-mile, and returns run as separate teams against separate targets that pull against each other.",
         ],
         prebuilt: [
-          "KPI templates for fleet utilization, route efficiency, and warehouse throughput, each decomposed to the sub-process that actually drives the number.",
+          "KPI templates for fleet utilisation, route efficiency, and warehouse throughput, each decomposed to the sub-process that actually drives the number.",
           "A logistics process taxonomy covering dispatch, line-haul, last-mile, and returns, mapped as one continuous flow rather than four disconnected functions.",
           "Maturity scoring against vertical-specific evidence, so a claim that the capability already exists is tested against artefacts rather than accepted as an assertion.",
           "Exception-handling patterns for the events -- failed delivery, damage, re-route -- that consume a disproportionate share of cost and management attention.",
         ],
         outcomes: [
-          "Utilization becomes a number you can act on, because it separates the time you are paying for from the time you are earning on.",
+          "Utilisation becomes a number you can act on, because it separates the time you are paying for from the time you are earning on.",
           "Cost shows up where it is actually incurred -- at dwell, at re-attempt, at returns -- instead of being smeared across a cost-per-km average.",
           "Handoffs between dispatch, line-haul, and last-mile get an owner and a measurement, so nothing sits in the gap between two teams.",
           "Automation is aimed at the exceptions that eat the day, rather than at the routine movements that already run fine.",
@@ -197,7 +197,7 @@ export const industryGroups: IndustryGroup[] = [
           "Discovery starts against known-good comparison data, so the assessment phase is shorter and the findings are harder to argue with.",
           "Losses are attributed to a named cause and a named owner, rather than absorbed into a plant-wide average nobody can act on.",
           "The KPI architecture outlives the engagement, because it is defined once and governed -- not rebuilt from scratch for each month's report.",
-          "AI-native execution lands where it earns its keep -- forecasting, scheduling, exception handling -- instead of being spread thin across everything at once.",
+          "AI goes where it earns its keep -- forecasting, scheduling, exception handling -- instead of being spread thin across everything at once.",
         ],
         goodFitIf: [
           "You have plenty of plant data but no agreed definition of what good actually looks like.",
@@ -210,17 +210,17 @@ export const industryGroups: IndustryGroup[] = [
         group: "Asset-Heavy Verticals",
         title: "Construction & Infrastructure",
         focus: "Resource management, project drift tracking",
-        body: "Built for project-based businesses where the core performance risk is drift -- scope, schedule, and cost variance against baseline -- with standard resource utilization KPIs and a drift-tracking template that plugs directly into governance.",
+        body: "Built for project-based businesses where the core performance risk is drift -- scope, schedule, and cost variance against baseline -- with standard resource utilisation KPIs and a drift-tracking template that plugs directly into governance.",
         metaDescription:
-          "QBPES™ Accelerator for construction and infrastructure -- utilization KPIs and a scope, schedule and cost drift-tracking template wired into governance.",
+          "QBPES™ Accelerator for construction and infrastructure -- utilisation KPIs and a scope, schedule and cost drift-tracking template wired into governance.",
         constraints: [
           "Variance against baseline is discovered at month-end reporting, by which point the decision that caused it is weeks old.",
           "Scope, schedule, and cost are tracked in three different systems by three different people, so nobody sees drift compounding across all three.",
-          "Resource utilization is estimated from timesheets filled in retrospectively, which makes the number directionally right and operationally useless.",
+          "Resource utilisation is estimated from timesheets filled in retrospectively, which makes the number directionally right and operationally useless.",
           "Lessons from the last project live in a closeout document nobody reads before starting the next one.",
         ],
         prebuilt: [
-          "Standard resource utilization KPI definitions for project-based delivery, built around the difference between capacity you are selling and capacity you are merely carrying.",
+          "Standard resource utilisation KPI definitions for project-based delivery, built around the difference between capacity you are selling and capacity you are merely carrying.",
           "A drift-tracking template that reads scope, schedule, and cost variance as one connected signal rather than three separate reports.",
           "Governance hooks so drift surfaces at the forum that can actually decide something, at the point where a decision still changes the outcome.",
           "A project maturity rubric covering estimation, change control, and closeout -- the three stages where drift is most often manufactured.",
@@ -228,7 +228,7 @@ export const industryGroups: IndustryGroup[] = [
         outcomes: [
           "Drift is visible while it is still small, because it is tracked continuously against baseline instead of reconstructed at month-end.",
           "Change control becomes a decision with an owner rather than an argument settled after the fact.",
-          "Utilization reflects capacity you can actually deploy, which makes bidding and resourcing decisions less speculative.",
+          "Utilisation reflects capacity you can actually deploy, which makes bidding and resourcing decisions less speculative.",
           "Closeout produces something reusable -- an estimating input for the next project, not a document filed and forgotten.",
         ],
         goodFitIf: [
@@ -247,9 +247,9 @@ export const industryGroups: IndustryGroup[] = [
         group: "Consumer & Service Verticals",
         title: "Retail & E-Commerce",
         focus: "CAC/LTV models, inventory turns, customer journey",
-        body: "Pre-built customer acquisition cost and lifetime value modeling, inventory turn benchmarks by category, and a standard customer journey map -- giving your engagement a head start on the KPI architecture that matters most to margin and growth decisions.",
+        body: "Pre-built customer acquisition cost and lifetime value modelling, inventory turn benchmarks by category, and a standard customer journey map -- giving your engagement a head start on the KPI architecture that matters most to margin and growth decisions.",
         metaDescription:
-          "QBPES™ Industry Accelerator for retail and e-commerce -- pre-built CAC/LTV modeling, inventory turn benchmarks by category, and a standard customer journey map.",
+          "QBPES™ Industry Accelerator for retail and e-commerce -- pre-built CAC/LTV modelling, inventory turn benchmarks by category, and a standard customer journey map.",
         constraints: [
           "Acquisition cost is measured per channel while lifetime value is measured in aggregate, so channel spend is judged on what a customer costs and never on what they turn out to be worth.",
           "Inventory turns are reported across the whole catalogue, which lets fast-moving lines subsidise dead stock indefinitely.",
@@ -266,7 +266,7 @@ export const industryGroups: IndustryGroup[] = [
           "Channel spend is judged on the customers it actually produces, not on the leads it reports.",
           "Dead stock surfaces early enough to act on, while markdown is still a choice rather than a write-off.",
           "The journey has named owners at every seam, so drop-off has somewhere to be resolved.",
-          "AI-native execution goes where volume makes it pay -- forecasting, merchandising, first-line service -- instead of being deployed as a demo.",
+          "AI goes where volume makes it pay -- forecasting, merchandising, first-line service -- instead of being deployed as a demo.",
         ],
         goodFitIf: [
           "Revenue is growing while margin is flat or falling.",

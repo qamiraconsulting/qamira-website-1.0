@@ -1,26 +1,35 @@
 # Qamira Consulting
 
-> Qamira Consulting is a Business Performance Excellence and AI Consulting firm for SMEs. We diagnose what's actually constraining a business's growth, redesign the process and operating model beneath it, and deploy AI-native execution to make the fix permanent -- governed by QBPES™, our proprietary performance system. We are a consulting and advisory firm, not a software vendor, marketing agency, or automation shop.
+> Qamira Consulting is a business advisory and technology firm. We advise owner-led and mid-sized businesses on what to change, and build the systems that change it: custom software, CRMs, websites, AI chatbots and receptionists, and business automation. Work is fixed price and delivered in weeks. Our team is based in India and works remotely across Indian, Australian, UK and European business hours.
 
-Qamira serves small-to-medium businesses ($2M-$50M revenue), post-Series A/B growth-stage startups, and enterprise divisions. Engagements start with a diagnosis, never a technology purchase.
+We work with owner-led and mid-sized businesses and growing startups in India, Australia, the UK, the US and the UAE. Clients use our advisory practice, our technology practice, or both. The easiest place to start is the free AI Business Assessment, or a free 20-minute call.
 
 ## Core methodology
 
-- [QBPES™ Methodology](https://www.qamiraconsulting.com/methodology): The Qamira Business Performance Excellence System -- eight interdependent performance domains (Strategy, Financial Performance, Process, People, Data, Technology, Customer, Governance), a five-level maturity model, and an eight-step delivery process.
-- [Qamira GrowthOS™](https://www.qamiraconsulting.com/growth-os): An AI-enabled business growth and performance operating system -- QBPES™ productized specifically for growth. Connects Diagnose, Strategise, Acquire, Convert, Deliver, Measure, Optimise, and Scale into one continuous loop. It is not a CRM, chatbot, dashboard, marketing tool, automation platform, or AI video-generation service -- those are, at most, individual swappable components inside it.
-- [AI Solutions](https://www.qamiraconsulting.com/ai-solutions): How Qamira governs its own use of AI -- evidence-based findings, human review gates, and the Cognitive Transformation Matrix used to decide what should and shouldn't be automated.
+- [QBPES™ Methodology](https://www.qamiraconsulting.com/methodology): Our method for assessing a business: eight connected areas (strategy, financial performance, process, people, data, technology, customer, governance), each scored on a five-level maturity scale, and an eight-step delivery process.
+- [QBPES™ Business Assessment](https://www.qamiraconsulting.com/advisory/qbpes-assessment): A full, fixed-price assessment of a business across all eight areas, with a target operating model and a sequenced roadmap of the changes worth making. Six to twelve weeks.
+- [Qamira GrowthOS™](https://www.qamiraconsulting.com/growth-os): Our growth operating system. It connects how a business wins, converts, delivers and measures customers into one continuous loop: Diagnose, Strategise, Acquire, Convert, Deliver, Measure, Optimise and Scale.
+- [AI Solutions](https://www.qamiraconsulting.com/ai-solutions): How we use AI in our own work: every finding cites its evidence, client data is never used to train shared models, and a person reviews every recommendation.
 
 ## What we do
 
-- [Services](https://www.qamiraconsulting.com/services): Business Performance Transformation, Operational Excellence & Process Optimization, Analytics Strategy & BI Engineering, AI Strategy & Custom Agent Implementation, plus managed services and executive workshops.
-- [Technology](https://www.qamiraconsulting.com/technology): Productized offerings Qamira builds -- customer-facing AI (chatbots, CRM, AI receptionist and call automation), content & growth systems (AI video, scheduling, marketing automation), and internal automation & intelligence (workflow integration, knowledge agents, document extraction).
+- [Services](https://www.qamiraconsulting.com/services): Every service we offer, from free assessments and process reviews to custom software, CRMs, chatbots, websites, training and managed support.
+- [Technology](https://www.qamiraconsulting.com/technology): What our technology practice builds: websites and online stores, SEO and AI search visibility, custom software, CRMs, AI chatbots, AI receptionists, HR software, marketing automation, AI video and content scheduling, internal knowledge assistants, document data extraction and systems integration.
+- [Websites & Online Stores](https://www.qamiraconsulting.com/technology/websites): Fast, mobile-first websites and online stores built to turn visitors into enquiries, bookings and orders.
+- [SEO & AI Search Visibility (GEO)](https://www.qamiraconsulting.com/technology/seo-geo): Search optimisation for a business's site and local listings, plus visibility in AI assistants such as ChatGPT.
+- [AI Chatbots](https://www.qamiraconsulting.com/technology/ai-chatbots): Website and WhatsApp chatbots trained on a business's own services and policies, which answer, book and capture leads.
+- [HR Software](https://www.qamiraconsulting.com/technology/hr-software): Staff records, leave, hiring and reviews in one place, built around how the business manages people.
 - [AI Receptionist (Australia)](https://www.qamiraconsulting.com/au/ai-receptionist): A done-for-you AI receptionist for Australian tradies, clinics and service businesses -- answers calls 24/7, books jobs, quotes from the business's own rate card, hands off to staff by callback and logs every call to the CRM.
+- [AI Receptionist (UK)](https://www.qamiraconsulting.com/uk/ai-receptionist): An AI receptionist for UK businesses that answers calls 24/7, books appointments and hands off to staff, set up to meet UK GDPR and call-recording notice rules.
+- [AI Receptionist (US)](https://www.qamiraconsulting.com/us/ai-receptionist): An AI receptionist for US businesses that answers calls 24/7, books appointments and hands off to staff, set up for state call-recording consent rules.
 - [Google Business Profile Optimisation (Australia)](https://www.qamiraconsulting.com/au/google-business-profile): Done-for-you Google Business Profile and local SEO setup for Australian tradies, clinics and local service businesses -- profile set up or cleaned up, categories, service areas, photos, a review request process and consistent citation listings.
 - [AI & Process Consulting (Melbourne)](https://www.qamiraconsulting.com/au/ai-process-consulting-melbourne): AI and process consulting for Melbourne small businesses -- AI receptionists and chatbots, workflow automation, process reviews and local search for clinics, trades and professional firms, delivered remotely with a fixed price up front.
 - [Business Consultant in Pune](https://www.qamiraconsulting.com/in/business-consultant-pune): Business consulting for growing SMEs in Pune and Pimpri-Chinchwad -- process improvement, AI automation, KPIs and systems for manufacturers, logistics firms and professional-services companies, on-site or online.
 - [Custom Software (India)](https://www.qamiraconsulting.com/in/custom-software): Custom software, ERP and client portals for growing Indian businesses, with a written scope and fixed quote before work starts.
 - [ERP & CRM Builds (India)](https://www.qamiraconsulting.com/in/erp-crm-development): CRM and custom ERP builds set up around how an Indian business sells and operates.
 - [Business Automation (India)](https://www.qamiraconsulting.com/in/business-automation): Connects Tally, Excel, CRM and other tools so data is typed once, without a forced switch to new software.
+- [WhatsApp & Website AI Chatbot (India)](https://www.qamiraconsulting.com/in/ai-chatbot): One AI assistant on a business's WhatsApp number and website, in English and Hindi, that answers customers and captures enquiries.
+- [Website Development (India)](https://www.qamiraconsulting.com/in/website-development): Fast, mobile-first websites for Indian businesses with click-to-WhatsApp, click-to-call and an enquiry form.
 - [Custom Software (Australia)](https://www.qamiraconsulting.com/au/custom-software): Custom software, business systems and client portals for growing Australian businesses, with a written scope and fixed quote before work starts.
 - [CRM Development (Australia)](https://www.qamiraconsulting.com/au/crm-development): CRM setup or custom CRM builds around how an Australian business sells, connected to its accounting system.
 - [Business Automation (Australia)](https://www.qamiraconsulting.com/au/business-automation): Connects Xero or MYOB, spreadsheets, CRM and email so data is typed once, without a forced switch to new software.
@@ -36,26 +45,26 @@ Qamira serves small-to-medium businesses ($2M-$50M revenue), post-Series A/B gro
 - [Business Automation (US)](https://www.qamiraconsulting.com/us/business-automation): Connects QuickBooks or Xero, spreadsheets, CRM and email so data is typed once, without a forced switch to new software.
 - [Website Development (US)](https://www.qamiraconsulting.com/us/website-development): Mobile-first websites for US small businesses, built to turn visitors into enquiries and bookings.
 - [AI Chatbot (US)](https://www.qamiraconsulting.com/us/ai-chatbot): A custom AI chatbot for US businesses, trained on their own services and prices -- answers questions, quotes, books and captures leads, then hands over to staff.
-- [Industries](https://www.qamiraconsulting.com/industries): Pre-built QBPES™ variants for specific verticals -- manufacturing, logistics, construction, retail, healthcare, financial services, professional services, startups, and public sector.
+- [Industries](https://www.qamiraconsulting.com/industries): How we work in specific sectors: manufacturing, logistics, construction, retail, healthcare, financial services, professional services, startups and the public sector.
 
 ## Industry accelerators
 
-Each is a pre-built QBPES™ variant for that vertical -- the same eight domains and eight-step delivery process, pre-populated with the KPIs, process taxonomies, and benchmark ranges the vertical typically needs.
+Each applies the same eight areas and delivery process, with the KPIs, process maps and benchmarks that sector usually needs.
 
 - [Manufacturing](https://www.qamiraconsulting.com/industries/manufacturing): Operational OEE, supply chain logistics, demand analytics.
-- [Logistics & Supply Chain](https://www.qamiraconsulting.com/industries/logistics-supply-chain): Fleet utilization, route efficiency, warehouse analytics.
+- [Logistics & Supply Chain](https://www.qamiraconsulting.com/industries/logistics-supply-chain): Fleet utilisation, route efficiency, warehouse analytics.
 - [Construction & Infrastructure](https://www.qamiraconsulting.com/industries/construction-infrastructure): Resource management, project drift tracking.
 - [Retail & E-Commerce](https://www.qamiraconsulting.com/industries/retail-ecommerce): CAC/LTV models, inventory turns, customer journey.
-- [Healthcare](https://www.qamiraconsulting.com/industries/healthcare): Patient flow, cost optimization, resource allocation.
+- [Healthcare](https://www.qamiraconsulting.com/industries/healthcare): Patient flow, cost optimisation, resource allocation.
 - [Financial Services](https://www.qamiraconsulting.com/industries/financial-services): Risk architecture, operational throughput, executive reporting.
-- [Professional Services](https://www.qamiraconsulting.com/industries/professional-services): Resource utilization, project profitability.
-- [Growing Startups & Tech](https://www.qamiraconsulting.com/industries/startups-tech): Agility mapping, burn-rate optimization.
+- [Professional Services](https://www.qamiraconsulting.com/industries/professional-services): Resource utilisation, project profitability.
+- [Growing Startups & Tech](https://www.qamiraconsulting.com/industries/startups-tech): Agility mapping, burn-rate optimisation.
 - [Public Sector & Education](https://www.qamiraconsulting.com/industries/public-sector-education): Resource allocation, compliance management.
 
 ## Learn more
 
-- [About](https://www.qamiraconsulting.com/about): Who Qamira is and how we're positioned relative to BI freelancers and large SI firms.
-- [Insights](https://www.qamiraconsulting.com/insights): Qamira's point of view on performance, process, and AI-native execution.
-- [Case Studies](https://www.qamiraconsulting.com/case-studies): Illustrative engagement scenarios (Qamira is an early-stage firm without publicly citable client results yet).
-- [Free AI Business Assessment](https://www.qamiraconsulting.com/assessment): An 8-question self-assessment that generates an instant, personalized AI Opportunity Report.
-- [Contact](https://www.qamiraconsulting.com/contact): Start a conversation with a consultant.
+- [About](https://www.qamiraconsulting.com/about): Who we are, how our advisory and technology practices work together, and who we work best with.
+- [Insights](https://www.qamiraconsulting.com/insights): Short articles from our team on performance, processes, data and AI.
+- [Case Studies](https://www.qamiraconsulting.com/case-studies): Illustrative scenarios showing the kind of problems we solve. Named client results are added as clients approve them.
+- [Free AI Business Assessment](https://www.qamiraconsulting.com/assessment): A free online check of eight quick ratings and a few details about the business. It takes a few minutes and produces an instant, personalised AI Opportunity Report.
+- [Contact](https://www.qamiraconsulting.com/contact): Book a free 20-minute call, or reach us by email, WhatsApp or phone.

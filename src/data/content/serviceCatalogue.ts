@@ -43,7 +43,7 @@ export type CatalogueService = {
 };
 
 export const catalogue: CatalogueService[] = [
-  { code: "QC-001", stage: "free", name: "AI Business Assessment", description: "Online self-assessment that scores AI and automation readiness and returns an opportunity report.", unit: "Per assessment", duration: "15 minutes" },
+  { code: "QC-001", stage: "free", name: "AI Business Assessment", description: "Online self-assessment that scores AI and automation readiness and returns an opportunity report.", unit: "Per assessment", duration: "5 minutes" },
   { code: "QC-002", stage: "free", name: "Digital Presence & AI Opportunity Audit", description: "Desk review of your website, Google profile, reviews and enquiry handling, plus a one-page findings note.", unit: "Per audit", duration: "2–3 days" },
 
   { code: "QC-101", stage: "diagnose", name: "Operations Diagnostic Workshop (1 day)", description: "Facilitated session that maps one operation, finds the highest-cost manual work, and produces a findings pack.", unit: "Per workshop", duration: "1 day + pack" },

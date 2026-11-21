@@ -41,7 +41,7 @@ export const sections = [
     body: [
       "Contact form submissions are used solely to respond to your enquiry.",
       "Job applications are used only to assess you for the role you applied for and similar roles at Qamira. They are stored in our own database and inbox, read only by the people hiring, and never shared with our clients without your agreement. They are not sent to any AI service, and are not shared with Meta or Google.",
-      "Assessment submissions are sent to Anthropic's Claude API to generate your personalized AI Opportunity Report. Per Anthropic's commercial API terms (anthropic.com/legal/commercial-terms), data submitted through the API is not used to train Anthropic's models, and is retained only briefly for abuse and safety monitoring.",
+      "Assessment submissions are sent to Anthropic's Claude API to generate your personalised AI Opportunity Report. Per Anthropic's commercial API terms (anthropic.com/legal/commercial-terms), data submitted through the API is not used to train Anthropic's models, and is retained only briefly for abuse and safety monitoring.",
       "We do not sell your information. We do share limited data with Meta (Facebook/Instagram) and Google to measure our own advertising, and with Apollo.io to see which companies visit our site -- see \"Cookies and advertising measurement\" below for exactly what. We do not share your information with any other third party for marketing.",
     ],
   },

@@ -87,7 +87,7 @@ export const growthLoopSteps = [
     step: "08",
     title: "Scale",
     icon: "TrendingUp",
-    body: "What's proven to work gets standardized and repeated -- a second location, a second channel, a second market -- without starting over.",
+    body: "What's proven to work gets standardised and repeated -- a second location, a second channel, a second market -- without starting over.",
   },
 ] as const;
 
@@ -139,7 +139,7 @@ export const capabilities = [
   {
     number: "08",
     title: "Scale",
-    body: "What's proven gets standardized into a repeatable playbook, so growing to a new channel, location, or market doesn't mean starting from zero.",
+    body: "What's proven gets standardised into a repeatable playbook, so growing to a new channel, location, or market doesn't mean starting from zero.",
   },
 ];
 
@@ -150,7 +150,7 @@ export const aiAndAutomation = {
   points: [
     {
       title: "AI reasons and creates",
-      body: "Drafts content, analyzes performance data, and supports strategy and recommendations -- always reviewed by your team or ours before it reaches a customer.",
+      body: "Drafts content, analyses performance data, and supports strategy and recommendations -- always reviewed by your team or ours before it reaches a customer.",
     },
     {
       title: "Automation connects and moves",
@@ -240,7 +240,7 @@ export const implementationApproach = {
     },
     {
       title: "Optimise & scale",
-      body: "Once the loop is running on trustworthy data, automation and AI optimisation are introduced -- and what's proven gets standardized for the next channel, location, or market.",
+      body: "Once the loop is running on trustworthy data, automation and AI optimisation are introduced -- and what's proven gets standardised for the next channel, location, or market.",
     },
   ],
 };
@@ -259,7 +259,7 @@ export const growthOSFaq = [
   {
     question: "How is GrowthOS different from Qamira's QBPES™ methodology?",
     answer:
-      "QBPES™ (the Qamira Business Performance Excellence System) is Qamira's core diagnostic methodology, applied across a business's strategy, process, people, data, technology, customer, and governance domains. GrowthOS™ is QBPES™ productized specifically for growth -- the packaged, client-facing operating system built on the same diagnostic discipline, scoped to customer acquisition, conversion, delivery, and continuous optimization.",
+      "QBPES™ (the Qamira Business Performance Excellence System) is Qamira's core diagnostic methodology, applied across a business's strategy, process, people, data, technology, customer, and governance domains. GrowthOS™ is QBPES™ productised specifically for growth -- the packaged, client-facing operating system built on the same diagnostic discipline, scoped to customer acquisition, conversion, delivery, and continuous optimisation.",
   },
   {
     question: "What technology does GrowthOS run on?",
