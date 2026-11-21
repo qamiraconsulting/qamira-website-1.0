@@ -50,7 +50,7 @@ export function Services() {
         lede={servicesHero.lede}
         breadcrumbLabel="Services"
         photo={{
-          src: "/photos/services-hero.jpg",
+          src: "/photos/services-hero.webp",
           label: "Editorial, process/strategy mood -- e.g. a whiteboard mid-session, or documents and a laptop on a desk. Bright, warm and high-key.",
           alt: "A strategy session mapping a business process on a whiteboard",
         }}

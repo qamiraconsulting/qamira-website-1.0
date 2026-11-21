@@ -728,7 +728,7 @@ function ReportView({ report, companyName }: { report: AssessmentReport; company
           <Reveal className="mx-auto max-w-[46rem]">
             <span className="font-mono text-xs uppercase tracking-[0.06em] text-brass">Directional ROI estimate</span>
             <p className="mx-auto mt-4 max-w-[65ch] text-charcoal-dim">{report.roiEstimate}</p>
-            <p className="mx-auto mt-3 max-w-[65ch] text-xs italic text-charcoal-dim/70">
+            <p className="mx-auto mt-3 max-w-[65ch] text-xs italic text-charcoal-dim">
               This report is a preliminary, self-assessed starting point -- not a completed diagnostic engagement.
               Figures are directional, not guaranteed.
             </p>

@@ -14,7 +14,7 @@ import { NotFound } from "@/pages/NotFound";
 const allOfferings = [...customerFacingAI, ...contentAndGrowthSystems, ...internalAutomation];
 
 // Placeholder descriptions shown until a real photo lands at
-// /photos/technology/<slug>.jpg -- see docs/photography-brief.md for the
+// /photos/technology/<slug>.webp -- see docs/photography-brief.md for the
 // prompts these correspond to.
 const photoDescriptions: Record<string, string> = {
   "ai-chatbots": "Laptop screen showing a generic AI customer-service chat interface, bright and sunlit.",
@@ -92,17 +92,22 @@ export function TechnologyDetail() {
               </div>
               <h1 className="mt-4 max-w-[22ch] text-charcoal">{offering.title}</h1>
               <p className="mt-5 max-w-[56ch] text-base text-charcoal-dim sm:text-lg">{offering.body}</p>
-              {offering.localVersion && (
+              {offering.localVersions && (
                 <p className="mt-6 border-l-2 border-brass pl-4 text-sm text-charcoal sm:text-base">
-                  {offering.localVersion.lead}{" "}
-                  <Link to={offering.localVersion.path} className="text-brass underline-offset-4 hover:underline">
-                    {offering.localVersion.label} →
-                  </Link>
+                  {offering.localVersions.lead}{" "}
+                  {offering.localVersions.links.map((link, i) => (
+                    <span key={link.path}>
+                      {i > 0 && " · "}
+                      <Link to={link.path} className="text-brass-dim underline underline-offset-4 hover:text-charcoal">
+                        {link.label}
+                      </Link>
+                    </span>
+                  ))}
                 </p>
               )}
             </div>
             <PhotoSlot
-              src={`/photos/technology/${offering.slug}.jpg`}
+              src={offering.photo ?? `/photos/technology/${offering.slug}.webp`}
               label={photoDescriptions[offering.slug]}
               alt={`Illustration of ${offering.title}`}
               className="hidden lg:block"

@@ -11,38 +11,41 @@ import { Reveal, RevealGroup, RevealItem } from "@/components/ui/Reveal";
 import { PhotoSlot } from "@/components/brand/PhotoSlot";
 import { FaqSection } from "@/components/sections/FaqSection";
 import { useShortlist } from "@/lib/shortlist";
-import {
-  auReceptionistHero,
-  missedCallPain,
-  howItWorksIntro,
-  howItWorksSteps,
-  differentiators,
-  proof,
-  included,
-  auReceptionistFaq,
-  auReceptionistCta,
-} from "@/data/content/auReceptionist";
+import { hreflangFor } from "@/lib/hreflang";
+import type { ReceptionistContent } from "@/data/content/receptionist";
 
-const path = "/au/ai-receptionist";
-const url = `${site.url}${path}`;
 const SERVICE_CODE = "QC-303";
 
 const stepIcons = { PhoneCall, CalendarCheck, Calculator, UserRound, Database };
 
-const description =
-  "Done-for-you AI receptionist for Australian tradies and clinics. Answers calls 24/7, books jobs, quotes from your own rate card and hands off to your team.";
+// One template for the AI receptionist landing pages in Australia, the UK
+// and the US. Content lives in src/data/content/receptionist.ts.
+export function AiReceptionistPage({ content }: { content: ReceptionistContent }) {
+  const {
+    path,
+    seo,
+    hero,
+    missedCallPain,
+    howItWorksIntro,
+    howItWorksSteps,
+    differentiators,
+    proof,
+    localRules,
+    included,
+    faq,
+    cta: ctaCopy,
+  } = content;
+  const url = `${site.url}${path}`;
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faq.map((f) => ({
+      "@type": "Question",
+      name: f.question,
+      acceptedAnswer: { "@type": "Answer", text: f.answer },
+    })),
+  };
 
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: auReceptionistFaq.map((f) => ({
-    "@type": "Question",
-    name: f.question,
-    acceptedAnswer: { "@type": "Answer", text: f.answer },
-  })),
-};
-
-export function AuAiReceptionist() {
   // The CTA puts QC-303 on the visitor's shortlist before it opens /contact,
   // so the enquiry arrives already tagged with the service. The lead itself
   // (GA4 generate_lead, Meta Contact) fires on /contact's form submit, the
@@ -61,9 +64,10 @@ export function AuAiReceptionist() {
   return (
     <>
       <Seo
-        title="AI Receptionist for Australian Businesses"
+        title={seo.title}
         path={path}
-        description={description}
+        description={seo.description}
+        alternates={hreflangFor(path)}
         jsonLd={[
           {
             "@context": "https://schema.org",
@@ -71,10 +75,10 @@ export function AuAiReceptionist() {
             name: "AI Receptionist",
             alternateName: ["AI Voice & Call Automation", "AI answering service"],
             serviceType: "AI phone answering and booking",
-            description: auReceptionistHero.lede,
+            description: hero.lede,
             provider: orgRef,
-            areaServed: { "@type": "Country", name: "Australia" },
-            audience: { "@type": "BusinessAudience", audienceType: "Tradies, clinics and service businesses" },
+            areaServed: { "@type": "Country", name: seo.country },
+            audience: { "@type": "BusinessAudience", audienceType: seo.audienceType },
             url,
           },
           {
@@ -82,7 +86,7 @@ export function AuAiReceptionist() {
             "@type": "BreadcrumbList",
             itemListElement: [
               { "@type": "ListItem", position: 1, name: "Home", item: site.url },
-              { "@type": "ListItem", position: 2, name: auReceptionistHero.breadcrumbLabel, item: url },
+              { "@type": "ListItem", position: 2, name: hero.breadcrumbLabel, item: url },
             ],
           },
           faqJsonLd,
@@ -98,15 +102,15 @@ export function AuAiReceptionist() {
                 <Link to="/" className="hover:text-brass">
                   Home
                 </Link>{" "}
-                / {auReceptionistHero.breadcrumbLabel}
+                / {hero.breadcrumbLabel}
               </p>
               <div className="mt-5">
-                <Eyebrow>{auReceptionistHero.eyebrow}</Eyebrow>
+                <Eyebrow>{hero.eyebrow}</Eyebrow>
               </div>
-              <h1 className="mt-4 max-w-[22ch] text-charcoal">{auReceptionistHero.title}</h1>
-              <p className="mt-5 max-w-[56ch] text-base text-charcoal-dim sm:text-lg">{auReceptionistHero.lede}</p>
+              <h1 className="mt-4 max-w-[22ch] text-charcoal">{hero.title}</h1>
+              <p className="mt-5 max-w-[56ch] text-base text-charcoal-dim sm:text-lg">{hero.lede}</p>
               <p className="mt-6 border-l-2 border-brass pl-4 font-mono text-sm text-charcoal">
-                {auReceptionistHero.promiseLine}
+                {hero.promiseLine}
               </p>
               <div className="mt-8 flex flex-wrap gap-4">
                 {cta}
@@ -116,7 +120,7 @@ export function AuAiReceptionist() {
               </div>
             </div>
             <PhotoSlot
-              src="/photos/technology/ai-voice-call-automation.jpg"
+              src="/photos/technology/ai-voice-call-automation.webp"
               label="A headset beside a laptop showing a call log."
               alt="A headset beside a laptop showing a call log"
               className="hidden lg:block"
@@ -205,21 +209,45 @@ export function AuAiReceptionist() {
         </Container>
       </Section>
 
-      {/* Proof */}
-      <Section tone="navy">
-        <Container>
-          <Reveal className="max-w-[46rem]">
-            <Eyebrow>{proof.eyebrow}</Eyebrow>
-            <h2 className="mt-4 text-cream">{proof.heading}</h2>
-            {proof.body.map((para) => (
-              <p key={para} className="mt-4 text-base text-cream-dim sm:text-lg">
-                {para}
-              </p>
-            ))}
-            <p className="mt-6 font-mono text-xs uppercase tracking-[0.06em] text-cream-dim/70">{proof.note}</p>
-          </Reveal>
-        </Container>
-      </Section>
+      {/* Proof, where there is a real client in this market */}
+      {proof && (
+        <Section tone="navy">
+          <Container>
+            <Reveal className="max-w-[46rem]">
+              <Eyebrow>{proof.eyebrow}</Eyebrow>
+              <h2 className="mt-4 text-cream">{proof.heading}</h2>
+              {proof.body.map((para) => (
+                <p key={para} className="mt-4 text-base text-cream-dim sm:text-lg">
+                  {para}
+                </p>
+              ))}
+              <p className="mt-6 font-mono text-xs uppercase tracking-[0.06em] text-cream-dim/70">{proof.note}</p>
+            </Reveal>
+          </Container>
+        </Section>
+      )}
+
+      {/* Local recording and privacy rules */}
+      {localRules && (
+        <Section tone="navy">
+          <Container>
+            <Reveal className="max-w-[46rem]">
+              <Eyebrow>{localRules.eyebrow}</Eyebrow>
+              <h2 className="mt-4 text-cream">{localRules.heading}</h2>
+              <p className="mt-4 text-base text-cream-dim sm:text-lg">{localRules.lede}</p>
+            </Reveal>
+            <RevealGroup className="mt-12 grid gap-8 sm:grid-cols-2">
+              {localRules.points.map((point) => (
+                <RevealItem key={point.title}>
+                  <span aria-hidden="true" className="block h-px w-6 bg-brass" />
+                  <h3 className="mt-4 text-lg text-cream">{point.title}</h3>
+                  <p className="mt-2.5 text-sm text-cream-dim sm:text-base">{point.body}</p>
+                </RevealItem>
+              ))}
+            </RevealGroup>
+          </Container>
+        </Section>
+      )}
 
       {/* What's included */}
       <Section tone="surface">
@@ -245,14 +273,14 @@ export function AuAiReceptionist() {
         </Container>
       </Section>
 
-      <FaqSection eyebrow="Frequently asked" heading="AI receptionist questions, answered plainly." items={auReceptionistFaq} />
+      <FaqSection eyebrow="Frequently asked" heading="AI receptionist questions, answered plainly." items={faq} />
 
       {/* CTA */}
       <Section tone="surface" bordered className="text-center">
         <Container>
           <Reveal className="mx-auto max-w-[42rem]">
-            <h2 className="text-charcoal">{auReceptionistCta.heading}</h2>
-            <p className="mx-auto mt-4 max-w-[52ch] text-charcoal-dim">{auReceptionistCta.body}</p>
+            <h2 className="text-charcoal">{ctaCopy.heading}</h2>
+            <p className="mx-auto mt-4 max-w-[52ch] text-charcoal-dim">{ctaCopy.body}</p>
             <div className="mt-9 flex flex-wrap justify-center gap-4">
               {cta}
               <Button to="/technology/ai-voice-call-automation" variant="ghost" arrow={false}>

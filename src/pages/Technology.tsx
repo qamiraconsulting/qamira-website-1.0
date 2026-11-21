@@ -75,7 +75,7 @@ export function Technology() {
         lede={technologyHero.lede}
         breadcrumbLabel="Technology"
         photo={{
-          src: "/photos/technology-hero.jpg",
+          src: "/photos/technology-hero.webp",
           label: "Product-mockup style -- a clean chatbot/CRM UI or automation workflow glimpsed on a screen. Bright, warm and high-key; this one can be more literal since it's illustrating real software.",
           alt: "A laptop displaying a generic AI customer assistant chatbot interface",
         }}

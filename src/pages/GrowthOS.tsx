@@ -176,7 +176,7 @@ export function GrowthOS() {
           </RevealGroup>
 
           <Reveal className="mt-6">
-            <p className="text-xs text-charcoal-dim/70">{exampleJourney.disclaimer}</p>
+            <p className="text-xs text-charcoal-dim">{exampleJourney.disclaimer}</p>
           </Reveal>
         </Container>
       </Section>

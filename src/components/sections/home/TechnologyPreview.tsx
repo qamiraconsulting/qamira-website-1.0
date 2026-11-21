@@ -27,7 +27,7 @@ export function TechnologyPreview() {
 
         <div className="mt-14 grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-14">
           <PhotoSlot
-            src="/photos/technology-preview.jpg"
+            src="/photos/technology-preview.webp"
             label="Abstract tech/automation visual -- a clean UI dashboard glimpsed on a screen, or a close-up of an automation workflow diagram. Bright, warm and high-key."
             alt="A laptop screen displaying an abstract analytics dashboard"
           />

@@ -97,7 +97,7 @@ export function ServiceIndex({
                         title={s.name}
                         className={clsx(
                           "group flex w-full items-baseline gap-2.5 rounded-sm py-1 pl-3 pr-1 text-left text-[13px] leading-5 transition-colors hover:bg-parchment-2",
-                          muted ? "text-charcoal-dim/70" : "text-charcoal-dim",
+                          muted ? "text-charcoal-dim" : "text-charcoal-dim",
                         )}
                       >
                         <span className="flex-none font-mono text-[10px] text-brass-dim">{s.code.slice(3)}</span>

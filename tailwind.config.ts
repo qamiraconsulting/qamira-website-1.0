@@ -25,6 +25,13 @@ export default {
           DEFAULT: "#b8863a",
           bright: "#c69a4e",
           dim: "#8a6a37",
+          // Text shade of brass: 5.2:1 or better on every
+          // light surface, where the default brass is only about 3:1.
+          ink: "#7d5f30",
+          // The gold in the logo file. Button fill, always with navy text
+          // (7.2:1; white text would fail at 2.4:1).
+          logo: "#cf9e3b",
+          "logo-hover": "#dbb05a",
         },
         slate: {
           teal: "#3e6f6f",
