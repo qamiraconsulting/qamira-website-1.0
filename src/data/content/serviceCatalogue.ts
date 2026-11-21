@@ -80,7 +80,7 @@ export const catalogue: CatalogueService[] = [
   { code: "QC-407", stage: "build", name: "AI Short-Form Video", description: "A 15–30 second branded video for social or ads, from script to final cut.", unit: "Per video", duration: "3–5 days" },
   { code: "QC-408", stage: "build", name: "AI Brand Film", description: "A 30–60 second brand or product film with voice-over, music and multiple scenes.", unit: "Per film", duration: "1–2 weeks" },
   { code: "QC-410", stage: "build", name: "AI Search Visibility (GEO)", description: "An audit of how you appear in ChatGPT and Google AI answers, plus a plan to get cited.", unit: "One-time", duration: "1–2 weeks" },
-  { code: "QC-411", stage: "build", name: "Tracking & Analytics Setup", description: "GA4, Search Console, Bing, Meta pixel and conversion tracking, set up and tested.", unit: "One-time", duration: "3–5 days" },
+  { code: "QC-411", stage: "build", name: "Tracking & Analytics Setup", description: "Website analytics, search engine consoles and ad conversion tracking, set up and tested.", unit: "One-time", duration: "3–5 days" },
 
   { code: "QC-501", stage: "run", name: "AI Ops Managed Retainer", description: "Runs and grows your automations: monitoring, fixes, and new automations added each month.", unit: "Monthly", duration: "Min. 6 months" },
   { code: "QC-502", stage: "run", name: "GrowthOS™ Managed Retainer", description: "A full growth operating system run with your team: acquisition, conversion, reporting and optimisation.", unit: "Monthly", duration: "6–12 months" },

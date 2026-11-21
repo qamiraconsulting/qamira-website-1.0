@@ -89,16 +89,16 @@ export const inServicePages: InServicePage[] = [
     serviceCodes: ["QC-309"],
     seoTitle: "Custom Software Development for Indian SMEs",
     description:
-      "Custom software, ERP and client portals for growing Indian businesses that have outgrown Excel and WhatsApp. Written scope and fixed quote after a free 20-minute scoping call.",
+      "Custom software, ERP and client portals for growing Indian businesses that have outgrown spreadsheets and WhatsApp. Written scope and fixed quote after a free 20-minute scoping call.",
     breadcrumbLabel: "Custom Software (India)",
     eyebrow: "Custom software · India",
     title: "Software built around how your business actually runs.",
-    lede: "Custom applications, ERP and client portals for growing Indian businesses that have outgrown Excel sheets, WhatsApp groups and a patchwork of tools. Built to fit your process, connected to what you already use.",
+    lede: "Custom applications, ERP and client portals for growing Indian businesses that have outgrown spreadsheets, WhatsApp groups and a patchwork of tools. Built to fit your process, connected to what you already use.",
     photo: { src: "/photos/technology/ai-chatbots.webp", label: "A laptop showing a custom business application." },
     pain: {
       eyebrow: "Sound familiar?",
       heading: "When the business outgrows the tools it started with.",
-      lede: "Most growing firms run on a mix of Tally, Excel, WhatsApp and one or two apps that were never meant to work together. It holds until it doesn't.",
+      lede: "Most growing firms run on a mix of accounting software, spreadsheets, WhatsApp and one or two apps that were never meant to work together. It holds until it doesn't.",
       points: [
         "The same order, invoice or customer gets typed into three different places.",
         "Only one or two people know how the master spreadsheet really works.",
@@ -139,7 +139,7 @@ export const inServicePages: InServicePage[] = [
         answer: "It depends on scope, so we agree the timeline in the written scope before starting. You see working pieces every week or two and sign each milestone off.",
       },
       {
-        question: "Will it work with Tally, Excel and the tools we already use?",
+        question: "Will it work with our accounting software, spreadsheets and the tools we already use?",
         answer: "That's usually the point. We connect to the systems you keep, so data is entered once and flows to the others, rather than forcing a switch.",
       },
       {
@@ -167,10 +167,10 @@ export const inServicePages: InServicePage[] = [
     pain: {
       eyebrow: "Sound familiar?",
       heading: "Leads, orders and stock living in different places.",
-      lede: "Sales tracks leads in a spreadsheet, operations works from WhatsApp, accounts lives in Tally, and nobody has the full picture.",
+      lede: "Sales tracks leads in a spreadsheet, operations works from WhatsApp, accounts lives in the accounting software, and nobody has the full picture.",
       points: [
         "Follow-ups slip because nobody can see which leads are waiting on a reply.",
-        "The CRM you bought is half set up, and the team went back to Excel.",
+        "The CRM you bought is half set up, and the team went back to spreadsheets.",
         "Stock, orders and invoices don't match, and month-end means reconciling by hand.",
         "Management asks for a sales or stock report and someone spends a day building it.",
       ],
@@ -208,7 +208,7 @@ export const inServicePages: InServicePage[] = [
         answer: "Often a well-configured off-the-shelf CRM is the right answer, and we'll say so. Custom makes sense when your process is what sets you apart, or when the ready-made options need too many workarounds.",
       },
       {
-        question: "Can you move our data from Excel or an old system?",
+        question: "Can you move our data from spreadsheets or an old system?",
         answer: "Yes. Cleaning up and moving your existing customers, products and open orders is part of the scope, so the team starts with real data on day one.",
       },
       {
@@ -231,11 +231,11 @@ export const inServicePages: InServicePage[] = [
     serviceCodes: ["QC-306", "QC-301"],
     seoTitle: "Business Automation & Systems Integration in India",
     description:
-      "Connect Tally, Excel, your CRM and other tools so data is typed once, with no forced switch to new software. Fixed quote after a free scoping call.",
+      "Connect your accounting software, spreadsheets, CRM and other tools so data is typed once, with no forced switch to new software. Fixed quote after a free scoping call.",
     breadcrumbLabel: "Business Automation (India)",
     eyebrow: "Automation & integration · India",
     title: "Stop typing the same data into three different systems.",
-    lede: "We connect the tools you already use, such as your accounting system, Excel, CRM and email, so information is entered once and moves on its own. No forced switch to new software.",
+    lede: "We connect the tools you already use, such as your accounting system, spreadsheets, CRM and email, so information is entered once and moves on its own. No forced switch to new software.",
     photo: { src: "/photos/technology/workflow-systems-integration.webp", label: "A laptop showing connected business systems." },
     pain: {
       eyebrow: "Sound familiar?",
@@ -281,7 +281,7 @@ export const inServicePages: InServicePage[] = [
         answer: "No. The aim is to connect what you already use. We only suggest replacing a tool when it genuinely can't connect to anything.",
       },
       {
-        question: "Can you connect to Tally?",
+        question: "Can you connect to our accounting software?",
         answer: "In most cases, yes, depending on your version and how it's set up. We check this on the scoping call before quoting.",
       },
       {

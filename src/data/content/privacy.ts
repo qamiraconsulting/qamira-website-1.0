@@ -1,5 +1,5 @@
 // Privacy Policy copy. Describes actual data handling as implemented in
-// api/contact.ts (Resend), api/assessment.ts (Anthropic Claude API), and
+// api/contact.ts (Resend), api/assessment.ts (third-party AI provider), and
 // the Meta tracking in src/lib/metaPixel.ts + api/_meta-capi.ts, the
 // Google tag (GA4, feeding Google Ads) in src/lib/googleTag.ts, and the
 // Apollo.io website visitor tracker in src/lib/apolloTracker.ts.
@@ -7,7 +7,8 @@
 // it" section below (2026-08-24, user decision) -- they're infrastructure
 // (email delivery, hosting), not methodology, so omitting them doesn't
 // change what data actually flows where, only what's disclosed publicly.
-// Keep in sync if the Anthropic integration changes.
+// The AI provider is described by role, not named (2026-11-21, user
+// decision). Keep in sync if the assessment's AI integration changes.
 //
 // Meta IS named, unlike Resend/Vercel, because the distinction drawn there
 // was infrastructure vs. methodology. Meta is neither: it is an
@@ -41,7 +42,7 @@ export const sections = [
     body: [
       "Contact form submissions are used solely to respond to your enquiry.",
       "Job applications are used only to assess you for the role you applied for and similar roles at Qamira. They are stored in our own database and inbox, read only by the people hiring, and never shared with our clients without your agreement. They are not sent to any AI service, and are not shared with Meta or Google.",
-      "Assessment submissions are sent to Anthropic's Claude API to generate your personalised AI Opportunity Report. Per Anthropic's commercial API terms (anthropic.com/legal/commercial-terms), data submitted through the API is not used to train Anthropic's models, and is retained only briefly for abuse and safety monitoring.",
+      "Assessment submissions are sent to a third-party AI provider to generate your personalised AI Opportunity Report. Under the provider's commercial terms, data we send is not used to train its models, and is retained only briefly for abuse and safety monitoring.",
       "We do not sell your information. We do share limited data with Meta (Facebook/Instagram) and Google to measure our own advertising, and with Apollo.io to see which companies visit our site -- see \"Cookies and advertising measurement\" below for exactly what. We do not share your information with any other third party for marketing.",
     ],
   },
@@ -70,7 +71,7 @@ export const sections = [
   {
     heading: "Who else touches it",
     body: [
-      "Anthropic -- processes assessment answers via the Claude API to generate your report.",
+      "A third-party AI provider -- processes assessment answers to generate your report, under commercial terms that stop it training its models on your data.",
       "Meta Platforms -- receives the advertising measurement data described above. Meta acts under its own terms and privacy policy, not ours.",
       "Google -- receives the analytics and advertising measurement data described above, under its own terms and privacy policy.",
       "Apollo.io -- receives the website visit data described above, to identify visiting companies, under its own terms and privacy policy.",
