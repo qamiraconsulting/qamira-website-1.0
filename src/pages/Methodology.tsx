@@ -98,6 +98,9 @@ export function Methodology() {
             <p className="mx-auto mt-4 max-w-[65ch] text-charcoal-dim">{interoperabilityNote.body}</p>
             <div className="mt-9 flex flex-wrap justify-center gap-4">
               <Button to="/contact">Start a conversation</Button>
+              <Button to="/advisory/qbpes-assessment" variant="ghost" arrow={false}>
+                See the QBPES™ assessment
+              </Button>
               <Button to="/growth-os" variant="ghost" arrow={false}>
                 See QBPES™ as an operating system
               </Button>

@@ -49,6 +49,7 @@ const staticRoutes = [
   "/careers",
   "/contact",
   "/privacy",
+  "/advisory/qbpes-assessment",
   "/au/google-business-profile",
 ];
 
@@ -118,6 +119,7 @@ const staticRouteSources: Record<string, string[]> = {
   "/careers": [`${P}Careers.tsx`, `${C}careers.ts`, `${C}jobs.ts`],
   "/contact": [`${P}Contact.tsx`],
   "/privacy": [`${P}Privacy.tsx`, `${C}privacy.ts`],
+  "/advisory/qbpes-assessment": [`${P}AdvisoryAssessment.tsx`, `${C}advisoryAssessment.ts`, `${C}methodology.ts`],
   "/au/ai-receptionist": [`${P}AiReceptionistPage.tsx`, `${C}auReceptionist.ts`, `${C}receptionist.ts`],
   "/uk/ai-receptionist": [`${P}AiReceptionistPage.tsx`, `${C}receptionist.ts`],
   "/us/ai-receptionist": [`${P}AiReceptionistPage.tsx`, `${C}receptionist.ts`],

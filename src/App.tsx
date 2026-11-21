@@ -26,6 +26,7 @@ const JobDetail = lazyPage(() => import("@/pages/JobDetail").then((m) => m.JobDe
 const Contact = lazyPage(() => import("@/pages/Contact").then((m) => m.Contact));
 const Assessment = lazyPage(() => import("@/pages/Assessment").then((m) => m.Assessment));
 const Privacy = lazyPage(() => import("@/pages/Privacy").then((m) => m.Privacy));
+const AdvisoryAssessment = lazyPage(() => import("@/pages/AdvisoryAssessment").then((m) => m.AdvisoryAssessment));
 const ReceptionistRoute = lazyPage(() => import("@/pages/routes/ReceptionistRoute").then((m) => m.ReceptionistRoute));
 const AuGoogleBusinessProfile = lazyPage(() =>
   import("@/pages/AuGoogleBusinessProfile").then((m) => m.AuGoogleBusinessProfile),
@@ -70,6 +71,7 @@ export const pageRoutes: PageRoute[] = [
   route("/contact", Contact, <Contact />),
   route("/assessment", Assessment, <Assessment />),
   route("/privacy", Privacy, <Privacy />),
+  route("/advisory/qbpes-assessment", AdvisoryAssessment, <AdvisoryAssessment />),
   route("/au/ai-receptionist", ReceptionistRoute, <ReceptionistRoute />),
   route("/uk/ai-receptionist", ReceptionistRoute, <ReceptionistRoute />),
   route("/us/ai-receptionist", ReceptionistRoute, <ReceptionistRoute />),
