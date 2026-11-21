@@ -78,7 +78,7 @@ export function ServiceBanner() {
                 onClick={() => setIndex(i)}
                 className={`whitespace-nowrap rounded-full border px-4 py-2 font-mono text-[11px] uppercase tracking-[0.08em] transition-colors duration-200 ease-signature ${
                   i === index
-                    ? "border-brass-ink bg-brass-ink text-white shadow-sm"
+                    ? "border-brass bg-brass text-navy shadow-sm"
                     : "border-charcoal/15 bg-white text-charcoal-dim hover:border-brass hover:text-brass"
                 }`}
               >

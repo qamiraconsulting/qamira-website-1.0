@@ -25,8 +25,9 @@ export default {
           DEFAULT: "#b8863a",
           bright: "#c69a4e",
           dim: "#8a6a37",
-          // Text and button-fill shade of brass: 5.2:1 or better on every
+          // Text shade of brass: 5.2:1 or better on every
           // light surface, where the default brass is only about 3:1.
+          // Buttons keep the logo brass fill with navy text (5.5:1).
           ink: "#7d5f30",
         },
         slate: {

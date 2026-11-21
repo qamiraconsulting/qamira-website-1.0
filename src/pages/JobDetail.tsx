@@ -184,7 +184,7 @@ function JobPage({ job }: { job: Job }) {
           <div className="mt-6">
             <a
               href="#apply"
-              className="inline-flex items-center gap-2.5 rounded-sm border border-brass bg-brass px-6 py-3.5 font-mono text-xs uppercase tracking-[0.08em] text-white transition-all duration-200 ease-signature hover:-translate-y-px hover:border-brass-bright hover:bg-brass-bright"
+              className="inline-flex items-center gap-2.5 rounded-sm border border-brass bg-brass px-6 py-3.5 font-mono text-xs uppercase tracking-[0.08em] text-navy transition-all duration-200 ease-signature hover:-translate-y-px hover:border-brass-bright hover:bg-brass-bright"
             >
               Apply now
             </a>
@@ -496,7 +496,7 @@ function JobPage({ job }: { job: Job }) {
                   <button
                     type="submit"
                     disabled={status === "submitting"}
-                    className="inline-flex items-center gap-2.5 whitespace-nowrap rounded-sm border border-brass bg-brass px-6 py-3.5 font-mono text-xs uppercase tracking-[0.08em] text-white transition-all duration-200 ease-signature hover:-translate-y-px hover:border-brass-bright hover:bg-brass-bright disabled:cursor-not-allowed disabled:opacity-60"
+                    className="inline-flex items-center gap-2.5 whitespace-nowrap rounded-sm border border-brass bg-brass px-6 py-3.5 font-mono text-xs uppercase tracking-[0.08em] text-navy transition-all duration-200 ease-signature hover:-translate-y-px hover:border-brass-bright hover:bg-brass-bright disabled:cursor-not-allowed disabled:opacity-60"
                   >
                     {status === "submitting" ? "Sending..." : "Submit application"}
                   </button>
