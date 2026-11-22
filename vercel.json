@@ -3,6 +3,11 @@
   "outputDirectory": "dist",
   "redirects": [
     {
+      "source": "/careers/business-development-manager",
+      "destination": "/careers/business-development-executive",
+      "permanent": true
+    },
+    {
       "source": "/index.html",
       "destination": "/",
       "permanent": true

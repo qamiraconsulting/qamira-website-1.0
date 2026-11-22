@@ -177,16 +177,16 @@ export const jobs: Job[] = [
     },
   },
   {
-    slug: "business-development-manager",
+    slug: "business-development-executive",
     open: true,
-    title: "Business Development Manager",
+    title: "Business Development Executive",
     summary:
       "Our first business development hire. Win new clients for our digital marketing and consulting services: you decide who to approach, start the conversation and find the real problem we can solve. Pune, work from home.",
-    listLine: "Pune, work from home  ·  Full-time  ·  2-4 years",
+    listLine: "Pune, work from home  ·  Full-time  ·  1-3 years",
     facts: [
       { label: "Location", value: "Pune, work from home" },
       { label: "Employment", value: "Full-time" },
-      { label: "Experience", value: "2-4 years" },
+      { label: "Experience", value: "1-3 years" },
       { label: "Reports to", value: "Founder" },
       { label: "Notice period", value: "Up to 30 days. Immediate joiners are welcome." },
     ],
@@ -232,7 +232,7 @@ export const jobs: Job[] = [
       {
         heading: "What we are looking for",
         bullets: [
-          "2-4 years in business development or sales, ideally selling services to businesses - digital marketing agency, IT services, SaaS, or similar.",
+          "1-3 years in business development or sales, ideally selling services to businesses - digital marketing agency, IT services, SaaS, or similar.",
           "You have won new business yourself, not only managed accounts that someone else signed. Tell us what you won and how much it was worth.",
           "You are professional and confident. You are comfortable speaking to business owners and senior people, and you speak and write in clear, professional English.",
           "You are steady and disciplined. You keep reaching out every day, even on the days when nothing is working.",
@@ -264,8 +264,8 @@ export const jobs: Job[] = [
     ],
     form: {
       experienceLabel: "Experience in business development or sales",
-      experienceOptions: ["Less than 2 years", "2 years", "3 years", "4 years", "5+ years"],
-      currentRolePlaceholder: "Company and role, e.g. Business Development Manager, digital marketing agency",
+      experienceOptions: ["Less than 1 year", "1 year", "2 years", "3 years", "4+ years"],
+      currentRolePlaceholder: "Company and role, e.g. Business Development Executive, digital marketing agency",
       questions: [
         {
           id: "best-client-won",
@@ -287,13 +287,13 @@ export const jobs: Job[] = [
         "Attach your CV and answer the three short questions. We read the answers closely, so give yourself about fifteen minutes. Prefer email? Send your CV and answers to careers@qamiraconsulting.com.",
     },
     schema: {
-      datePosted: "2026-10-21",
+      datePosted: "2026-11-22",
       validThrough: "2026-12-31",
       employmentType: "FULL_TIME",
       addressLocality: "Pune",
       addressRegion: "Maharashtra",
       addressCountry: "IN",
-      minMonthsExperience: 24,
+      minMonthsExperience: 12,
     },
   },
 ];

@@ -73,7 +73,7 @@ ALTER TABLE applicants
 -- "Best fit" is a plain ordering, not a score: grouped by role, then people
 -- who can do the shift first (roles with no shift question count as yes),
 -- then more international voice experience, then newest.
--- Filter by role: WHERE role_slug = 'business-development-manager'.
+-- Filter by role: WHERE role_slug = 'business-development-executive'.
 -- Read a written answer: SELECT answers -> 0 ->> 'answer' FROM shortlist.
 -- New columns can only be added at the END of a view, hence role_slug and
 -- answers come last.

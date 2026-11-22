@@ -49,9 +49,9 @@ const ROLES: Record<string, RoleConfig> = {
     askSetup: true,
     questions: [],
   },
-  "business-development-manager": {
-    title: "Business Development Manager",
-    shortTitle: "BDM",
+  "business-development-executive": {
+    title: "Business Development Executive",
+    shortTitle: "BDE",
     askVoiceExperience: false,
     askShift: false,
     askSetup: false,

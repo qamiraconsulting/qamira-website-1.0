@@ -156,9 +156,9 @@ export const seoOverrides: Record<string, SeoOverride> = {
     description:
       "Sales executive role, based in Pune and working from home, selling our advisory and technology services to Australian businesses. See the role and apply.",
   },
-  "/careers/business-development-manager": {
+  "/careers/business-development-executive": {
     description:
-      "Business development manager role, based in Pune and working from home, winning and growing advisory and technology clients. See the role and apply.",
+      "Business development executive role, based in Pune and working from home, winning and growing advisory and technology clients. See the role and apply.",
   },
 
   // Insights: long headlines lose the brand suffix rather than the headline.
