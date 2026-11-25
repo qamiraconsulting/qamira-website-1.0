@@ -116,3 +116,13 @@ export function trackQami(action: "qami_open" | "qami_chat_start" | "qami_messag
   if (typeof window === "undefined" || !resolveMeasurementId()) return;
   window.gtag?.("event", action);
 }
+
+/**
+ * The "how it works" demo video on /assessment. GA4's own video event
+ * names, as plain events (never key events), so watching the demo never
+ * counts as a lead.
+ */
+export function trackDemoVideo(action: "video_start" | "video_complete", format: "16x9" | "4x5"): void {
+  if (typeof window === "undefined" || !resolveMeasurementId()) return;
+  window.gtag?.("event", action, { video_title: "Assessment demo", video_format: format });
+}

@@ -1,5 +1,6 @@
-import { useState } from "react";
+import { useRef, useState, type SyntheticEvent } from "react";
 import { Link } from "react-router-dom";
+import { PlayCircle } from "lucide-react";
 import { Seo } from "@/lib/Seo";
 import { PageHero } from "@/components/sections/PageHero";
 import { Section } from "@/components/ui/Section";
@@ -8,7 +9,7 @@ import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
 import { ProcessFlow } from "@/components/brand/ProcessFlow";
 import { newEventId, track } from "@/lib/metaPixel";
-import { trackGoogleLead } from "@/lib/googleTag";
+import { trackDemoVideo, trackGoogleLead } from "@/lib/googleTag";
 import {
   PERFORMANCE_DOMAINS,
   PRIORITY_OUTCOMES,
@@ -262,6 +263,7 @@ export function Assessment() {
           </Link>{" "}
           with a consultant directly instead.
         </p>
+        <DemoVideo />
       </Container>
 
       <Section tone="white">
@@ -650,6 +652,68 @@ export function Assessment() {
         </Container>
       </Section>
     </>
+  );
+}
+
+/**
+ * "Watch how it works": a captioned walkthrough of this page, collapsed by
+ * default so the form stays where visitors (often straight from an ad)
+ * expect it. Opening it plays the video; closing pauses it.
+ *
+ * Two cuts: 4:5 for phones, 16:9 from `sm` up. preload="none" means only
+ * the one a visitor actually plays is downloaded. The videos have a
+ * voiceover (the "Bella" narrator) over quiet music, with captions burned
+ * in for anyone watching on mute. They walk through a fictional sample
+ * manufacturer against a sample report, and say so. Source and re-make
+ * steps: Social Media\Assessment demo video 2026-11\ (outside this repo).
+ *
+ * Not muted: opening the panel is a click, which lets the browser play
+ * sound. If a browser still refuses, the catch below leaves the video
+ * paused with its controls showing, ready for the visitor to press play.
+ */
+function DemoVideo() {
+  const wide = useRef<HTMLVideoElement>(null);
+  const tall = useRef<HTMLVideoElement>(null);
+  const started = useRef(false);
+
+  // Whichever cut the breakpoint is showing (the other is display:none).
+  const visible = () => [tall.current, wide.current].find((v) => v && v.offsetParent !== null) ?? null;
+
+  function onToggle(e: SyntheticEvent<HTMLDetailsElement>) {
+    if (e.currentTarget.open) {
+      visible()?.play().catch(() => {});
+    } else {
+      wide.current?.pause();
+      tall.current?.pause();
+    }
+  }
+
+  const videoProps = (format: "16x9" | "4x5") => ({
+    controls: true,
+    playsInline: true,
+    preload: "none" as const,
+    src: `/video/assessment-demo-${format}.mp4`,
+    poster: `/video/assessment-demo-${format}.webp`,
+    "aria-label": "How the Free AI Business Assessment works: a two-minute narrated walkthrough with captions",
+    onPlay: () => {
+      if (!started.current) trackDemoVideo("video_start", format);
+      started.current = true;
+    },
+    onEnded: () => trackDemoVideo("video_complete", format),
+  });
+
+  return (
+    <details className="group mx-auto mt-5 max-w-[42rem]" onToggle={onToggle}>
+      <summary className="mx-auto flex w-fit cursor-pointer list-none items-center gap-2 font-mono text-xs uppercase tracking-[0.06em] text-brass hover:text-brass-bright [&::-webkit-details-marker]:hidden">
+        <PlayCircle className="h-4 w-4" aria-hidden="true" />
+        <span className="group-open:hidden">Watch how it works · 2 min</span>
+        <span className="hidden group-open:inline">Hide the video</span>
+      </summary>
+      <div className="mt-5">
+        <video ref={tall} {...videoProps("4x5")} className="mx-auto block aspect-[4/5] w-full max-w-[26rem] border border-charcoal/10 bg-parchment sm:hidden" />
+        <video ref={wide} {...videoProps("16x9")} className="hidden aspect-video w-full border border-charcoal/10 bg-parchment sm:block" />
+      </div>
+    </details>
   );
 }
 
