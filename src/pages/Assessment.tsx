@@ -656,9 +656,12 @@ export function Assessment() {
 }
 
 /**
- * "Watch how it works": a captioned walkthrough of this page, collapsed by
- * default so the form stays where visitors (often straight from an ad)
- * expect it. Opening it plays the video; closing pauses it.
+ * "Watch how it works": a narrated walkthrough of this page. Shown open by
+ * default (the founder wants it visible, 2026-11-25) with its poster and
+ * play button, but it never starts by itself on page load: a video that
+ * talks as the page opens is jarring, and browsers mostly block it anyway.
+ * Visitors can hide it; closing pauses it, and re-opening it (a click)
+ * plays it straight away.
  *
  * Two cuts: 4:5 for phones, 16:9 from `sm` up. preload="none" means only
  * the one a visitor actually plays is downloaded. The videos have a
@@ -675,11 +678,15 @@ function DemoVideo() {
   const wide = useRef<HTMLVideoElement>(null);
   const tall = useRef<HTMLVideoElement>(null);
   const started = useRef(false);
+  // Set by a click on the summary, so the toggle event that browsers fire
+  // for the initial `open` state never starts the video on page load.
+  const clicked = useRef(false);
 
   // Whichever cut the breakpoint is showing (the other is display:none).
   const visible = () => [tall.current, wide.current].find((v) => v && v.offsetParent !== null) ?? null;
 
   function onToggle(e: SyntheticEvent<HTMLDetailsElement>) {
+    if (!clicked.current) return;
     if (e.currentTarget.open) {
       visible()?.play().catch(() => {});
     } else {
@@ -703,11 +710,18 @@ function DemoVideo() {
   });
 
   return (
-    <details className="group mx-auto mt-5 max-w-[42rem]" onToggle={onToggle}>
-      <summary className="mx-auto flex w-fit cursor-pointer list-none items-center gap-2 font-mono text-xs uppercase tracking-[0.06em] text-brass hover:text-brass-bright [&::-webkit-details-marker]:hidden">
+    <details open className="group mx-auto mt-5 max-w-[42rem]" onToggle={onToggle}>
+      <summary
+        onClick={() => {
+          clicked.current = true;
+        }}
+        className="mx-auto flex w-fit cursor-pointer list-none items-center gap-2 font-mono text-xs uppercase tracking-[0.06em] text-brass hover:text-brass-bright [&::-webkit-details-marker]:hidden"
+      >
         <PlayCircle className="h-4 w-4" aria-hidden="true" />
         <span className="group-open:hidden">Watch how it works · 2 min</span>
-        <span className="hidden group-open:inline">Hide the video</span>
+        <span className="hidden group-open:inline">
+          How it works · 2 min <span className="text-charcoal-dim">· Hide</span>
+        </span>
       </summary>
       <div className="mt-5">
         <video ref={tall} {...videoProps("4x5")} className="mx-auto block aspect-[4/5] w-full max-w-[26rem] border border-charcoal/10 bg-parchment sm:hidden" />
